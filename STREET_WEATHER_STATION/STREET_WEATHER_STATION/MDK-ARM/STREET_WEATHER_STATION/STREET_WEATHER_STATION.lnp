@@ -1,0 +1,27 @@
+--cpu Cortex-M3
+"street_weather_station\startup_stm32f103xb.o"
+"street_weather_station\main.o"
+"street_weather_station\stm32f1xx_it.o"
+"street_weather_station\stm32f1xx_hal_msp.o"
+"street_weather_station\w5500.o"
+"street_weather_station\network.o"
+"street_weather_station\stm32f1xx_hal_gpio_ex.o"
+"street_weather_station\stm32f1xx_hal_i2c.o"
+"street_weather_station\stm32f1xx_hal.o"
+"street_weather_station\stm32f1xx_hal_rcc.o"
+"street_weather_station\stm32f1xx_hal_rcc_ex.o"
+"street_weather_station\stm32f1xx_hal_gpio.o"
+"street_weather_station\stm32f1xx_hal_dma.o"
+"street_weather_station\stm32f1xx_hal_cortex.o"
+"street_weather_station\stm32f1xx_hal_pwr.o"
+"street_weather_station\stm32f1xx_hal_flash.o"
+"street_weather_station\stm32f1xx_hal_flash_ex.o"
+"street_weather_station\stm32f1xx_hal_exti.o"
+"street_weather_station\stm32f1xx_hal_spi.o"
+"street_weather_station\stm32f1xx_hal_tim.o"
+"street_weather_station\stm32f1xx_hal_tim_ex.o"
+"street_weather_station\system_stm32f1xx.o"
+--strict --scatter "STREET_WEATHER_STATION\STREET_WEATHER_STATION.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "STREET_WEATHER_STATION.map" -o STREET_WEATHER_STATION\STREET_WEATHER_STATION.axf
