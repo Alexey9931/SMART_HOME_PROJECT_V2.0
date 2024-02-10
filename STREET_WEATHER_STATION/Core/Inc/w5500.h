@@ -88,70 +88,88 @@
 
 #define be16toword(a) ((((a)>>8)&0xff)|(((a)<<8)&0xff00))
 
+#define BUF_LEN 1024
+
 typedef struct data_sect 
 {
   volatile uint16_t addr;
   volatile uint8_t opcode;
   uint8_t data[];
-} data_sect_ptr;
+}__attribute__((packed)) data_sect_ptr;
+
+// Структура с настройками и данными микросхемы w5500
+typedef struct w5500_struct
+{
+  SPI_HandleTypeDef spi_n;  	// Выбранный интерфейс SPI для микросхемы w5500
+  uint8_t 	macaddr[6];       // MAC адрес
+  uint8_t 	ipaddr[4];        // IP адрес
+  uint8_t 	ipgate[4];        // IP адрес маршрутизатора
+  uint8_t 	ipmask[4];        // Маска подсети
+  uint16_t 	local_port;      	// Порт соединения
+  uint8_t 	sock_num;         // Номер сокета
+	uint8_t 	rx_buf[BUF_LEN];			// Буфер приемника
+	uint8_t 	tx_buf[BUF_LEN];			// Буфер передатчика
+	uint32_t 	rx_buf_len;				// Длина буфера приемника
+	uint32_t 	tx_buf_len;				// Длина буфера передатчика
+} w5500_data;
 
 // Функция записи байта в регистр
-void w5500_write_reg(uint8_t op, uint16_t address, uint8_t data);
+void w5500_write_reg(w5500_data* w5500_n, uint8_t op, uint16_t address, uint8_t data);
 // Функция записи в буфер данных переменной длины
-void w5500_write_buf(data_sect_ptr *datasect, uint16_t len);
+void w5500_write_buf(w5500_data* w5500_n, data_sect_ptr *datasect, uint16_t len);
 // Функция записи в буфер данных переменной длины с привязкой к определенному сокету
-void w5500_write_sock_buf(uint8_t sock_num, uint16_t point, uint8_t *buf, uint16_t len);
+void w5500_write_sock_buf(w5500_data* w5500_n, uint8_t sock_num, uint16_t point, uint8_t *buf, uint16_t len);
 // Функция чтения байта из регистра
-uint8_t w5500_read_reg(uint8_t op, uint16_t address);
+uint8_t w5500_read_reg(w5500_data* w5500_n, uint8_t op, uint16_t address);
 // Функция чтения буфера
-void w5500_read_buf(data_sect_ptr *datasect, uint16_t len);
+void w5500_read_buf(w5500_data* w5500_n, data_sect_ptr *datasect, uint16_t len);
 // Функция чтения одного байта из буфера
-uint8_t w5500_read_sock_buf_byte(uint8_t sock_num, uint16_t point);
+uint8_t w5500_read_sock_buf_byte(w5500_data* w5500_n, uint8_t sock_num, uint16_t point);
 // Функция чтения нескольких байт буфера 
-void w5500_read_sock_buf(uint8_t sock_num, uint16_t point, uint8_t *buf, uint16_t len);
+void w5500_read_sock_buf(w5500_data* w5500_n, uint8_t sock_num, uint16_t point, uint8_t *buf, uint16_t len);
 // Функция инициализации порта в сокете
-void set_sock_port(uint8_t sock_num, uint16_t port);
+void set_sock_port(w5500_data* w5500_n, uint8_t sock_num, uint16_t port);
 // Функция инициализации сокета
-void open_socket(uint8_t sock_num, uint16_t mode);
+void open_socket(w5500_data* w5500_n, uint8_t sock_num, uint16_t mode);
 // Функция ожидания окончания инициализации сокета
-void socket_init_wait(uint8_t sock_num);
+void socket_init_wait(w5500_data* w5500_n, uint8_t sock_num);
 // Функция прослушивания сокета
-void listen_socket(uint8_t sock_num);
+void listen_socket(w5500_data* w5500_n, uint8_t sock_num);
 // Функция ожидания пакета по сокету
-void socket_listen_wait(uint8_t sock_num);
+void socket_listen_wait(w5500_data* w5500_n, uint8_t sock_num);
 // Функция ожидания закрытия сокета
-void socket_closed_wait(uint8_t sock_num);
+void socket_closed_wait(w5500_data* w5500_n, uint8_t sock_num);
 // Функция закрытия соединения
-void disconnect_socket(uint8_t sock_num);
+void disconnect_socket(w5500_data* w5500_n, uint8_t sock_num);
 // Функция определения текущего состояния сокета
-uint8_t get_socket_status(uint8_t sock_num);
+uint8_t get_socket_status(w5500_data* w5500_n, uint8_t sock_num);
 // Функция для подготовки отправки буфера сетевому устройству
-void recv_socket(uint8_t sock_num);
+void recv_socket(w5500_data* w5500_n, uint8_t sock_num);
 // Функция отправки буфера сетевому устройству
-void send_socket(uint8_t sock_num);
+void send_socket(w5500_data* w5500_n, uint8_t sock_num);
 // Функция определения размера принятых данных
-uint16_t get_size_rx(uint8_t sock_num);
+uint16_t get_size_rx(w5500_data* w5500_n, uint8_t sock_num);
 // Функция определения адрес данных в приемном буфере
-uint16_t get_read_pointer(uint8_t sock_num);
+uint16_t get_read_pointer(w5500_data* w5500_n, uint8_t sock_num);
 // Функция возвращает адрес начала данных для записи в буфер отправки
-uint16_t get_write_pointer(uint8_t sock_num);
+uint16_t get_write_pointer(w5500_data* w5500_n, uint8_t sock_num);
 // Функция установки адреса начала данных для записи в буфер отправки
-void set_write_pointer(uint8_t sock_num, uint16_t point);
+void set_write_pointer(w5500_data* w5500_n, uint8_t sock_num, uint16_t point);
 // Функция аппаратного сброса микросхемы
 void w5500_hardware_rst(void);
 // Функция программного сброса микросхемы
-void w5500_soft_rst(void);
+void w5500_soft_rst(w5500_data* w5500_n);
 // Функция установки mac адреса микросхемы
-void w5500_set_mac_addr(uint8_t macaddr[6]);
+void w5500_set_mac_addr(w5500_data* w5500_n, uint8_t macaddr[6]);
 // Функция установки ip адреса маршрутизатора
-void w5500_set_ip_gate_addr(uint8_t ipgate[4]);
+void w5500_set_ip_gate_addr(w5500_data* w5500_n, uint8_t ipgate[4]);
 // Функция установки маски подсети
-void w5500_set_ipmask(uint8_t ipmask[4]);
+void w5500_set_ipmask(w5500_data* w5500_n, uint8_t ipmask[4]);
 // Функция установки ip адреса микросхемы
-void w5500_set_ipaddr(uint8_t ipaddr[4]);
+void w5500_set_ipaddr(w5500_data* w5500_n, uint8_t ipaddr[4]);
 // Функция инициализации микросхемы
-void w5500_ini(void);
+void w5500_ini(w5500_data* w5500_n);
 // Функция приема пакета по сети
-void w5500_packet_receive(uint8_t sn);
+void w5500_packet_receive(w5500_data* w5500_n, uint8_t sn);
 
 #endif /* W5500_H_ */

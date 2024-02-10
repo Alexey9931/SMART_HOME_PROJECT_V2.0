@@ -3,11 +3,11 @@
 <title>Static Call Graph - [STREET_WEATHER_STATION\STREET_WEATHER_STATION.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image STREET_WEATHER_STATION\STREET_WEATHER_STATION.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Mon Jan 01 20:48:07 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Jan 03 23:38:05 2024
 <BR><P>
-<H3>Maximum Stack Usage =        320 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        224 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-__rt_entry_main &rArr; main &rArr; w5500_packet_receive &rArr; w5500_read_sock_buf &rArr; w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+__rt_entry_main &rArr; main &rArr; receive_packet &rArr; w5500_read_sock_buf &rArr; w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 <P>
 <H3>
 Functions with no stack information
@@ -196,8 +196,8 @@ Global Symbols
 <P><STRONG><a name="[af]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[43]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 320 + Unknown Stack Size
-<LI>Call Chain = __rt_entry_main &rArr; main &rArr; w5500_packet_receive &rArr; w5500_read_sock_buf &rArr; w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 224 + Unknown Stack Size
+<LI>Call Chain = __rt_entry_main &rArr; main &rArr; receive_packet &rArr; w5500_read_sock_buf &rArr; w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
@@ -359,8 +359,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_setup_stackheap
 </UL>
 
-<P><STRONG><a name="[8a]"></a>__aeabi_memcpy</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, rt_memcpy_v6.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
+<P><STRONG><a name="[7f]"></a>__aeabi_memcpy</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, rt_memcpy_v6.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
 </UL>
 
 <P><STRONG><a name="[4a]"></a>__rt_memcpy</STRONG> (Thumb, 138 bytes, Stack size 0 bytes, rt_memcpy_v6.o(.text), UNUSED)
@@ -369,33 +369,36 @@ Global Symbols
 
 <P><STRONG><a name="[b2]"></a>_memcpy_lastbytes</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rt_memcpy_v6.o(.text), UNUSED)
 
+<P><STRONG><a name="[4b]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, rt_memcpy_w.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_memcpy4
+</UL>
+<BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_memcpy
+</UL>
+
+<P><STRONG><a name="[b3]"></a>__aeabi_memcpy8</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, rt_memcpy_w.o(.text), UNUSED)
+
+<P><STRONG><a name="[b4]"></a>__rt_memcpy_w</STRONG> (Thumb, 100 bytes, Stack size 8 bytes, rt_memcpy_w.o(.text), UNUSED)
+
+<P><STRONG><a name="[b5]"></a>_memcpy_lastbytes_aligned</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rt_memcpy_w.o(.text), UNUSED)
+
 <P><STRONG><a name="[71]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 4 bytes, rt_memclr_w.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = __aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
-<P><STRONG><a name="[b3]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 4 bytes, rt_memclr_w.o(.text), UNUSED)
+<P><STRONG><a name="[b6]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 4 bytes, rt_memclr_w.o(.text), UNUSED)
 
-<P><STRONG><a name="[b4]"></a>__rt_memclr_w</STRONG> (Thumb, 78 bytes, Stack size 4 bytes, rt_memclr_w.o(.text), UNUSED)
+<P><STRONG><a name="[b7]"></a>__rt_memclr_w</STRONG> (Thumb, 78 bytes, Stack size 4 bytes, rt_memclr_w.o(.text), UNUSED)
 
-<P><STRONG><a name="[b5]"></a>_memset_w</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rt_memclr_w.o(.text), UNUSED)
+<P><STRONG><a name="[b8]"></a>_memset_w</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rt_memclr_w.o(.text), UNUSED)
 
-<P><STRONG><a name="[b6]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[b9]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[b7]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[ba]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[b8]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
-
-<P><STRONG><a name="[4b]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, rt_memcpy_w.o(.text), UNUSED)
-<BR><BR>[Called By]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_memcpy
-</UL>
-
-<P><STRONG><a name="[b9]"></a>__aeabi_memcpy8</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, rt_memcpy_w.o(.text), UNUSED)
-
-<P><STRONG><a name="[ba]"></a>__rt_memcpy_w</STRONG> (Thumb, 100 bytes, Stack size 8 bytes, rt_memcpy_w.o(.text), UNUSED)
-
-<P><STRONG><a name="[bb]"></a>_memcpy_lastbytes_aligned</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rt_memcpy_w.o(.text), UNUSED)
+<P><STRONG><a name="[bb]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
 <P><STRONG><a name="[40]"></a>__user_setup_stackheap</STRONG> (Thumb, 74 bytes, Stack size 8 bytes, sys_stackheap_outer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
@@ -451,9 +454,9 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_soft_rst
-<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_hardware_rst
+<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_soft_rst
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_hardware_rst
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
 </UL>
 
 <P><STRONG><a name="[54]"></a>HAL_GPIO_Init</STRONG> (Thumb, 766 bytes, Stack size 36 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_Init))
@@ -469,7 +472,7 @@ Global Symbols
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_buf
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_reg
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_buf
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_hardware_rst
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_hardware_rst
 <LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 </UL>
 
@@ -674,167 +677,94 @@ Global Symbols
 <P><STRONG><a name="[8]"></a>UsageFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f1xx_it.o(i.UsageFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xb.o(RESET)
 </UL>
-<P><STRONG><a name="[72]"></a>disconnect_socket</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, w5500.o(i.disconnect_socket))
+<P><STRONG><a name="[72]"></a>disconnect_socket</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, w5500.o(i.disconnect_socket))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = disconnect_socket &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
 </UL>
 
-<P><STRONG><a name="[74]"></a>get_read_pointer</STRONG> (Thumb, 48 bytes, Stack size 24 bytes, w5500.o(i.get_read_pointer))
+<P><STRONG><a name="[7a]"></a>fill_crc32_table</STRONG> (Thumb, 48 bytes, Stack size 0 bytes, modbus.o(i.fill_crc32_table))
+<BR><BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[74]"></a>get_read_pointer</STRONG> (Thumb, 54 bytes, Stack size 24 bytes, w5500.o(i.get_read_pointer))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = get_read_pointer &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
 </UL>
 
-<P><STRONG><a name="[76]"></a>get_size_rx</STRONG> (Thumb, 50 bytes, Stack size 24 bytes, w5500.o(i.get_size_rx))
+<P><STRONG><a name="[76]"></a>get_size_rx</STRONG> (Thumb, 56 bytes, Stack size 24 bytes, w5500.o(i.get_size_rx))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = get_size_rx &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
 </UL>
 
-<P><STRONG><a name="[77]"></a>get_socket_status</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, w5500.o(i.get_socket_status))
-<BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = get_socket_status &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<P><STRONG><a name="[77]"></a>get_socket_status</STRONG> (Thumb, 42 bytes, Stack size 24 bytes, w5500.o(i.get_socket_status))
+<BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = get_socket_status &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
-<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
 </UL>
 
-<P><STRONG><a name="[78]"></a>get_write_pointer</STRONG> (Thumb, 48 bytes, Stack size 24 bytes, w5500.o(i.get_write_pointer))
+<P><STRONG><a name="[78]"></a>get_write_pointer</STRONG> (Thumb, 54 bytes, Stack size 24 bytes, w5500.o(i.get_write_pointer))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = get_write_pointer &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
 </UL>
 
-<P><STRONG><a name="[79]"></a>listen_socket</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, w5500.o(i.listen_socket))
+<P><STRONG><a name="[79]"></a>listen_socket</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, w5500.o(i.listen_socket))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = listen_socket &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
-<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
 </UL>
 
-<P><STRONG><a name="[44]"></a>main</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = main &rArr; w5500_packet_receive &rArr; w5500_read_sock_buf &rArr; w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<P><STRONG><a name="[44]"></a>main</STRONG> (Thumb, 226 bytes, Stack size 0 bytes, main.o(i.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = main &rArr; receive_packet &rArr; w5500_read_sock_buf &rArr; w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
-<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;net_ini
+<BR>[Calls]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fill_crc32_table
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
 <LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_SPI1_Init
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_I2C1_Init
 <LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
+<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
-<P><STRONG><a name="[7a]"></a>net_ini</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, network.o(i.net_ini))
-<BR><BR>[Stack]<UL><LI>Max Depth = 184<LI>Call Chain = net_ini &rArr; w5500_ini &rArr; socket_listen_wait &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
-</UL>
-<BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-</UL>
-
-<P><STRONG><a name="[7d]"></a>open_socket</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, w5500.o(i.open_socket))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = open_socket &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<P><STRONG><a name="[7d]"></a>open_socket</STRONG> (Thumb, 54 bytes, Stack size 24 bytes, w5500.o(i.open_socket))
+<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = open_socket &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
-<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
 </UL>
 
-<P><STRONG><a name="[7e]"></a>recv_socket</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, w5500.o(i.recv_socket))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = recv_socket &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<P><STRONG><a name="[7c]"></a>receive_packet</STRONG> (Thumb, 180 bytes, Stack size 24 bytes, modbus.o(i.receive_packet))
+<BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = receive_packet &rArr; w5500_read_sock_buf &rArr; w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
-</UL>
-
-<P><STRONG><a name="[7f]"></a>send_socket</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, w5500.o(i.send_socket))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = send_socket &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
-</UL>
-
-<P><STRONG><a name="[80]"></a>set_sock_port</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, w5500.o(i.set_sock_port))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = set_sock_port &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
-</UL>
-
-<P><STRONG><a name="[81]"></a>socket_init_wait</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, w5500.o(i.socket_init_wait))
-<BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = socket_init_wait &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_reg
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
-<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
-</UL>
-
-<P><STRONG><a name="[82]"></a>socket_listen_wait</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, w5500.o(i.socket_listen_wait))
-<BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = socket_listen_wait &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_reg
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
-<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
-</UL>
-
-<P><STRONG><a name="[83]"></a>w5500_hardware_rst</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, w5500.o(i.w5500_hardware_rst))
-<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = w5500_hardware_rst &rArr; HAL_Delay
-</UL>
-<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
-</UL>
-
-<P><STRONG><a name="[7c]"></a>w5500_ini</STRONG> (Thumb, 86 bytes, Stack size 8 bytes, w5500.o(i.w5500_ini))
-<BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = w5500_ini &rArr; socket_listen_wait &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_soft_rst
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_mac_addr
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ipmask
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ipaddr
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ip_gate_addr
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_hardware_rst
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_listen_wait
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_init_wait
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_sock_port
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;open_socket
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;listen_socket
-<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_socket_status
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;net_ini
-</UL>
-
-<P><STRONG><a name="[7b]"></a>w5500_packet_receive</STRONG> (Thumb, 130 bytes, Stack size 128 bytes, w5500.o(i.w5500_packet_receive))
-<BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = w5500_packet_receive &rArr; w5500_read_sock_buf &rArr; w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_sock_buf
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_sock_buf
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_listen_wait
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_init_wait
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_socket
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recv_socket
+<BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_sock_buf
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_sock_buf
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_listen_wait
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_init_wait
+<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_socket
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recv_socket
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;open_socket
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;listen_socket
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_write_pointer
@@ -842,118 +772,189 @@ Global Symbols
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_size_rx
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_read_pointer
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;disconnect_socket
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8c]"></a>w5500_read_buf</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, w5500.o(i.w5500_read_buf))
+<P><STRONG><a name="[81]"></a>recv_socket</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, w5500.o(i.recv_socket))
+<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = recv_socket &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
+</UL>
+
+<P><STRONG><a name="[82]"></a>send_socket</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, w5500.o(i.send_socket))
+<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = send_socket &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
+</UL>
+
+<P><STRONG><a name="[85]"></a>set_sock_port</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, w5500.o(i.set_sock_port))
+<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = set_sock_port &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+</UL>
+
+<P><STRONG><a name="[83]"></a>socket_init_wait</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, w5500.o(i.socket_init_wait))
+<BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = socket_init_wait &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_reg
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
+</UL>
+
+<P><STRONG><a name="[84]"></a>socket_listen_wait</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, w5500.o(i.socket_listen_wait))
+<BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = socket_listen_wait &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_reg
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
+</UL>
+
+<P><STRONG><a name="[86]"></a>w5500_hardware_rst</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, w5500.o(i.w5500_hardware_rst))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = w5500_hardware_rst &rArr; HAL_Delay
+</UL>
+<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+</UL>
+
+<P><STRONG><a name="[7b]"></a>w5500_ini</STRONG> (Thumb, 130 bytes, Stack size 8 bytes, w5500.o(i.w5500_ini))
+<BR><BR>[Stack]<UL><LI>Max Depth = 184<LI>Call Chain = w5500_ini &rArr; get_socket_status &rArr; w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_soft_rst
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_mac_addr
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ipmask
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ipaddr
+<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ip_gate_addr
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_hardware_rst
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_listen_wait
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_init_wait
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_sock_port
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;open_socket
+<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;listen_socket
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_socket_status
+</UL>
+<BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[8c]"></a>w5500_read_buf</STRONG> (Thumb, 58 bytes, Stack size 16 bytes, w5500.o(i.w5500_read_buf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_Transmit
 <LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_Receive
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_sock_buf
+<BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_sock_buf
 </UL>
 
-<P><STRONG><a name="[75]"></a>w5500_read_reg</STRONG> (Thumb, 72 bytes, Stack size 32 bytes, w5500.o(i.w5500_read_reg))
+<P><STRONG><a name="[75]"></a>w5500_read_reg</STRONG> (Thumb, 74 bytes, Stack size 32 bytes, w5500.o(i.w5500_read_reg))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = w5500_read_reg &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_listen_wait
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_init_wait
+<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_listen_wait
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_init_wait
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_write_pointer
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_socket_status
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_size_rx
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_read_pointer
 </UL>
 
-<P><STRONG><a name="[89]"></a>w5500_read_sock_buf</STRONG> (Thumb, 54 bytes, Stack size 24 bytes, w5500.o(i.w5500_read_sock_buf))
-<BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = w5500_read_sock_buf &rArr; w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<P><STRONG><a name="[7e]"></a>w5500_read_sock_buf</STRONG> (Thumb, 60 bytes, Stack size 32 bytes, w5500.o(i.w5500_read_sock_buf))
+<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = w5500_read_sock_buf &rArr; w5500_read_buf &rArr; HAL_SPI_Receive &rArr; HAL_SPI_TransmitReceive &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_read_buf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
 </UL>
 
-<P><STRONG><a name="[86]"></a>w5500_set_ip_gate_addr</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, w5500.o(i.w5500_set_ip_gate_addr))
+<P><STRONG><a name="[89]"></a>w5500_set_ip_gate_addr</STRONG> (Thumb, 58 bytes, Stack size 16 bytes, w5500.o(i.w5500_set_ip_gate_addr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = w5500_set_ip_gate_addr &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
 </UL>
 
-<P><STRONG><a name="[88]"></a>w5500_set_ipaddr</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, w5500.o(i.w5500_set_ipaddr))
+<P><STRONG><a name="[8b]"></a>w5500_set_ipaddr</STRONG> (Thumb, 58 bytes, Stack size 16 bytes, w5500.o(i.w5500_set_ipaddr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = w5500_set_ipaddr &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
 </UL>
 
-<P><STRONG><a name="[87]"></a>w5500_set_ipmask</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, w5500.o(i.w5500_set_ipmask))
+<P><STRONG><a name="[8a]"></a>w5500_set_ipmask</STRONG> (Thumb, 58 bytes, Stack size 16 bytes, w5500.o(i.w5500_set_ipmask))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = w5500_set_ipmask &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
 </UL>
 
-<P><STRONG><a name="[85]"></a>w5500_set_mac_addr</STRONG> (Thumb, 68 bytes, Stack size 16 bytes, w5500.o(i.w5500_set_mac_addr))
+<P><STRONG><a name="[88]"></a>w5500_set_mac_addr</STRONG> (Thumb, 82 bytes, Stack size 16 bytes, w5500.o(i.w5500_set_mac_addr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = w5500_set_mac_addr &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
 </UL>
 
-<P><STRONG><a name="[84]"></a>w5500_soft_rst</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, w5500.o(i.w5500_soft_rst))
-<BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = w5500_soft_rst &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<P><STRONG><a name="[87]"></a>w5500_soft_rst</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, w5500.o(i.w5500_soft_rst))
+<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = w5500_soft_rst &rArr; w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_reg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
 </UL>
 
-<P><STRONG><a name="[8d]"></a>w5500_write_buf</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, w5500.o(i.w5500_write_buf))
+<P><STRONG><a name="[8d]"></a>w5500_write_buf</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, w5500.o(i.w5500_write_buf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = w5500_write_buf &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_Transmit
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_sock_buf
+<BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_sock_buf
 </UL>
 
-<P><STRONG><a name="[73]"></a>w5500_write_reg</STRONG> (Thumb, 68 bytes, Stack size 24 bytes, w5500.o(i.w5500_write_reg))
+<P><STRONG><a name="[73]"></a>w5500_write_reg</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, w5500.o(i.w5500_write_reg))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = w5500_write_reg &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_Transmit
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_soft_rst
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_mac_addr
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ipmask
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ipaddr
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ip_gate_addr
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_sock_port
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_socket
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recv_socket
+<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_soft_rst
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_mac_addr
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ipmask
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ipaddr
+<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_set_ip_gate_addr
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_sock_port
+<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_socket
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recv_socket
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;open_socket
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;listen_socket
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;disconnect_socket
 </UL>
 
-<P><STRONG><a name="[8b]"></a>w5500_write_sock_buf</STRONG> (Thumb, 58 bytes, Stack size 24 bytes, w5500.o(i.w5500_write_sock_buf))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = w5500_write_sock_buf &rArr; w5500_write_buf &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<P><STRONG><a name="[80]"></a>w5500_write_sock_buf</STRONG> (Thumb, 64 bytes, Stack size 32 bytes, w5500.o(i.w5500_write_sock_buf))
+<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = w5500_write_sock_buf &rArr; w5500_write_buf &rArr; HAL_SPI_Transmit &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_write_buf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_packet_receive
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive_packet
 </UL>
 <P>
 <H3>

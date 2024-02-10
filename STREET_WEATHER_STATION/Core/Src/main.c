@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "network.h"
+#include "modbus.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,7 +58,7 @@ static void MX_SPI1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+extern w5500_data w5500_1; // Настройки первой микросхемы w5500
 /* USER CODE END 0 */
 
 /**
@@ -92,7 +92,19 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-  net_ini();
+  fill_crc32_table();
+
+  w5500_data* w5500_1_ptr = &w5500_1;
+  w5500_1_ptr->ipaddr[0] = 192; w5500_1_ptr->ipaddr[1] = 168; w5500_1_ptr->ipaddr[2] = 1; w5500_1_ptr->ipaddr[3] = 197;
+	w5500_1_ptr->ipgate[0] = 192; w5500_1_ptr->ipgate[1] = 168; w5500_1_ptr->ipgate[2] = 1; w5500_1_ptr->ipgate[3] = 1;
+	w5500_1_ptr->ipmask[0] = 255; w5500_1_ptr->ipmask[1] = 255; w5500_1_ptr->ipmask[2] = 255; w5500_1_ptr->ipmask[3] = 0;
+	w5500_1_ptr->local_port = 5151;
+	w5500_1_ptr->macaddr[0] = 0x00; w5500_1_ptr->macaddr[1] = 0x15; w5500_1_ptr->macaddr[2] = 0x42; w5500_1_ptr->macaddr[3] = 0xBF; 
+	w5500_1_ptr->macaddr[4] = 0xF0; w5500_1_ptr->macaddr[5] = 0x51;
+	w5500_1_ptr->sock_num = 0;
+	w5500_1_ptr->spi_n = hspi1;
+	
+  w5500_ini(w5500_1_ptr);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -100,7 +112,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		w5500_packet_receive(0);
+		receive_packet(w5500_1_ptr, w5500_1_ptr->sock_num);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
