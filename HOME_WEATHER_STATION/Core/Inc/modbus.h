@@ -5,9 +5,15 @@
 #define MODBUS_H_
 
 #include "w5500.h"
+#include "eeprom.h"
 
+// Константные поля протокола
 #define PACKET_HEADER 0x55
 #define PACKET_TAIL 	0xAAAA
+
+// Поддерживаемые протоколом команды
+#define READ_CMD 	0x01
+#define WRITE_CMD 0x02
 
 // Структура, описывающая заголовочные поля пакета 
 typedef struct packet_header_struct
@@ -32,8 +38,10 @@ typedef struct modbus_struct
     packet_end      end_fields;     // Поля конца пакета
 }__attribute__((packed)) modbus_packet;
 
+// Функция, реализующая обмен данными по принципу запрос-ответ
+uint8_t request_reply_iteration(w5500_data* w5500_n, uint8_t sn);
 // Функция получения пакета
-void receive_packet(w5500_data* w5500_n, uint8_t sn);
+uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn);
 // Функция отправки пакета
 void transmit_packet(w5500_data* w5500_n, uint8_t sn);
 // Функция выполнения команды

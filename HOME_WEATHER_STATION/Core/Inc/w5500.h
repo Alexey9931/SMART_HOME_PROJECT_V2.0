@@ -151,6 +151,8 @@ void send_socket(w5500_data* w5500_n, uint8_t sock_num);
 uint16_t get_size_rx(w5500_data* w5500_n, uint8_t sock_num);
 // Функция определения адрес данных в приемном буфере
 uint16_t get_read_pointer(w5500_data* w5500_n, uint8_t sock_num);
+// Функция установки адреса начала данных для чтения из буфера приемника
+void set_read_pointer(w5500_data* w5500_n, uint8_t sock_num, uint16_t point);
 // Функция возвращает адрес начала данных для записи в буфер отправки
 uint16_t get_write_pointer(w5500_data* w5500_n, uint8_t sock_num);
 // Функция установки адреса начала данных для записи в буфер отправки
@@ -169,7 +171,5 @@ void w5500_set_ipmask(w5500_data* w5500_n, uint8_t ipmask[4]);
 void w5500_set_ipaddr(w5500_data* w5500_n, uint8_t ipaddr[4]);
 // Функция инициализации микросхемы
 void w5500_ini(w5500_data* w5500_n);
-// Функция приема пакета по сети
-void w5500_packet_receive(w5500_data* w5500_n, uint8_t sn);
 
 #endif /* W5500_H_ */

@@ -40,7 +40,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
- I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c1;
 
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
@@ -71,6 +71,9 @@ static void MX_USART3_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 extern w5500_data w5500_1; // Настройки первой микросхемы w5500
+
+extern eeprom_data rom_data;	//Пространство памяти ОЗУ (зеркализованное данными из ПЗУ)
+eeprom_data *rom_ptr = &rom_data;	// Указатель на данные ОЗУ
 /* USER CODE END 0 */
 
 /**
@@ -109,24 +112,28 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+	
+	// Заполнение таблицы CRC32
 	fill_crc32_table();
+	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
 	//eeproms_first_ini();
 	
-	eeprom_data data;
-	eeprom_data *ptr = &data;
-	eeprom_read(1, 0, 0, (uint8_t*)ptr, sizeof(data));
+	// Зеркализация данных из ПЗУ в ОЗУ
+	eeprom_read(1, 0, 0, (uint8_t*)rom_ptr, sizeof(rom_data));
 
+	// Инициализация контроллера Ethernet настройками из ПЗУ
   w5500_data* w5500_1_ptr = &w5500_1;
-	memcpy(w5500_1_ptr->ipaddr, &data.ip_addr, sizeof(data.ip_addr));
-	memcpy(w5500_1_ptr->ipgate, &data.ip_gate, sizeof(data.ip_gate));
-	memcpy(w5500_1_ptr->ipmask, &data.ip_mask, sizeof(data.ip_mask));
-	w5500_1_ptr->local_port = data.local_port;
-	memcpy(w5500_1_ptr->macaddr, &data.mac_addr, sizeof(data.mac_addr));
+	memcpy(w5500_1_ptr->ipaddr, &rom_data.ip_addr, sizeof(rom_data.ip_addr));
+	memcpy(w5500_1_ptr->ipgate, &rom_data.ip_gate, sizeof(rom_data.ip_gate));
+	memcpy(w5500_1_ptr->ipmask, &rom_data.ip_mask, sizeof(rom_data.ip_mask));
+	w5500_1_ptr->local_port = rom_data.local_port;
+	memcpy(w5500_1_ptr->macaddr, &rom_data.mac_addr, sizeof(rom_data.mac_addr));
 	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
-	
+		
   w5500_ini(w5500_1_ptr);
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -136,9 +143,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		receive_packet(w5500_1_ptr, w5500_1_ptr->sock_num);
-		
-		transmit_packet(w5500_1_ptr, w5500_1_ptr->sock_num);
+		request_reply_iteration(w5500_1_ptr, w5500_1_ptr->sock_num);
   }
   /* USER CODE END 3 */
 }

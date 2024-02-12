@@ -2,6 +2,8 @@
 
 extern I2C_HandleTypeDef hi2c1;
 
+eeprom_data rom_data;	//Пространство памяти ОЗУ (зеркализованное данными из ПЗУ)
+
 // Настройки по умолчанию
 #define DEVICE_NAME "Control Panel"
 uint8_t 	ip_addr_ini[4] = {192, 168, 1, 22};		//IP адрес по умолчанию

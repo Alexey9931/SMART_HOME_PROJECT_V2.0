@@ -1,6 +1,6 @@
 Dependencies for Project 'HOME_WEATHER_STATION', Target 'HOME_WEATHER_STATION': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (startup_stm32f407xx.s)(0x65BAA990)(--cpu Cortex-M4.fp.sp --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 535" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o home_weather_station\startup_stm32f407xx.o --depend home_weather_station\startup_stm32f407xx.d)
+F (startup_stm32f407xx.s)(0x65C8F11D)(--cpu Cortex-M4.fp.sp --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 535" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o home_weather_station\startup_stm32f407xx.o --depend home_weather_station\startup_stm32f407xx.d)
 F (..\Core\Src\network.c)(0x65943D3E)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="535" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o home_weather_station\network.o --omf_browse home_weather_station\network.crf --depend home_weather_station\network.d)
 I (../Core/Inc/network.h)(0x659A7BAA)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65993E2F)
@@ -36,9 +36,9 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x65993E2F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65993E2F)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x602569CE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x602569C4)
-I (../Core/Inc/w5500.h)(0x659A7B8A)
-F (..\Core\Src\w5500.c)(0x659443A1)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="535" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o home_weather_station\w5500.o --omf_browse home_weather_station\w5500.crf --depend home_weather_station\w5500.d)
-I (../Core/Inc/w5500.h)(0x659A7B8A)
+I (../Core/Inc/w5500.h)(0x65CA835E)
+F (..\Core\Src\w5500.c)(0x65CA835E)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="535" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o home_weather_station\w5500.o --omf_browse home_weather_station\w5500.crf --depend home_weather_station\w5500.d)
+I (../Core/Inc/w5500.h)(0x65CA835E)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65993E2F)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x65BAA98C)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x65993E2F)
@@ -72,12 +72,12 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x65993E2F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65993E2F)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x602569CE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x602569C4)
-F (..\Core\Inc\modbus.h)(0x659DA498)()
+F (..\Core\Inc\modbus.h)(0x65C9FDC1)()
 F (..\Core\Inc\network.h)(0x659A7BAA)()
-F (..\Core\Inc\w5500.h)(0x659A7B8A)()
-F (..\Core\Src\modbus.c)(0x65A84F31)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="535" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o home_weather_station\modbus.o --omf_browse home_weather_station\modbus.crf --depend home_weather_station\modbus.d)
-I (../Core/Inc/modbus.h)(0x659DA498)
-I (../Core/Inc/w5500.h)(0x659A7B8A)
+F (..\Core\Inc\w5500.h)(0x65CA835E)()
+F (..\Core\Src\modbus.c)(0x65CA835E)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="535" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o home_weather_station\modbus.o --omf_browse home_weather_station\modbus.crf --depend home_weather_station\modbus.d)
+I (../Core/Inc/modbus.h)(0x65C9FDC1)
+I (../Core/Inc/w5500.h)(0x65CA835E)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65993E2F)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x65BAA98C)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x65993E2F)
@@ -111,8 +111,10 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x65993E2F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65993E2F)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x602569CE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x602569C4)
+I (../Core/Inc/eeprom.h)(0x65BD6954)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x602569C8)
 F (..\Core\Inc\eeprom.h)(0x65BD6954)()
-F (..\Core\Src\eeprom.c)(0x65C7BACD)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="535" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o home_weather_station\eeprom.o --omf_browse home_weather_station\eeprom.crf --depend home_weather_station\eeprom.d)
+F (..\Core\Src\eeprom.c)(0x65C9FDC0)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="535" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o home_weather_station\eeprom.o --omf_browse home_weather_station\eeprom.crf --depend home_weather_station\eeprom.d)
 I (../Core/Inc/eeprom.h)(0x65BD6954)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65993E2F)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x65BAA98C)
@@ -148,7 +150,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65993E2F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x602569C4)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x602569CE)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x602569C8)
-F (../Core/Src/main.c)(0x65C7CDA3)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="535" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o home_weather_station\main.o --omf_browse home_weather_station\main.crf --depend home_weather_station\main.d)
+F (../Core/Src/main.c)(0x65C9FDBF)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_HOME_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="535" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o home_weather_station\main.o --omf_browse home_weather_station\main.crf --depend home_weather_station\main.d)
 I (../Core/Inc/main.h)(0x65993E34)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65993E2F)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x65BAA98C)
@@ -181,8 +183,8 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h)(0x65993E2F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x65993E2F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x65993E2F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65993E2F)
-I (../Core/Inc/modbus.h)(0x659DA498)
-I (../Core/Inc/w5500.h)(0x659A7B8A)
+I (../Core/Inc/modbus.h)(0x65C9FDC1)
+I (../Core/Inc/w5500.h)(0x65CA835E)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x602569CE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x602569C4)
 I (../Core/Inc/eeprom.h)(0x65BD6954)
