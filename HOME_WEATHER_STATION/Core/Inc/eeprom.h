@@ -17,6 +17,9 @@
 #define PAGE_SIZE 64     //Размер страницы
 #define PAGE_NUM  512    //Кол-во страниц
 
+// Имя устройства
+#define DEVICE_NAME "Control Panel"
+
 // Структура с данными для хранения в ПЗУ
 typedef struct eeprom_struct 
 {
@@ -30,10 +33,14 @@ typedef struct eeprom_struct
 
 // Функция первичной инициализации микросхем ПЗУ (выполняется один раз)
 void eeproms_first_ini();
+// Универсальная функция записи в ПЗУ (пока сделана только возможность записи в 1-ую микросхему)
+void eeprom_write(uint16_t addr, uint8_t *data, uint16_t size);
+// Универсальная функция чтения из ПЗУ (пока сделана только возможность чтения из 1-ой микросхемы)
+void eeprom_read(uint16_t addr, uint8_t *data, uint16_t size);
 // Функция записи в ПЗУ
-void eeprom_write(uint8_t rom_num, uint16_t page, uint16_t offset, uint8_t *data, uint16_t size);
+void _eeprom_write(uint8_t rom_num, uint16_t page, uint16_t offset, uint8_t *data, uint16_t size);
 // Функция чтения из ПЗУ
-void eeprom_read(uint8_t rom_num, uint16_t page, uint16_t offset, uint8_t *data, uint16_t size);
+void _eeprom_read(uint8_t rom_num, uint16_t page, uint16_t offset, uint8_t *data, uint16_t size);
 // Функция очистки страниц ПЗУ
 void eeprom_page_erase(uint8_t rom_num, uint16_t page);
 

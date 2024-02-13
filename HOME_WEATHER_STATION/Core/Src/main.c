@@ -120,7 +120,7 @@ int main(void)
 	//eeproms_first_ini();
 	
 	// Зеркализация данных из ПЗУ в ОЗУ
-	eeprom_read(1, 0, 0, (uint8_t*)rom_ptr, sizeof(rom_data));
+	eeprom_read(0, (uint8_t*)rom_ptr, sizeof(rom_data));
 
 	// Инициализация контроллера Ethernet настройками из ПЗУ
   w5500_data* w5500_1_ptr = &w5500_1;

@@ -124,6 +124,22 @@ void do_cmd(void)
 				memset(&tx_packet.data, WRITE_CMD, 1);
 				tx_data_size = 1;
 				break;
+		case CONFIG_CMD:
+				reg_addr = *(uint16_t*)rx_packet.data;
+				reg_size = *(uint16_t*)(rx_packet.data + sizeof(reg_addr));
+				eeprom_write(reg_addr, rx_packet.data + sizeof(reg_addr) + sizeof(reg_size), reg_size);
+				memset(&tx_packet.data, CONFIG_CMD, 1);
+				tx_data_size = 1;
+				break;
+		case RESET_CMD:
+				eeproms_first_ini();
+				memset(&tx_packet.data, RESET_CMD, 1);
+				tx_data_size = 1;
+				break;
+		case TYPE_CMD:
+				strncpy((char*)&tx_packet.data, (char*)rom_data.device_name, sizeof(rom_data.device_name));
+				tx_data_size = sizeof(rom_data.device_name);
+				break;
 	}
 }
 // Функция вычисления контрольной суммы буфера по алгоритму CRC32

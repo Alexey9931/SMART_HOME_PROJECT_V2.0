@@ -5,7 +5,6 @@ extern I2C_HandleTypeDef hi2c1;
 eeprom_data rom_data;	//Пространство памяти ОЗУ (зеркализованное данными из ПЗУ)
 
 // Настройки по умолчанию
-#define DEVICE_NAME "Control Panel"
 uint8_t 	ip_addr_ini[4] = {192, 168, 1, 22};		//IP адрес по умолчанию
 uint8_t 	ip_gate_ini[4] = {192, 168, 1, 1};		//IP маршрутизатора по умолчанию
 uint8_t 	ip_mask_ini[4] = {255, 255, 255, 0};		//Маскирование по умолчанию
@@ -24,7 +23,7 @@ void eeproms_first_ini()
 	memcpy(rom_struct.mac_addr, mac_addr_ini, sizeof(mac_addr_ini));
 	
 	eeprom_page_erase(1, 0);
-	eeprom_write(1, 0, 0, (uint8_t*)&rom_struct, sizeof(rom_struct));
+	eeprom_write(0, (uint8_t*)&rom_struct, sizeof(rom_struct));
 }
 
 uint16_t bytestowrite (uint16_t size, uint16_t offset)
@@ -33,7 +32,55 @@ uint16_t bytestowrite (uint16_t size, uint16_t offset)
 	else return PAGE_SIZE-offset;
 }
 
-void eeprom_write(uint8_t rom_num, uint16_t page, uint16_t offset, uint8_t *data, uint16_t size)
+void eeprom_write(uint16_t addr, uint8_t *data, uint16_t size)
+{
+	uint16_t start_page = addr/PAGE_SIZE;
+	uint16_t start_offset = addr - start_page*PAGE_SIZE;
+	uint16_t data_offset;
+	
+	while(1)
+	{
+		if (size > (PAGE_SIZE - start_offset))
+		{
+			_eeprom_write(1, start_page, start_offset, data + data_offset, PAGE_SIZE - start_offset);
+			size -= (PAGE_SIZE - start_offset);
+			start_offset = 0;
+			start_page++;
+			data_offset += (PAGE_SIZE - start_offset);
+		}
+		else 
+		{
+			_eeprom_write(1, start_page, start_offset, data + data_offset, size);
+			break;
+		}
+	}
+}
+
+void eeprom_read(uint16_t addr, uint8_t *data, uint16_t size)
+{
+	uint16_t start_page = addr/PAGE_SIZE;
+	uint16_t start_offset = addr - start_page*PAGE_SIZE;
+	uint16_t data_offset;
+	
+	while(1)
+	{
+		if (size > (PAGE_SIZE - start_offset))
+		{
+			_eeprom_read(1, start_page, start_offset, data + data_offset, PAGE_SIZE - start_offset);
+			size -= (PAGE_SIZE - start_offset);
+			start_offset = 0;
+			start_page++;
+			data_offset += (PAGE_SIZE - start_offset);
+		}
+		else 
+		{
+			_eeprom_read(1, start_page, start_offset, data + data_offset, size);
+			break;
+		}
+	}
+}
+
+void _eeprom_write(uint8_t rom_num, uint16_t page, uint16_t offset, uint8_t *data, uint16_t size)
 {
 	uint8_t eeprom_addr;
 	
@@ -80,7 +127,7 @@ void eeprom_write(uint8_t rom_num, uint16_t page, uint16_t offset, uint8_t *data
 	}
 }
 
-void eeprom_read(uint8_t rom_num, uint16_t page, uint16_t offset, uint8_t *data, uint16_t size)
+void _eeprom_read(uint8_t rom_num, uint16_t page, uint16_t offset, uint8_t *data, uint16_t size)
 {
 	uint8_t eeprom_addr;
 	

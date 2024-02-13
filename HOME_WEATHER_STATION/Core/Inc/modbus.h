@@ -12,8 +12,11 @@
 #define PACKET_TAIL 	0xAAAA
 
 // Поддерживаемые протоколом команды
-#define READ_CMD 	0x01
-#define WRITE_CMD 0x02
+#define READ_CMD 		0x01
+#define WRITE_CMD 	0x02
+#define CONFIG_CMD 	0x03
+#define RESET_CMD 	0x04
+#define TYPE_CMD 		0x05
 
 // Структура, описывающая заголовочные поля пакета 
 typedef struct packet_header_struct
