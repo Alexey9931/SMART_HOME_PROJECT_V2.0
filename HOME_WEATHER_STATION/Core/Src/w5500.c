@@ -1,6 +1,7 @@
 #include "w5500.h"
 
 w5500_data w5500_1; // Настройки первой микросхемы w5500
+w5500_data* w5500_1_ptr = &w5500_1;
 
 // Функция записи байта в регистр
 void w5500_write_reg(w5500_data* w5500_n, uint8_t op, uint16_t address, uint8_t data)

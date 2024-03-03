@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "ds3231_rtc.h"
 
 // Адреса микросхем ПЗУ
 #define EEPROM_ADDR_1 0xA0
@@ -30,6 +31,15 @@ typedef struct eeprom_struct
 	uint8_t 	mac_addr[6];			//MAC адрес
 	uint32_t 	local_port;				//Порт соединения (сокета)
 }__attribute__((packed)) eeprom_data;
+
+// Структура с данными для хранения в ОЗУ
+typedef struct ram_struct 
+{
+	eeprom_data mirrored_to_rom_regs;
+	int 				num_rx_pack;
+	int 				num_tx_pack;
+	ds3231_time time;
+}__attribute__((packed)) ram_data_struct;
 
 // Функция первичной инициализации микросхем ПЗУ (выполняется один раз)
 void eeproms_first_ini();

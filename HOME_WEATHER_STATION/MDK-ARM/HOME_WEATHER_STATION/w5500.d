@@ -31,6 +31,8 @@ home_weather_station\w5500.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_
 home_weather_station\w5500.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 home_weather_station\w5500.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 home_weather_station\w5500.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
+home_weather_station\w5500.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
+home_weather_station\w5500.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 home_weather_station\w5500.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 home_weather_station\w5500.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 home_weather_station\w5500.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

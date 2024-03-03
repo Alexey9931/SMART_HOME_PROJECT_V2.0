@@ -1,6 +1,8 @@
 #include "modbus.h"
 
-extern eeprom_data rom_data;	//Пространство памяти ОЗУ (зеркализованное данными из ПЗУ)
+extern TIM_HandleTypeDef htim2;
+extern ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
+extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
 
 // Таблица для вычисления контрольной суммы
 uint_least32_t crc_table[256];	
@@ -17,6 +19,7 @@ uint8_t request_reply_iteration(w5500_data* w5500_n, uint8_t sn)
 	if (receive_packet(w5500_n, sn) != 0) return 1;
 	do_cmd();
 	transmit_packet(w5500_n, sn);
+	__HAL_TIM_SET_COUNTER(&htim2, 0);
 	
 	return 0;
 }
@@ -64,6 +67,8 @@ uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn)
 			return 1;
 		}
 		
+		ram_ptr->num_rx_pack++;
+		
 		return 0;
 	}
 	
@@ -101,6 +106,8 @@ void transmit_packet(w5500_data* w5500_n, uint8_t sn)
 		recv_socket(w5500_n, sn);
 		send_socket(w5500_n, sn);
 		
+		ram_ptr->num_tx_pack++;
+		
 		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_2);
 }
 // Функция выполнения команды
@@ -114,13 +121,13 @@ void do_cmd(void)
 		case READ_CMD:
 				reg_addr = *(uint16_t*)rx_packet.data;
 				reg_size = *(uint16_t*)(rx_packet.data + sizeof(reg_addr));
-				memcpy(&tx_packet.data, (uint8_t*)&rom_data + reg_addr, reg_size);
+				memcpy(&tx_packet.data, (uint8_t*)&ram_data + reg_addr, reg_size);
 				tx_data_size = reg_size;
 				break;
 		case WRITE_CMD:
 				reg_addr = *(uint16_t*)rx_packet.data;
 				reg_size = *(uint16_t*)(rx_packet.data + sizeof(reg_addr));
-				memcpy((uint8_t*)&rom_data + reg_addr, rx_packet.data + sizeof(reg_addr) + sizeof(reg_size), reg_size);
+				memcpy((uint8_t*)&ram_data + reg_addr, rx_packet.data + sizeof(reg_addr) + sizeof(reg_size), reg_size);
 				memset(&tx_packet.data, WRITE_CMD, 1);
 				tx_data_size = 1;
 				break;
@@ -137,8 +144,8 @@ void do_cmd(void)
 				tx_data_size = 1;
 				break;
 		case TYPE_CMD:
-				strncpy((char*)&tx_packet.data, (char*)rom_data.device_name, sizeof(rom_data.device_name));
-				tx_data_size = sizeof(rom_data.device_name);
+				memcpy((char*)&tx_packet.data, (char*)&ram_data, sizeof(ram_data));
+				tx_data_size = sizeof(ram_data);
 				break;
 	}
 }

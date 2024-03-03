@@ -2,7 +2,8 @@
 
 extern I2C_HandleTypeDef hi2c1;
 
-eeprom_data rom_data;	//Пространство памяти ОЗУ (зеркализованное данными из ПЗУ)
+ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
+ram_data_struct *ram_ptr = &ram_data;	// Указатель на данные ОЗУ
 
 // Настройки по умолчанию
 uint8_t 	ip_addr_ini[4] = {192, 168, 1, 22};		//IP адрес по умолчанию

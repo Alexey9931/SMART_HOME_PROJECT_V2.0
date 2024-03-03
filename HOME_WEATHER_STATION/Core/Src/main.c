@@ -21,8 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "modbus.h"
-#include "eeprom.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,6 +45,8 @@ SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi3;
 
+TIM_HandleTypeDef htim2;
+
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
@@ -64,6 +65,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -71,9 +73,11 @@ static void MX_USART3_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 extern w5500_data w5500_1; // Настройки первой микросхемы w5500
-
-extern eeprom_data rom_data;	//Пространство памяти ОЗУ (зеркализованное данными из ПЗУ)
-eeprom_data *rom_ptr = &rom_data;	// Указатель на данные ОЗУ
+extern w5500_data* w5500_1_ptr;
+extern ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
+extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
+extern uint8_t is_soc_active;	//Флаг активности сокета
+extern ds3231_time time;	// Структура времени
 /* USER CODE END 0 */
 
 /**
@@ -111,28 +115,34 @@ int main(void)
   MX_SPI3_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-	
+
 	// Заполнение таблицы CRC32
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
 	//eeproms_first_ini();
 	
+	// Инициализация микросхемы RTC (прошивается 1 раз)
+	//set_time(00, 03, 00, 1, 4, 3, 24);
+	get_time();
+	memcpy(&ram_ptr->time, &time, sizeof(time));
+	
 	// Зеркализация данных из ПЗУ в ОЗУ
-	eeprom_read(0, (uint8_t*)rom_ptr, sizeof(rom_data));
+	eeprom_read(0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
 
 	// Инициализация контроллера Ethernet настройками из ПЗУ
-  w5500_data* w5500_1_ptr = &w5500_1;
-	memcpy(w5500_1_ptr->ipaddr, &rom_data.ip_addr, sizeof(rom_data.ip_addr));
-	memcpy(w5500_1_ptr->ipgate, &rom_data.ip_gate, sizeof(rom_data.ip_gate));
-	memcpy(w5500_1_ptr->ipmask, &rom_data.ip_mask, sizeof(rom_data.ip_mask));
-	w5500_1_ptr->local_port = rom_data.local_port;
-	memcpy(w5500_1_ptr->macaddr, &rom_data.mac_addr, sizeof(rom_data.mac_addr));
+	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr, sizeof(ram_data.mirrored_to_rom_regs.ip_addr));
+	memcpy(w5500_1_ptr->ipgate, &ram_data.mirrored_to_rom_regs.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.ip_gate));
+	memcpy(w5500_1_ptr->ipmask, &ram_data.mirrored_to_rom_regs.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.ip_mask));
+	w5500_1_ptr->local_port = ram_data.mirrored_to_rom_regs.local_port;
+	memcpy(w5500_1_ptr->macaddr, &ram_data.mirrored_to_rom_regs.mac_addr, sizeof(ram_data.mirrored_to_rom_regs.mac_addr));
 	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
 		
-  w5500_ini(w5500_1_ptr);
+  //w5500_ini(w5500_1_ptr);
+	HAL_TIM_Base_Start_IT(&htim2);
 	
   /* USER CODE END 2 */
 
@@ -143,6 +153,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+		if (is_soc_active != 1) 
+		{
+			w5500_ini(w5500_1_ptr);
+			is_soc_active = 1;
+		}
 		request_reply_iteration(w5500_1_ptr, w5500_1_ptr->sock_num);
   }
   /* USER CODE END 3 */
@@ -338,6 +353,51 @@ static void MX_SPI3_Init(void)
   /* USER CODE BEGIN SPI3_Init 2 */
 
   /* USER CODE END SPI3_Init 2 */
+
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 8399;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 99999;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
 
 }
 

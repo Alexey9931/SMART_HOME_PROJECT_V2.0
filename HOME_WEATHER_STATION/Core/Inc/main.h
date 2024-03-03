@@ -31,7 +31,9 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "modbus.h"
+#include "eeprom.h"
+#include "ds3231_rtc.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
