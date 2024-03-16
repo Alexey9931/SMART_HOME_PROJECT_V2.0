@@ -34,6 +34,9 @@ extern "C" {
 #include "modbus.h"
 #include "eeprom.h"
 #include "ds3231_rtc.h"
+#include "bmp180.h"
+#include "dht22.h"
+#include "ds18b20.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

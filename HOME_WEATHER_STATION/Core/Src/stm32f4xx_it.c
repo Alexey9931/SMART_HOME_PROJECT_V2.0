@@ -22,6 +22,7 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "bmp180.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,6 +43,8 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 uint8_t is_soc_active = 1;
+extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
+extern ds3231_time time;	// Структура времени
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -56,8 +59,10 @@ uint8_t is_soc_active = 1;
 
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim5;
 /* USER CODE BEGIN EV */
 extern w5500_data* w5500_1_ptr;
+extern uint8_t is_time_to_update_params;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -212,6 +217,22 @@ void TIM2_IRQHandler(void)
 	is_soc_active = 0;
 
   /* USER CODE END TIM2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM5 global interrupt.
+  */
+void TIM5_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM5_IRQn 0 */
+
+  /* USER CODE END TIM5_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim5);
+  /* USER CODE BEGIN TIM5_IRQn 1 */
+	//Каждую секунду обновление параметров модуля
+	is_time_to_update_params = 1;
+
+  /* USER CODE END TIM5_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

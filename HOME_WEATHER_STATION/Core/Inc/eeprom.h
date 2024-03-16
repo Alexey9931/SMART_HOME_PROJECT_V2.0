@@ -39,6 +39,9 @@ typedef struct ram_struct
 	int 				num_rx_pack;
 	int 				num_tx_pack;
 	ds3231_time time;
+	float				temperature;
+	float 			humidity;
+	float				pressure;
 }__attribute__((packed)) ram_data_struct;
 
 // Функция первичной инициализации микросхем ПЗУ (выполняется один раз)

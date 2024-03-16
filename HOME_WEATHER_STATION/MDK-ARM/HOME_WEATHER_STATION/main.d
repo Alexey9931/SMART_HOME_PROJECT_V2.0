@@ -41,3 +41,7 @@ home_weather_station\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 home_weather_station\main.o: ../Core/Inc/eeprom.h
 home_weather_station\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 home_weather_station\main.o: ../Core/Inc/ds3231_rtc.h
+home_weather_station\main.o: ../Core/Inc/bmp180.h
+home_weather_station\main.o: ../Core/Inc/dht22.h
+home_weather_station\main.o: ../Core/Inc/ds18b20.h
+home_weather_station\main.o: ../Core/Inc/common.h

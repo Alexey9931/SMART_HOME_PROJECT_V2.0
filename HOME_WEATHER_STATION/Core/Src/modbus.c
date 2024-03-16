@@ -106,13 +106,13 @@ void transmit_packet(w5500_data* w5500_n, uint8_t sn)
 		recv_socket(w5500_n, sn);
 		send_socket(w5500_n, sn);
 		
-		ram_ptr->num_tx_pack++;
-		
 		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_2);
 }
 // Функция выполнения команды
 void do_cmd(void)
 {
+	ram_ptr->num_tx_pack++;
+	
 	uint16_t reg_addr;
 	uint16_t reg_size;
 	
