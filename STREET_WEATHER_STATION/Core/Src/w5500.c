@@ -1,22 +1,28 @@
 #include "w5500.h"
 
-
 w5500_data w5500_1; // Настройки первой микросхемы w5500
+w5500_data* w5500_1_ptr = &w5500_1;
+w5500_data w5500_2; // Настройки второй микросхемы w5500
+w5500_data* w5500_2_ptr = &w5500_2;
 
 // Функция записи байта в регистр
 void w5500_write_reg(w5500_data* w5500_n, uint8_t op, uint16_t address, uint8_t data)
 {
   uint8_t buf[] = {address >> 8, address, op|(RWB_WRITE<<2), data};
-  SS_SELECT();
+	if (w5500_n == w5500_1_ptr)	{SS_SELECT(1);}
+	else if (w5500_n == w5500_2_ptr)	{SS_SELECT(2);}
   HAL_SPI_Transmit(&w5500_n->spi_n, buf, 4, 0xFFFFFFFF);
-  SS_DESELECT();
+	if (w5500_n == w5500_1_ptr)	{SS_DESELECT(1);}
+	else if (w5500_n == w5500_2_ptr)	{SS_DESELECT(2);}
 }
 // Функция записи в буфер данных переменной длины
 void w5500_write_buf(w5500_data* w5500_n, data_sect_ptr *datasect, uint16_t len)
 {
-  SS_SELECT();
+  if (w5500_n == w5500_1_ptr)	{SS_SELECT(1);}
+	else if (w5500_n == w5500_2_ptr)	{SS_SELECT(2);}
   HAL_SPI_Transmit(&w5500_n->spi_n, (uint8_t*) datasect, len, 0xFFFFFFFF);
-  SS_DESELECT();
+	if (w5500_n == w5500_1_ptr)	{SS_DESELECT(1);}
+	else if (w5500_n == w5500_2_ptr)	{SS_DESELECT(2);}
 }
 // Функция записи в буфер данных переменной длины с привязкой к определенному сокету
 void w5500_write_sock_buf(w5500_data* w5500_n, uint8_t sock_num, uint16_t point, uint8_t *buf, uint16_t len)
@@ -32,19 +38,23 @@ uint8_t w5500_read_reg(w5500_data* w5500_n, uint8_t op, uint16_t address)
   uint8_t data;
   uint8_t wbuf[] = {address >> 8, address, op, 0x0};
   uint8_t rbuf[4];
-  SS_SELECT();
+  if (w5500_n == w5500_1_ptr)	{SS_SELECT(1);}
+	else if (w5500_n == w5500_2_ptr)	{SS_SELECT(2);}
   HAL_SPI_TransmitReceive(&w5500_n->spi_n, wbuf, rbuf, 4, 0xFFFFFFFF);
-  SS_DESELECT();
+  if (w5500_n == w5500_1_ptr)	{SS_DESELECT(1);}
+	else if (w5500_n == w5500_2_ptr)	{SS_DESELECT(2);}
   data = rbuf[3];
   return data;
 }
 // Функция чтения буфера
 void w5500_read_buf(w5500_data* w5500_n, data_sect_ptr *datasect, uint16_t len)
 {
-  SS_SELECT();
+  if (w5500_n == w5500_1_ptr)	{SS_SELECT(1);}
+	else if (w5500_n == w5500_2_ptr)	{SS_SELECT(2);}
   HAL_SPI_Transmit(&w5500_n->spi_n, (uint8_t*) datasect, 3, 0xFFFFFFFF);
   HAL_SPI_Receive(&w5500_n->spi_n, (uint8_t*) datasect, len, 0xFFFFFFFF);
-  SS_DESELECT();
+  if (w5500_n == w5500_1_ptr)	{SS_DESELECT(1);}
+	else if (w5500_n == w5500_2_ptr)	{SS_DESELECT(2);}
 }
 // Функция чтения одного байта из буфера
 uint8_t w5500_read_sock_buf_byte(w5500_data* w5500_n, uint8_t sock_num, uint16_t point)
@@ -172,6 +182,13 @@ uint16_t get_read_pointer(w5500_data* w5500_n, uint8_t sock_num)
   point = (w5500_read_reg(w5500_n, opcode,Sn_RX_RD0)<<8|w5500_read_reg(w5500_n, opcode,Sn_RX_RD1));
   return point;
 }
+void set_read_pointer(w5500_data* w5500_n, uint8_t sock_num, uint16_t point)
+{
+  uint8_t opcode;
+  opcode = (((sock_num<<2)|BSB_S0)<<3)|OM_FDM1;
+  w5500_write_reg(w5500_n, opcode, Sn_RX_RD0, point>>8);
+  w5500_write_reg(w5500_n, opcode, Sn_RX_RD1, (uint8_t)point);
+}
 // Функция возвращает адрес начала данных для записи в буфер отправки
 uint16_t get_write_pointer(w5500_data* w5500_n, uint8_t sock_num)
 {
@@ -190,11 +207,13 @@ void set_write_pointer(w5500_data* w5500_n, uint8_t sock_num, uint16_t point)
   w5500_write_reg(w5500_n, opcode, Sn_TX_WR1, (uint8_t)point);
 }
 // Функция аппаратного сброса микросхемы
-void w5500_hardware_rst(void)
+void w5500_hardware_rst(w5500_data* w5500_n)
 {
-	RST_SELECT();
+	if (w5500_n == w5500_1_ptr)	{RST_SELECT(1);}
+	else if (w5500_n == w5500_2_ptr)	{RST_SELECT(2);}
   HAL_Delay(70);
-  RST_DESELECT();
+  if (w5500_n == w5500_1_ptr)	{RST_DESELECT(1);}
+	else if (w5500_n == w5500_2_ptr)	{RST_DESELECT(2);}
   HAL_Delay(70);
 }
 // Функция программного сброса микросхемы
@@ -252,7 +271,7 @@ void w5500_set_ipaddr(w5500_data* w5500_n, uint8_t ipaddr[4])
 void w5500_ini(w5500_data* w5500_n)
 { 
   // Аппаратный сброс
-  w5500_hardware_rst();
+  //w5500_hardware_rst(w5500_n);
 
   // Программный сброс
   w5500_soft_rst(w5500_n);
@@ -277,39 +296,4 @@ void w5500_ini(w5500_data* w5500_n)
 
   // Проверяем статусы
 	get_socket_status(w5500_n, w5500_n->sock_num);
-}
-// Функция приема пакета по сети
-void w5500_packet_receive(w5500_data* w5500_n, uint8_t sn)
-{
-  uint16_t point;
-  uint16_t len;
-	uint8_t rx_buf[56];
-	uint8_t tx_buf[56];
-
-  // Если статус текущего сокета "Соединено"
-	if(get_socket_status(w5500_n, sn) == SOCK_ESTABLISHED)
-	{
-		len = get_size_rx(w5500_n, sn);
-    //Если пришел пустой пакет, то уходим из функции
-		if(len == 0) 
-		{
-			return;
-		}
-		else
-		{
-			w5500_read_sock_buf(w5500_n, sn, get_read_pointer(w5500_n, sn), rx_buf, len);
-			memcpy(tx_buf + 3, rx_buf, len);
-			w5500_write_sock_buf(w5500_n, sn, get_write_pointer(w5500_n, sn), tx_buf, len);
-			recv_socket(w5500_n, sn);
-			send_socket(w5500_n, sn);
-			
-			disconnect_socket(w5500_n, sn);
-			
-			open_socket(w5500_n, sn, Mode_TCP);
-			socket_init_wait(w5500_n, sn);
-			
-			listen_socket(w5500_n, sn);
-      socket_listen_wait(w5500_n, sn);
-		}
-	}
 }

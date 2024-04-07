@@ -47,11 +47,14 @@ SPI_HandleTypeDef hspi3;
 
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
+DMA_HandleTypeDef hdma_usart1_rx;
+DMA_HandleTypeDef hdma_usart1_tx;
 
 /* USER CODE BEGIN PV */
 
@@ -69,6 +72,8 @@ static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM5_Init(void);
+static void MX_DMA_Init(void);
+static void MX_TIM4_Init(void);
 static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -78,11 +83,13 @@ static void MX_TIM3_Init(void);
 /* USER CODE BEGIN 0 */
 extern w5500_data w5500_1; // Настройки первой микросхемы w5500
 extern w5500_data* w5500_1_ptr;
+extern w5500_data w5500_2; // Настройки второй микросхемы w5500
+extern w5500_data* w5500_2_ptr;
 extern ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
 extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
-extern uint8_t is_soc_active;	//Флаг активности сокета
-extern ds3231_time time;	// Структура времени
-uint8_t is_time_to_update_params;
+extern ds3231_time sys_time;	// Структура системного времени
+uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
+uint8_t hours_delta; // Локальный счетчик часов
 /* USER CODE END 0 */
 
 /**
@@ -122,42 +129,58 @@ int main(void)
   MX_USART3_UART_Init();
   MX_TIM2_Init();
   MX_TIM5_Init();
+  MX_DMA_Init();
+  MX_TIM4_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
 	// Заполнение таблицы CRC32
 	fill_crc32_table();
 	
-	// �?нициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
+	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
 	//eeproms_first_ini();
 	
-	// �?нициализация микросхемы RTC (прошивается 1 раз)
+	// Инициализация микросхемы RTC (прошивается 1 раз)
 	//set_time(00, 03, 00, 1, 4, 3, 24);
 	get_time();
-	memcpy(&ram_ptr->time, &time, sizeof(time));
+	memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
+	memcpy(&ram_ptr->start_time, &sys_time, sizeof(sys_time));
+	hours_delta = ram_ptr->start_time.hour;
 	
 	// Зеркализация данных из ПЗУ в ОЗУ
 	eeprom_read(0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
 
-	// �?нициализация контроллера Ethernet настройками из ПЗУ
-	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr, sizeof(ram_data.mirrored_to_rom_regs.ip_addr));
+	// Инициализация контроллера Ethernet1 настройками из ПЗУ
+	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr_1, sizeof(ram_data.mirrored_to_rom_regs.ip_addr_1));
 	memcpy(w5500_1_ptr->ipgate, &ram_data.mirrored_to_rom_regs.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.ip_gate));
 	memcpy(w5500_1_ptr->ipmask, &ram_data.mirrored_to_rom_regs.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.ip_mask));
 	w5500_1_ptr->local_port = ram_data.mirrored_to_rom_regs.local_port;
-	memcpy(w5500_1_ptr->macaddr, &ram_data.mirrored_to_rom_regs.mac_addr, sizeof(ram_data.mirrored_to_rom_regs.mac_addr));
+	memcpy(w5500_1_ptr->macaddr, &ram_data.mirrored_to_rom_regs.mac_addr_1, sizeof(ram_data.mirrored_to_rom_regs.mac_addr_1));
 	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
-		
-  //w5500_ini(w5500_1_ptr);
+	w5500_1_ptr->htim = htim2;
+	
+	// Инициализация контроллера Ethernet2 настройками из ПЗУ
+	memcpy(w5500_2_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr_2, sizeof(ram_data.mirrored_to_rom_regs.ip_addr_2));
+	memcpy(w5500_2_ptr->ipgate, &ram_data.mirrored_to_rom_regs.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.ip_gate));
+	memcpy(w5500_2_ptr->ipmask, &ram_data.mirrored_to_rom_regs.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.ip_mask));
+	w5500_2_ptr->local_port = ram_data.mirrored_to_rom_regs.local_port;
+	memcpy(w5500_2_ptr->macaddr, &ram_data.mirrored_to_rom_regs.mac_addr_2, sizeof(ram_data.mirrored_to_rom_regs.mac_addr_2));
+	w5500_2_ptr->sock_num = 0;
+	w5500_2_ptr->spi_n = hspi2;
+	w5500_2_ptr->htim = htim4;
+	
 	HAL_TIM_Base_Start_IT(&htim2);
+	HAL_TIM_Base_Start_IT(&htim4);
 	HAL_TIM_Base_Start_IT(&htim5);
 	HAL_TIM_Base_Start(&htim3);
 	
-	// �?нициализация датчиков
+	// Инициализация датчиков
 	bmp180_init();
 	dht22_init();
 	ds18b20_init(SKIP_ROM);
 	
+	dwin_write_half_word(0x0450, 0x0500);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -172,7 +195,12 @@ int main(void)
 		{
 			//обновление времени
 			get_time();
-			memcpy(&ram_ptr->time, &time, sizeof(time));
+			memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
+			if (((ram_ptr->sys_time.hour - hours_delta) > 0 )||((hours_delta - ram_ptr->sys_time.hour) == 23))
+			{
+				hours_delta = ram_ptr->sys_time.hour;
+				ram_ptr->work_time++;
+			}
 			//обновление показаний датчиков
 			ram_ptr->pressure = bmp180_get_press(3);
 			uint8_t data[5];
@@ -184,12 +212,19 @@ int main(void)
 			is_time_to_update_params = 0;
 		}
 		
-		if (is_soc_active != 1) 
+		if (w5500_1_ptr->is_soc_active != 1) 
 		{
 			w5500_ini(w5500_1_ptr);
-			is_soc_active = 1;
+			w5500_1_ptr->is_soc_active = 1;
 		}
 		request_reply_iteration(w5500_1_ptr, w5500_1_ptr->sock_num);
+		
+		if (w5500_2_ptr->is_soc_active != 1) 
+		{
+			w5500_ini(w5500_2_ptr);
+			w5500_2_ptr->is_soc_active = 1;
+		}
+		request_reply_iteration(w5500_2_ptr, w5500_2_ptr->sock_num);
   }
   /* USER CODE END 3 */
 }
@@ -478,6 +513,51 @@ static void MX_TIM3_Init(void)
 }
 
 /**
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM4_Init(void)
+{
+
+  /* USER CODE BEGIN TIM4_Init 0 */
+
+  /* USER CODE END TIM4_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM4_Init 1 */
+
+  /* USER CODE END TIM4_Init 1 */
+  htim4.Instance = TIM4;
+  htim4.Init.Prescaler = 8399;
+  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim4.Init.Period = 29999;
+  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM4_Init 2 */
+
+  /* USER CODE END TIM4_Init 2 */
+
+}
+
+/**
   * @brief TIM5 Initialization Function
   * @param None
   * @retval None
@@ -618,6 +698,25 @@ static void MX_USART3_UART_Init(void)
   /* USER CODE BEGIN USART3_Init 2 */
 
   /* USER CODE END USART3_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA2_Stream2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
+  /* DMA2_Stream7_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream7_IRQn);
 
 }
 

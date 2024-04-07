@@ -26,3 +26,5 @@ street_weather_station\stm32f1xx_hal_gpio_ex.o: ../../Drivers/STM32F1xx_HAL_Driv
 street_weather_station\stm32f1xx_hal_gpio_ex.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 street_weather_station\stm32f1xx_hal_gpio_ex.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 street_weather_station\stm32f1xx_hal_gpio_ex.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h
+street_weather_station\stm32f1xx_hal_gpio_ex.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
+street_weather_station\stm32f1xx_hal_gpio_ex.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h

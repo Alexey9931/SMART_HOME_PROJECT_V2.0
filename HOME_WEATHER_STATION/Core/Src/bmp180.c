@@ -3,9 +3,6 @@
 
 extern I2C_HandleTypeDef hi2c1;
 
-#define BMP180_I2C &hi2c1
-#define BMP180_ADDRESS 0xEE
-
 // Defines according to the datsheet
 short AC1 = 0;
 short AC2 = 0;
@@ -30,8 +27,6 @@ long B5 = 0;
 unsigned long B4 = 0;
 long B6 = 0;
 unsigned long B7 = 0;
-
-#define ATMPRESS 101325 //Pa
 
 void read_calliberation_data (void)
 {

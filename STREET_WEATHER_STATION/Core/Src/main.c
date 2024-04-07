@@ -39,9 +39,13 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-I2C_HandleTypeDef hi2c1;
+ I2C_HandleTypeDef hi2c1;
 
 SPI_HandleTypeDef hspi1;
+
+TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
 
 /* USER CODE BEGIN PV */
 
@@ -52,6 +56,9 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
+static void MX_TIM2_Init(void);
+static void MX_TIM4_Init(void);
+static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -59,6 +66,11 @@ static void MX_SPI1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 extern w5500_data w5500_1; // Настройки первой микросхемы w5500
+extern w5500_data* w5500_1_ptr;
+extern ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
+extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
+uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
+uint8_t hours_delta; // Локальный счетчик часов
 /* USER CODE END 0 */
 
 /**
@@ -91,20 +103,37 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_SPI1_Init();
+  MX_TIM2_Init();
+  MX_TIM4_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  fill_crc32_table();
 
-  w5500_data* w5500_1_ptr = &w5500_1;
-  w5500_1_ptr->ipaddr[0] = 192; w5500_1_ptr->ipaddr[1] = 168; w5500_1_ptr->ipaddr[2] = 1; w5500_1_ptr->ipaddr[3] = 197;
-	w5500_1_ptr->ipgate[0] = 192; w5500_1_ptr->ipgate[1] = 168; w5500_1_ptr->ipgate[2] = 1; w5500_1_ptr->ipgate[3] = 1;
-	w5500_1_ptr->ipmask[0] = 255; w5500_1_ptr->ipmask[1] = 255; w5500_1_ptr->ipmask[2] = 255; w5500_1_ptr->ipmask[3] = 0;
-	w5500_1_ptr->local_port = 5151;
-	w5500_1_ptr->macaddr[0] = 0x00; w5500_1_ptr->macaddr[1] = 0x15; w5500_1_ptr->macaddr[2] = 0x42; w5500_1_ptr->macaddr[3] = 0xBF; 
-	w5500_1_ptr->macaddr[4] = 0xF0; w5500_1_ptr->macaddr[5] = 0x51;
+	// Заполнение таблицы CRC32
+	fill_crc32_table();
+	
+	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
+	eeproms_first_ini();
+	
+	// Зеркализация данных из ПЗУ в ОЗУ
+	eeprom_read(0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
+
+	// Инициализация контроллера Ethernet1 настройками из ПЗУ
+	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr, sizeof(ram_data.mirrored_to_rom_regs.ip_addr));
+	memcpy(w5500_1_ptr->ipgate, &ram_data.mirrored_to_rom_regs.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.ip_gate));
+	memcpy(w5500_1_ptr->ipmask, &ram_data.mirrored_to_rom_regs.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.ip_mask));
+	w5500_1_ptr->local_port = ram_data.mirrored_to_rom_regs.local_port;
+	memcpy(w5500_1_ptr->macaddr, &ram_data.mirrored_to_rom_regs.mac_addr, sizeof(ram_data.mirrored_to_rom_regs.mac_addr));
 	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
+	w5500_1_ptr->htim = htim2;
 	
-  w5500_ini(w5500_1_ptr);
+	HAL_TIM_Base_Start_IT(&htim2);
+	HAL_TIM_Base_Start_IT(&htim4);
+	HAL_TIM_Base_Start(&htim3);
+	
+	// Инициализация датчиков
+	ds18b20_init(SKIP_ROM);
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -112,8 +141,24 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		receive_packet(w5500_1_ptr, w5500_1_ptr->sock_num);
+
     /* USER CODE BEGIN 3 */
+		//если пришло время обновить параметры модуля
+		if (is_time_to_update_params == 1)
+		{
+			//обновление времени
+
+			//обновление показаний датчиков
+			ram_ptr->temperature = ds18b20_get_temp();
+			is_time_to_update_params = 0;
+		}
+		
+		if (w5500_1_ptr->is_soc_active != 1) 
+		{
+			w5500_ini(w5500_1_ptr);
+			w5500_1_ptr->is_soc_active = 1;
+		}
+		request_reply_iteration(w5500_1_ptr, w5500_1_ptr->sock_num);
   }
   /* USER CODE END 3 */
 }
@@ -173,7 +218,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.ClockSpeed = 400000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -214,7 +259,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -226,6 +271,141 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 3604;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 29999;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 35;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 65535;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
+
+}
+
+/**
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM4_Init(void)
+{
+
+  /* USER CODE BEGIN TIM4_Init 0 */
+
+  /* USER CODE END TIM4_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM4_Init 1 */
+
+  /* USER CODE END TIM4_Init 1 */
+  htim4.Instance = TIM4;
+  htim4.Init.Prescaler = 7199;
+  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim4.Init.Period = 9999;
+  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM4_Init 2 */
+
+  /* USER CODE END TIM4_Init 2 */
 
 }
 
@@ -244,10 +424,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_Pin|ETH1_SCS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(ETH1_RST_GPIO_Port, ETH1_RST_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(ETH1_SCS_GPIO_Port, ETH1_SCS_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(ETH1_RST_GPIO_Port, ETH1_RST_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : LED_Pin ETH1_SCS_Pin */
   GPIO_InitStruct.Pin = LED_Pin|ETH1_SCS_Pin;

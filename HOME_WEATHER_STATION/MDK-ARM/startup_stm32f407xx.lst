@@ -850,11 +850,11 @@ ARM Macro Assembler    Page 14
 
 
 ation\startup_stm32f407xx.o -I.\RTE\_HOME_WEATHER_STATION -IC:\Users\Alex2\AppD
-ata\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include -IC:\Users\Alex2\AppData
+ata\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\Alex2\AppData
 \Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\In
-clude --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 535" --pr
-edefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --predefine="_RTE_ SETA
- 1" --list=startup_stm32f407xx.lst startup_stm32f407xx.s
+clude --predefine="__UVISION_VERSION SETA 538" --predefine="_RTE_ SETA 1" --pre
+define="STM32F407xx SETA 1" --predefine="_RTE_ SETA 1" --list=startup_stm32f407
+xx.lst startup_stm32f407xx.s
 
 
 
@@ -1958,4 +1958,4 @@ Symbol: __use_two_region_memory
       None
 Comment: __use_two_region_memory unused
 3 symbols
-449 symbols in table
+448 symbols in table

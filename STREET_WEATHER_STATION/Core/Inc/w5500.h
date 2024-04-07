@@ -8,15 +8,30 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdio.h>
 
-#define CS_GPIO_PORT    GPIOA
-#define CS_PIN          GPIO_PIN_4
-#define RST_GPIO_PORT   GPIOB
-#define RST_PIN         GPIO_PIN_0
-#define SS_SELECT()     HAL_GPIO_WritePin(CS_GPIO_PORT, CS_PIN, GPIO_PIN_RESET)
-#define SS_DESELECT()   HAL_GPIO_WritePin(CS_GPIO_PORT, CS_PIN, GPIO_PIN_SET)
-#define RST_SELECT()    HAL_GPIO_WritePin(RST_GPIO_PORT, RST_PIN, GPIO_PIN_RESET)
-#define RST_DESELECT()  HAL_GPIO_WritePin(RST_GPIO_PORT, RST_PIN, GPIO_PIN_SET)
+#define CS_ETH1_GPIO_PORT    GPIOA
+#define CS_ETH1_PIN          GPIO_PIN_4
+#define RST_ETH1_GPIO_PORT   GPIOC
+#define RST_ETH1_PIN         GPIO_PIN_4
+#define CS_ETH2_GPIO_PORT    GPIOB
+#define CS_ETH2_PIN          GPIO_PIN_12
+#define RST_ETH2_GPIO_PORT   GPIOB
+#define RST_ETH2_PIN         GPIO_PIN_13
+
+#define SS_SELECT(w5500_num) \
+		if (w5500_num == 1) {HAL_GPIO_WritePin(CS_ETH1_GPIO_PORT, CS_ETH1_PIN, GPIO_PIN_RESET);}	\
+		else if (w5500_num == 2) {HAL_GPIO_WritePin(CS_ETH2_GPIO_PORT, CS_ETH2_PIN, GPIO_PIN_RESET);}
+#define SS_DESELECT(w5500_num)	\
+		if (w5500_num == 1) {HAL_GPIO_WritePin(CS_ETH1_GPIO_PORT, CS_ETH1_PIN, GPIO_PIN_SET);}	\
+		else if (w5500_num == 2) {HAL_GPIO_WritePin(CS_ETH2_GPIO_PORT, CS_ETH2_PIN, GPIO_PIN_SET);}
+#define RST_SELECT(w5500_num)	\
+		if (w5500_num == 1) {HAL_GPIO_WritePin(RST_ETH1_GPIO_PORT, RST_ETH1_PIN, GPIO_PIN_RESET);}	\
+		else if (w5500_num == 2) {HAL_GPIO_WritePin(RST_ETH2_GPIO_PORT, RST_ETH2_PIN, GPIO_PIN_RESET);}
+#define RST_DESELECT(w5500_num)	\
+		if (w5500_num == 1) {HAL_GPIO_WritePin(RST_ETH1_GPIO_PORT, RST_ETH1_PIN, GPIO_PIN_SET);}	\
+		else if (w5500_num == 2) {HAL_GPIO_WritePin(RST_ETH2_GPIO_PORT, RST_ETH2_PIN, GPIO_PIN_SET);}
+
 
 #define MAC_ADDR {0x00,0x15,0x42,0xBF,0xF0,0x51}
 
@@ -100,17 +115,19 @@ typedef struct data_sect
 // Структура с настройками и данными микросхемы w5500
 typedef struct w5500_struct
 {
-  SPI_HandleTypeDef spi_n;  	// Выбранный интерфейс SPI для микросхемы w5500
-  uint8_t 	macaddr[6];       // MAC адрес
-  uint8_t 	ipaddr[4];        // IP адрес
-  uint8_t 	ipgate[4];        // IP адрес маршрутизатора
-  uint8_t 	ipmask[4];        // Маска подсети
-  uint16_t 	local_port;      	// Порт соединения
-  uint8_t 	sock_num;         // Номер сокета
-	uint8_t 	rx_buf[BUF_LEN];			// Буфер приемника
-	uint8_t 	tx_buf[BUF_LEN];			// Буфер передатчика
-	uint32_t 	rx_buf_len;				// Длина буфера приемника
-	uint32_t 	tx_buf_len;				// Длина буфера передатчика
+  SPI_HandleTypeDef spi_n;  					// Выбранный интерфейс SPI для микросхемы w5500
+  uint8_t 					macaddr[6];       // MAC адрес
+  uint8_t 					ipaddr[4];        // IP адрес
+  uint8_t 					ipgate[4];        // IP адрес маршрутизатора
+  uint8_t 					ipmask[4];        // Маска подсети
+  uint16_t 					local_port;      	// Порт соединения
+  uint8_t 					sock_num;         // Номер сокета
+	uint8_t 					is_soc_active;		// Статус сокета (активен/не активен)
+	TIM_HandleTypeDef htim;							// Таймер для ведения таймаута
+	uint8_t 					rx_buf[BUF_LEN];	// Буфер приемника
+	uint8_t 					tx_buf[BUF_LEN];	// Буфер передатчика
+	uint32_t 					rx_buf_len;				// Длина буфера приемника
+	uint32_t 					tx_buf_len;				// Длина буфера передатчика
 } w5500_data;
 
 // Функция записи байта в регистр
@@ -151,12 +168,14 @@ void send_socket(w5500_data* w5500_n, uint8_t sock_num);
 uint16_t get_size_rx(w5500_data* w5500_n, uint8_t sock_num);
 // Функция определения адрес данных в приемном буфере
 uint16_t get_read_pointer(w5500_data* w5500_n, uint8_t sock_num);
+// Функция установки адреса начала данных для чтения из буфера приемника
+void set_read_pointer(w5500_data* w5500_n, uint8_t sock_num, uint16_t point);
 // Функция возвращает адрес начала данных для записи в буфер отправки
 uint16_t get_write_pointer(w5500_data* w5500_n, uint8_t sock_num);
 // Функция установки адреса начала данных для записи в буфер отправки
 void set_write_pointer(w5500_data* w5500_n, uint8_t sock_num, uint16_t point);
 // Функция аппаратного сброса микросхемы
-void w5500_hardware_rst(void);
+void w5500_hardware_rst(w5500_data* w5500_n);
 // Функция программного сброса микросхемы
 void w5500_soft_rst(w5500_data* w5500_n);
 // Функция установки mac адреса микросхемы
@@ -169,7 +188,5 @@ void w5500_set_ipmask(w5500_data* w5500_n, uint8_t ipmask[4]);
 void w5500_set_ipaddr(w5500_data* w5500_n, uint8_t ipaddr[4]);
 // Функция инициализации микросхемы
 void w5500_ini(w5500_data* w5500_n);
-// Функция приема пакета по сети
-void w5500_packet_receive(w5500_data* w5500_n, uint8_t sn);
 
 #endif /* W5500_H_ */

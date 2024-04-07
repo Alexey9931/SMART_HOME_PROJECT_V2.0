@@ -37,6 +37,7 @@ extern "C" {
 #include "bmp180.h"
 #include "dht22.h"
 #include "ds18b20.h"
+#include "dwin.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

@@ -6,10 +6,12 @@ ram_data_struct ram_data;	//Пространство памяти ОЗУ (куд
 ram_data_struct *ram_ptr = &ram_data;	// Указатель на данные ОЗУ
 
 // Настройки по умолчанию
-uint8_t 	ip_addr_ini[4] = {192, 168, 1, 22};		//IP адрес по умолчанию
+uint8_t 	ip_addr_ini_1[4] = {192, 168, 1, 22};		//IP адрес 1-го порта по умолчанию
+uint8_t 	ip_addr_ini_2[4] = {192, 168, 1, 23};		//IP адрес 2-го порта по умолчанию
 uint8_t 	ip_gate_ini[4] = {192, 168, 1, 1};		//IP маршрутизатора по умолчанию
 uint8_t 	ip_mask_ini[4] = {255, 255, 255, 0};		//Маскирование по умолчанию
-uint8_t 	mac_addr_ini[6] = {0x00, 0x15, 0x42, 0xBF, 0xF0, 0x51};	//MAC адрес по умолчанию
+uint8_t 	mac_addr_ini_1[6] = {0x00, 0x15, 0x42, 0xBF, 0xF0, 0x22};	//MAC адрес 1-го порта по умолчанию
+uint8_t 	mac_addr_ini_2[6] = {0x00, 0x15, 0x42, 0xBF, 0xF0, 0x23};	//MAC адрес 2-го порта по умолчанию
 uint32_t 	local_port_ini = 5151;		//Порт соединения (сокета) по умолчанию
 
 void eeproms_first_ini()
@@ -17,11 +19,13 @@ void eeproms_first_ini()
 	eeprom_data rom_struct;
 	
 	strncpy((char*)&rom_struct.device_name, DEVICE_NAME, sizeof(DEVICE_NAME));	
-	memcpy(rom_struct.ip_addr, ip_addr_ini, sizeof(ip_addr_ini));
+	memcpy(rom_struct.ip_addr_1, ip_addr_ini_1, sizeof(ip_addr_ini_1));
+	memcpy(rom_struct.ip_addr_2, ip_addr_ini_2, sizeof(ip_addr_ini_2));
 	memcpy(rom_struct.ip_gate, ip_gate_ini, sizeof(ip_gate_ini));
 	memcpy(rom_struct.ip_mask, ip_mask_ini, sizeof(ip_mask_ini));
 	rom_struct.local_port = local_port_ini;
-	memcpy(rom_struct.mac_addr, mac_addr_ini, sizeof(mac_addr_ini));
+	memcpy(rom_struct.mac_addr_1, mac_addr_ini_1, sizeof(mac_addr_ini_1));
+	memcpy(rom_struct.mac_addr_2, mac_addr_ini_2, sizeof(mac_addr_ini_2));
 	
 	eeprom_page_erase(1, 0);
 	eeprom_write(0, (uint8_t*)&rom_struct, sizeof(rom_struct));

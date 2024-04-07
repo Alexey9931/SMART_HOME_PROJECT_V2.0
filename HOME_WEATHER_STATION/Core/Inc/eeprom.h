@@ -25,10 +25,12 @@
 typedef struct eeprom_struct 
 {
 	uint8_t 	device_name[32];	//Имя устройства
-	uint8_t 	ip_addr[4];				//IP адрес
+	uint8_t 	ip_addr_1[4];			//IP адрес 1-го порта
+	uint8_t 	ip_addr_2[4];			//IP адрес 2-го порта
 	uint8_t 	ip_gate[4];				//IP маршрутизатора
 	uint8_t 	ip_mask[4];				//Маскирование
-	uint8_t 	mac_addr[6];			//MAC адрес
+	uint8_t 	mac_addr_1[6];		//MAC адрес 1-го порта
+	uint8_t 	mac_addr_2[6];		//MAC адрес 2-го порта
 	uint32_t 	local_port;				//Порт соединения (сокета)
 }__attribute__((packed)) eeprom_data;
 
@@ -38,7 +40,9 @@ typedef struct ram_struct
 	eeprom_data mirrored_to_rom_regs;
 	int 				num_rx_pack;
 	int 				num_tx_pack;
-	ds3231_time time;
+	int         work_time;
+	ds3231_time	start_time;
+	ds3231_time sys_time;
 	float				temperature;
 	float 			humidity;
 	float				pressure;

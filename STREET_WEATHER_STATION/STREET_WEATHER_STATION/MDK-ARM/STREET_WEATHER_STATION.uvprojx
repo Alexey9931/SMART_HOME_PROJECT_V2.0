@@ -186,6 +186,7 @@
             <RvdsVP>0</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
+            <nBranchProt>0</nBranchProt>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -419,16 +420,6 @@
               <FilePath>..\..\Core\Inc\w5500.h</FilePath>
             </File>
             <File>
-              <FileName>network.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Core\Inc\network.h</FilePath>
-            </File>
-            <File>
-              <FileName>network.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Core\Src\network.c</FilePath>
-            </File>
-            <File>
               <FileName>modbus.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Core\Src\modbus.c</FilePath>
@@ -437,6 +428,36 @@
               <FileName>modbus.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Core\Inc\modbus.h</FilePath>
+            </File>
+            <File>
+              <FileName>common.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Core\Src\common.c</FilePath>
+            </File>
+            <File>
+              <FileName>ds18b20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Core\Src\ds18b20.c</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Core\Src\eeprom.c</FilePath>
+            </File>
+            <File>
+              <FileName>common.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Core\Inc\common.h</FilePath>
+            </File>
+            <File>
+              <FileName>ds18b20.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Core\Inc\ds18b20.h</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Core\Inc\eeprom.h</FilePath>
             </File>
           </Files>
         </Group>

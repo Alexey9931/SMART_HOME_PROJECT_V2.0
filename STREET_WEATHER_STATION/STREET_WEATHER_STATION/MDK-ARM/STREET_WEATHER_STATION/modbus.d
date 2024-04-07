@@ -28,5 +28,10 @@ street_weather_station\modbus.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1x
 street_weather_station\modbus.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 street_weather_station\modbus.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 street_weather_station\modbus.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h
+street_weather_station\modbus.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
+street_weather_station\modbus.o: ../../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 street_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 street_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+street_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+street_weather_station\modbus.o: ../../Core/Inc/eeprom.h
+street_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
