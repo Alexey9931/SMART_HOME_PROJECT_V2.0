@@ -38,3 +38,4 @@ home_weather_station\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 home_weather_station\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 home_weather_station\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 home_weather_station\eeprom.o: ../Core/Inc/ds3231_rtc.h
+home_weather_station\eeprom.o: ../Core/Inc/common.h

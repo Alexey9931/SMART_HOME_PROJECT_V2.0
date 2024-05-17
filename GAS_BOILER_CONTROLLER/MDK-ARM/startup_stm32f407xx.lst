@@ -852,7 +852,7 @@ ARM Macro Assembler    Page 14
 troller\startup_stm32f407xx.o -I.\RTE\_GAS_BOILER_CONTROLLER -IC:\Users\Alex2\A
 ppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\Alex2\AppD
 ata\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx
-\Include --predefine="__UVISION_VERSION SETA 538" --predefine="_RTE_ SETA 1" --
+\Include --predefine="__UVISION_VERSION SETA 539" --predefine="_RTE_ SETA 1" --
 predefine="STM32F407xx SETA 1" --predefine="_RTE_ SETA 1" --list=startup_stm32f
 407xx.lst startup_stm32f407xx.s
 

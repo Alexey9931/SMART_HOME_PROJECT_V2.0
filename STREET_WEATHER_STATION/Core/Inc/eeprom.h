@@ -12,23 +12,27 @@
 
 // Адреса микросхем ПЗУ
 #define EEPROM_ADDR_1 0xA0
-#define EEPROM_ADDR_2 0xA1
+#define EEPROM_ADDR_2 0xA2
+
 // Параметры микросхем ПЗУ
 #define PAGE_SIZE 64     //Размер страницы
 #define PAGE_NUM  512    //Кол-во страниц
 
 // Имя устройства
-#define DEVICE_NAME "Control Panel"
+#define DEVICE_NAME "Weather Station"
 
 // Структура с данными для хранения в ПЗУ
 typedef struct eeprom_struct 
 {
 	uint8_t 	device_name[32];	//Имя устройства
-	uint8_t 	ip_addr[4];				//IP адрес порта
+	uint8_t 	ip_addr_1[4];			//IP адрес 1-го порта
+	uint8_t 	ip_addr_2[4];			//IP адрес 2-го порта
 	uint8_t 	ip_gate[4];				//IP маршрутизатора
 	uint8_t 	ip_mask[4];				//Маскирование
-	uint8_t 	mac_addr[6];			//MAC адрес порта
+	uint8_t 	mac_addr_1[6];		//MAC адрес 1-го порта
+	uint8_t 	mac_addr_2[6];		//MAC адрес 2-го порта
 	uint32_t 	local_port;				//Порт соединения (сокета)
+	uint8_t 	reserv[8];				//Резерв
 }__attribute__((packed)) eeprom_data;
 
 // Структура байта-описвания регистра WindDirection
@@ -51,6 +55,7 @@ typedef struct ram_struct
 	int 						num_rx_pack;
 	int 						num_tx_pack;
 	int         		work_time;
+	uint8_t					reserv[12];
 	float						temperature;
 	float 					humidity;
 	float						rainfall;

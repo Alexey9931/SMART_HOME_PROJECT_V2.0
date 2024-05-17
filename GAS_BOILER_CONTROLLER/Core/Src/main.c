@@ -128,10 +128,10 @@ int main(void)
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-	eeproms_first_ini();
+	//eeproms_first_ini();
 	
 	// Инициализация микросхемы RTC (прошивается 1 раз)
-	set_time(00, 04, 13, 7, 7, 4, 24);
+	//set_time(00, 14, 0, 6, 18, 5, 24);
 	
 	get_time();
 	memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
@@ -165,6 +165,9 @@ int main(void)
 	HAL_TIM_Base_Start_IT(&htim4);
 	HAL_TIM_Base_Start_IT(&htim5);
 	HAL_TIM_Base_Start(&htim3);
+	
+	// Инициализация дисплея
+	max7219_init();
 	
 	// Инициализация датчиков
 	dht22_init();
@@ -233,12 +236,11 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLM = 4;
   RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
@@ -395,7 +397,7 @@ static void MX_SPI3_Init(void)
   hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi3.Init.NSS = SPI_NSS_SOFT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -654,8 +656,10 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, ETH2_SS_Pin|ETH2_RST_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, LCD_NSS_Pin|SD_NSS_Pin|NRF24_CE_Pin|led_link_Pin
-                          |led_error_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LCD_NSS_GPIO_Port, LCD_NSS_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, SD_NSS_Pin|NRF24_CE_Pin|led_link_Pin|led_error_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(MOSFET_GPIO_Port, MOSFET_Pin, GPIO_PIN_RESET);
@@ -675,11 +679,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : ETH2_INT_Pin */
-  GPIO_InitStruct.Pin = ETH2_INT_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pins : ETH2_INT_Pin ETH1_INT_Pin */
+  GPIO_InitStruct.Pin = ETH2_INT_Pin|ETH1_INT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(ETH2_INT_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : ETH1_SS_Pin NRF24_SS_Pin */
   GPIO_InitStruct.Pin = ETH1_SS_Pin|NRF24_SS_Pin;
@@ -695,17 +699,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : ETH1_INT_Pin */
-  GPIO_InitStruct.Pin = ETH1_INT_Pin;
+  /*Configure GPIO pin : button_up_Pin */
+  GPIO_InitStruct.Pin = button_up_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(ETH1_INT_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : button_up_Pin button_down_Pin */
-  GPIO_InitStruct.Pin = button_up_Pin|button_down_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(button_up_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : button_ok_Pin */
   GPIO_InitStruct.Pin = button_ok_Pin;

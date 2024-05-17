@@ -1,4 +1,5 @@
 #include "ds3231_rtc.h"
+#include "common.h"
 
 extern I2C_HandleTypeDef hi2c1;
 ds3231_time sys_time;
@@ -24,6 +25,7 @@ void set_time(uint8_t sec, uint8_t min, uint8_t hour, uint8_t dow, uint8_t dom, 
 	set_time[4] = dec_to_binary(dom);
 	set_time[5] = dec_to_binary(month);
 	set_time[6] = dec_to_binary(year);
+		
 	HAL_I2C_Mem_Write(&hi2c1, DS3231_ADDRESS, 0x00, 1, set_time, 7, 1000);
 }
 
@@ -32,6 +34,7 @@ void get_time(void)
 	uint8_t get_time[7];
 	
 	HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, 0x00, 1, get_time, 7, 1000);
+	
 	sys_time.seconds = binary_to_dec(get_time[0]);
 	sys_time.minutes = binary_to_dec(get_time[1]);
 	sys_time.hour = binary_to_dec(get_time[2]);
@@ -55,10 +58,11 @@ void force_temp_conv(void)
 	uint8_t status=0;
 	uint8_t control=0;
 	
-	HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, 0x0F, 1, &status, 1, 100);  // read status register
+	HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, 0x0F, 1, &status, 1, 100);
+
 	if (!(status&0x04))
 	{
-		HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, 0x0E, 1, &control, 1, 100);  // read control register
+		HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, 0x0E, 1, &control, 1, 100);
 		HAL_I2C_Mem_Write(&hi2c1, DS3231_ADDRESS, 0x0E, 1, (uint8_t *)(control|(0x20)), 1, 100);
 	}
 }

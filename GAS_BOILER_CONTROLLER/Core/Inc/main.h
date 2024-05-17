@@ -36,6 +36,7 @@ extern "C" {
 #include "ds3231_rtc.h"
 #include "dht22.h"
 #include "ds18b20.h"
+#include "lcd.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -81,8 +82,6 @@ void Error_Handler(void);
 #define ETH1_INT_GPIO_Port GPIOC
 #define button_up_Pin GPIO_PIN_0
 #define button_up_GPIO_Port GPIOB
-#define button_down_Pin GPIO_PIN_1
-#define button_down_GPIO_Port GPIOB
 #define button_ok_Pin GPIO_PIN_7
 #define button_ok_GPIO_Port GPIOE
 #define ETH2_SS_Pin GPIO_PIN_12

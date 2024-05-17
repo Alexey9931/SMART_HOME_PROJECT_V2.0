@@ -143,6 +143,11 @@ void do_cmd(void)
 				tx_data_size = 1;
 				break;
 		case type_cmd:
+				memcpy((char*)&tx_packet.data, (char*)&ram_data.mirrored_to_rom_regs.device_name, 
+					sizeof(ram_data.mirrored_to_rom_regs.device_name));
+				tx_data_size = sizeof(ram_data.mirrored_to_rom_regs.device_name);
+				break;
+		case init_cmd:
 				memcpy((char*)&tx_packet.data, (char*)&ram_data, sizeof(ram_data));
 				tx_data_size = sizeof(ram_data);
 				break;

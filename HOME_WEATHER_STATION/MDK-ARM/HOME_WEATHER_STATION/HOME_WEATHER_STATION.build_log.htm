@@ -3,31 +3,46 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: µVision V5.38.0.0
-Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: Alexey Gorlov, MEPHI, LIC=----
+IDE-Version: µVision V5.39.0.0
+Copyright (C) 2023 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Alexey Gorlov, MEPHI, LIC=4ZLZX-HH6IC-VJG6J-UYJG0-ALN2U-F3C4M
  
 Tool Versions:
-Toolchain:       MDK-ARM Professional  Version: 5.38.0.0
+Toolchain:       MDK-ARM Professional  Version: 5.39.0.0
 Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
 C Compiler:      Armcc.exe V5.06 update 7 (build 960)
 Assembler:       Armasm.exe V5.06 update 7 (build 960)
 Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
 Library Manager: ArmAr.exe V5.06 update 7 (build 960)
 Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
-CPU DLL:         SARMCM3.DLL V5.38.0.0
+CPU DLL:         SARMCM3.DLL V5.39.0.0
 Dialog DLL:      DCM.DLL V1.17.5.0
-Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.1.0.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.2.0.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 E:\SMART_HOME_PROJECT_v.2.0\HOME_WEATHER_STATION\MDK-ARM\HOME_WEATHER_STATION.uvprojx
-Project File Date:  03/31/2024
+Project File Date:  05/17/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'HOME_WEATHER_STATION'
 assembling startup_stm32f407xx.s...
+compiling network.c...
+../Core/Inc/network.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif /* __NETWORK_H */
+..\Core\Src\network.c: 1 warning, 0 errors
+compiling eeprom.c...
+../Core/Inc/ds3231_rtc.h(28): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+../Core/Inc/eeprom.h(54): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
+  void eeproms_first_ini();
+../Core/Inc/eeprom.h(66): warning:  #1-D: last line of file ends without a newline
+  #endif /* EEPROM_H_ */
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+..\Core\Src\eeprom.c: 4 warnings, 0 errors
+compiling w5500.c...
 compiling bmp180.c...
 ../Core/Inc/bmp180.h(14): warning:  #1-D: last line of file ends without a newline
   #endif /* __BMP180_H */
@@ -36,6 +51,12 @@ compiling bmp180.c...
 ..\Core\Src\bmp180.c(136): warning:  #1-D: last line of file ends without a newline
   }
 ..\Core\Src\bmp180.c: 3 warnings, 0 errors
+compiling ds3231_rtc.c...
+../Core/Inc/ds3231_rtc.h(28): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+..\Core\Src\ds3231_rtc.c: 2 warnings, 0 errors
 compiling dht22.c...
 ../Core/Inc/dht22.h(15): warning:  #1-D: last line of file ends without a newline
   #endif /* __DHT22_H */
@@ -54,51 +75,18 @@ compiling dht22.c...
 ..\Core\Src\dht22.c(56): warning:  #1-D: last line of file ends without a newline
   }
 ..\Core\Src\dht22.c: 8 warnings, 0 errors
-compiling eeprom.c...
-../Core/Inc/ds3231_rtc.h(28): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS3231_RTC_H */
-../Core/Inc/eeprom.h(52): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
-  void eeproms_first_ini();
-../Core/Inc/eeprom.h(64): warning:  #1-D: last line of file ends without a newline
-  #endif /* EEPROM_H_ */
-..\Core\Src\eeprom.c: 3 warnings, 0 errors
-compiling network.c...
-../Core/Inc/network.h(20): warning:  #1-D: last line of file ends without a newline
-  #endif /* __NETWORK_H */
-..\Core\Src\network.c: 1 warning, 0 errors
-compiling ds3231_rtc.c...
-../Core/Inc/ds3231_rtc.h(28): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS3231_RTC_H */
-..\Core\Src\ds3231_rtc.c(64): warning:  #1-D: last line of file ends without a newline
-  }
-..\Core\Src\ds3231_rtc.c: 2 warnings, 0 errors
 compiling modbus.c...
 ../Core/Inc/ds3231_rtc.h(28): warning:  #1-D: last line of file ends without a newline
   #endif /* __DS3231_RTC_H */
-../Core/Inc/eeprom.h(52): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
+../Core/Inc/eeprom.h(54): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
   void eeproms_first_ini();
-../Core/Inc/eeprom.h(64): warning:  #1-D: last line of file ends without a newline
+../Core/Inc/eeprom.h(66): warning:  #1-D: last line of file ends without a newline
   #endif /* EEPROM_H_ */
 ../Core/Inc/modbus.h(60): warning:  #1-D: last line of file ends without a newline
   #endif /* MODBUS_H_ */
 ..\Core\Src\modbus.c(176): warning:  #1-D: last line of file ends without a newline
   }
 ..\Core\Src\modbus.c: 5 warnings, 0 errors
-compiling w5500.c...
-compiling common.c...
-../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
-  #endif /* __COMMON_H */
-..\Core\Src\common.c(27): warning:  #1-D: last line of file ends without a newline
-  }
-..\Core\Src\common.c: 2 warnings, 0 errors
-compiling dwin.c...
-../Core/Inc/dwin.h(35): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DWIN_H */
-..\Core\Src\dwin.c(17): warning:  #1-D: last line of file ends without a newline
-  }
-..\Core\Src\dwin.c(8): warning:  #177-D: variable "tx_buf"  was declared but never referenced
-  	uint8_t tx_buf[9];
-..\Core\Src\dwin.c: 3 warnings, 0 errors
 compiling ds18b20.c...
 ../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
   #endif /* __COMMON_H */
@@ -119,34 +107,25 @@ compiling ds18b20.c...
 ..\Core\Src\ds18b20.c(52): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 1);
 ..\Core\Src\ds18b20.c: 9 warnings, 0 errors
-compiling stm32f4xx_it.c...
-../Core/Inc/ds3231_rtc.h(28): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS3231_RTC_H */
-../Core/Inc/eeprom.h(52): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
-  void eeproms_first_ini();
-../Core/Inc/eeprom.h(64): warning:  #1-D: last line of file ends without a newline
-  #endif /* EEPROM_H_ */
-../Core/Inc/modbus.h(60): warning:  #1-D: last line of file ends without a newline
-  #endif /* MODBUS_H_ */
-../Core/Inc/bmp180.h(14): warning:  #1-D: last line of file ends without a newline
-  #endif /* __BMP180_H */
-../Core/Inc/dht22.h(15): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DHT22_H */
-../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
-  #endif /* __COMMON_H */
-../Core/Inc/ds18b20.h(25): warning:  #1295-D: Deprecated declaration ds18b20_get_temp - give arg types
-  float ds18b20_get_temp();
-../Core/Inc/ds18b20.h(27): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS18B20_H */
+compiling stm32f4xx_hal_i2c_ex.c...
+compiling dwin.c...
 ../Core/Inc/dwin.h(35): warning:  #1-D: last line of file ends without a newline
   #endif /* __DWIN_H */
-../Core/Src/stm32f4xx_it.c: 10 warnings, 0 errors
+..\Core\Src\dwin.c(17): warning:  #1-D: last line of file ends without a newline
+  }
+..\Core\Src\dwin.c(8): warning:  #177-D: variable "tx_buf"  was declared but never referenced
+  	uint8_t tx_buf[9];
+..\Core\Src\dwin.c: 3 warnings, 0 errors
+compiling common.c...
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+..\Core\Src\common.c: 1 warning, 0 errors
 compiling main.c...
 ../Core/Inc/ds3231_rtc.h(28): warning:  #1-D: last line of file ends without a newline
   #endif /* __DS3231_RTC_H */
-../Core/Inc/eeprom.h(52): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
+../Core/Inc/eeprom.h(54): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
   void eeproms_first_ini();
-../Core/Inc/eeprom.h(64): warning:  #1-D: last line of file ends without a newline
+../Core/Inc/eeprom.h(66): warning:  #1-D: last line of file ends without a newline
   #endif /* EEPROM_H_ */
 ../Core/Inc/modbus.h(60): warning:  #1-D: last line of file ends without a newline
   #endif /* MODBUS_H_ */
@@ -163,12 +142,34 @@ compiling main.c...
 ../Core/Inc/dwin.h(35): warning:  #1-D: last line of file ends without a newline
   #endif /* __DWIN_H */
 ../Core/Src/main.c: 10 warnings, 0 errors
+compiling stm32f4xx_it.c...
+../Core/Inc/ds3231_rtc.h(28): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+../Core/Inc/eeprom.h(54): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
+  void eeproms_first_ini();
+../Core/Inc/eeprom.h(66): warning:  #1-D: last line of file ends without a newline
+  #endif /* EEPROM_H_ */
+../Core/Inc/modbus.h(60): warning:  #1-D: last line of file ends without a newline
+  #endif /* MODBUS_H_ */
+../Core/Inc/bmp180.h(14): warning:  #1-D: last line of file ends without a newline
+  #endif /* __BMP180_H */
+../Core/Inc/dht22.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DHT22_H */
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+../Core/Inc/ds18b20.h(25): warning:  #1295-D: Deprecated declaration ds18b20_get_temp - give arg types
+  float ds18b20_get_temp();
+../Core/Inc/ds18b20.h(27): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS18B20_H */
+../Core/Inc/dwin.h(35): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DWIN_H */
+../Core/Src/stm32f4xx_it.c: 10 warnings, 0 errors
 compiling stm32f4xx_hal_msp.c...
 ../Core/Inc/ds3231_rtc.h(28): warning:  #1-D: last line of file ends without a newline
   #endif /* __DS3231_RTC_H */
-../Core/Inc/eeprom.h(52): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
+../Core/Inc/eeprom.h(54): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
   void eeproms_first_ini();
-../Core/Inc/eeprom.h(64): warning:  #1-D: last line of file ends without a newline
+../Core/Inc/eeprom.h(66): warning:  #1-D: last line of file ends without a newline
   #endif /* EEPROM_H_ */
 ../Core/Inc/modbus.h(60): warning:  #1-D: last line of file ends without a newline
   #endif /* MODBUS_H_ */
@@ -186,27 +187,26 @@ compiling stm32f4xx_hal_msp.c...
   #endif /* __DWIN_H */
 ../Core/Src/stm32f4xx_hal_msp.c: 10 warnings, 0 errors
 compiling stm32f4xx_hal_i2c.c...
-compiling stm32f4xx_hal_i2c_ex.c...
-compiling stm32f4xx_hal_rcc_ex.c...
-compiling stm32f4xx_hal_flash_ramfunc.c...
-compiling stm32f4xx_hal_flash_ex.c...
-compiling stm32f4xx_hal_flash.c...
+compiling stm32f4xx_hal_dma_ex.c...
 compiling stm32f4xx_hal_gpio.c...
 compiling stm32f4xx_hal_rcc.c...
-compiling stm32f4xx_hal_dma.c...
-compiling stm32f4xx_hal_pwr_ex.c...
+compiling stm32f4xx_hal_rcc_ex.c...
+compiling stm32f4xx_hal_flash_ramfunc.c...
+compiling stm32f4xx_hal_flash.c...
+compiling stm32f4xx_hal_flash_ex.c...
+compiling stm32f4xx_hal_spi.c...
 compiling stm32f4xx_hal_cortex.c...
 compiling stm32f4xx_hal_exti.c...
-compiling stm32f4xx_hal_dma_ex.c...
-compiling stm32f4xx_hal.c...
 compiling stm32f4xx_hal_pwr.c...
-compiling system_stm32f4xx.c...
-compiling stm32f4xx_hal_spi.c...
+compiling stm32f4xx_hal_dma.c...
+compiling stm32f4xx_hal_pwr_ex.c...
+compiling stm32f4xx_hal.c...
 compiling stm32f4xx_hal_uart.c...
+compiling system_stm32f4xx.c...
 compiling stm32f4xx_hal_tim_ex.c...
 compiling stm32f4xx_hal_tim.c...
 linking...
-Program Size: Code=33422 RO-data=658 RW-data=144 ZI-data=10352  
+Program Size: Code=33042 RO-data=662 RW-data=144 ZI-data=10360  
 FromELF: creating hex file...
 "HOME_WEATHER_STATION\HOME_WEATHER_STATION.axf" - 0 Error(s), 66 Warning(s).
 
@@ -214,13 +214,13 @@ FromELF: creating hex file...
 
 Package Vendor: ARM
                 http://www.keil.com/pack/ARM.CMSIS.5.9.0.pack
-                ARM.CMSIS.5.9.0
+                ARM::CMSIS@5.9.0
                 CMSIS (Common Microcontroller Software Interface Standard)
    * Component: CORE Version: 5.6.0
 
 Package Vendor: Keil
                 http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.13.0.pack
-                Keil.STM32F4xx_DFP.2.13.0
+                Keil::STM32F4xx_DFP@2.13.0
                 STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
 
 <h2>Collection of Component include folders:</h2>
@@ -230,9 +230,9 @@ Package Vendor: Keil
 
 <h2>Collection of Component Files used:</h2>
 
-   * Component: ARM::CMSIS:CORE:5.6.0
+   * Component: ARM::CMSIS:CORE@5.6.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:01:18
+Build Time Elapsed:  00:00:24
 </pre>
 </body>
 </html>

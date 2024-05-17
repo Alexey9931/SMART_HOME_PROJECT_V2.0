@@ -45,3 +45,4 @@ gas_boiler_controller\stm32f4xx_hal_msp.o: ../Core/Inc/ds3231_rtc.h
 gas_boiler_controller\stm32f4xx_hal_msp.o: ../Core/Inc/dht22.h
 gas_boiler_controller\stm32f4xx_hal_msp.o: ../Core/Inc/ds18b20.h
 gas_boiler_controller\stm32f4xx_hal_msp.o: ../Core/Inc/common.h
+gas_boiler_controller\stm32f4xx_hal_msp.o: ../Core/Inc/lcd.h

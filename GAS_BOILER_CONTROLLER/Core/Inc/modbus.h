@@ -18,7 +18,8 @@ typedef enum
 	write_cmd = 0x02,
 	config_cmd = 0x03,
 	reset_cmd = 0x04,
-	type_cmd = 0x05
+	type_cmd = 0x05,
+	init_cmd = 0x06
 } modbus_commands;
 
 // Структура, описывающая заголовочные поля пакета 

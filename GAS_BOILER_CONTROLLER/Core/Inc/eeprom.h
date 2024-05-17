@@ -13,13 +13,14 @@
 
 // Адреса микросхем ПЗУ
 #define EEPROM_ADDR_1 0xA0
-#define EEPROM_ADDR_2 0xA1
+#define EEPROM_ADDR_2 0xA2
+
 // Параметры микросхем ПЗУ
 #define PAGE_SIZE 64     //Размер страницы
 #define PAGE_NUM  512    //Кол-во страниц
 
 // Имя устройства
-#define DEVICE_NAME "Control Panel"
+#define DEVICE_NAME "Gas Boiler Controller"
 
 // Структура с данными для хранения в ПЗУ
 typedef struct eeprom_struct 
@@ -32,6 +33,8 @@ typedef struct eeprom_struct
 	uint8_t 	mac_addr_1[6];		//MAC адрес 1-го порта
 	uint8_t 	mac_addr_2[6];		//MAC адрес 2-го порта
 	uint32_t 	local_port;				//Порт соединения (сокета)
+	float			temp_setpoint;		//Уставка температуры
+	float			temp_range;				//Нижний предел уставки температуры
 }__attribute__((packed)) eeprom_data;
 
 // Структура с данными для хранения в ОЗУ
@@ -46,8 +49,6 @@ typedef struct ram_struct
 	float				temperature;
 	float 			humidity;
 	uint8_t			rele_status;
-	float				temp_setpoint;
-	float				temp_range;
 }__attribute__((packed)) ram_data_struct;
 
 // Функция первичной инициализации микросхем ПЗУ (выполняется один раз)

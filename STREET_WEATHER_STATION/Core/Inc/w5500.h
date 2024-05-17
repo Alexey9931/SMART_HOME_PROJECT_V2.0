@@ -12,8 +12,8 @@
 
 #define CS_ETH1_GPIO_PORT    GPIOA
 #define CS_ETH1_PIN          GPIO_PIN_4
-#define RST_ETH1_GPIO_PORT   GPIOC
-#define RST_ETH1_PIN         GPIO_PIN_4
+#define RST_ETH1_GPIO_PORT   GPIOB
+#define RST_ETH1_PIN         GPIO_PIN_0
 #define CS_ETH2_GPIO_PORT    GPIOB
 #define CS_ETH2_PIN          GPIO_PIN_12
 #define RST_ETH2_GPIO_PORT   GPIOB

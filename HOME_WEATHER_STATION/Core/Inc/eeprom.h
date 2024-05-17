@@ -13,7 +13,8 @@
 
 // Адреса микросхем ПЗУ
 #define EEPROM_ADDR_1 0xA0
-#define EEPROM_ADDR_2 0xA1
+#define EEPROM_ADDR_2 0xA2
+
 // Параметры микросхем ПЗУ
 #define PAGE_SIZE 64     //Размер страницы
 #define PAGE_NUM  512    //Кол-во страниц
@@ -32,6 +33,7 @@ typedef struct eeprom_struct
 	uint8_t 	mac_addr_1[6];		//MAC адрес 1-го порта
 	uint8_t 	mac_addr_2[6];		//MAC адрес 2-го порта
 	uint32_t 	local_port;				//Порт соединения (сокета)
+	uint8_t 	reserv[8];				//Резерв
 }__attribute__((packed)) eeprom_data;
 
 // Структура с данными для хранения в ОЗУ

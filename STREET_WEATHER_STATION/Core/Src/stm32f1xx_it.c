@@ -226,6 +226,7 @@ void TIM4_IRQHandler(void)
   /* USER CODE BEGIN TIM4_IRQn 1 */
 	//Каждую секунду обновление параметров модуля
 	is_time_to_update_params = 1;
+	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
   /* USER CODE END TIM4_IRQn 1 */
 }
 

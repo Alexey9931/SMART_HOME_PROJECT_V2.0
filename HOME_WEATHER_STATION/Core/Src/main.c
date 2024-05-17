@@ -141,7 +141,7 @@ int main(void)
 	//eeproms_first_ini();
 	
 	// Инициализация микросхемы RTC (прошивается 1 раз)
-	//set_time(00, 03, 00, 1, 4, 3, 24);
+	//set_time(00, 48, 23, 5, 17, 5, 24);
 	get_time();
 	memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
 	memcpy(&ram_ptr->start_time, &sys_time, sizeof(sys_time));
@@ -180,7 +180,7 @@ int main(void)
 	dht22_init();
 	ds18b20_init(SKIP_ROM);
 	
-	dwin_write_half_word(0x0450, 0x0500);
+	//dwin_write_half_word(0x0450, 0x0500);
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -470,6 +470,16 @@
               <FilePath>..\Core\Src\w5500.c</FilePath>
             </File>
             <File>
+              <FileName>lcd.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\lcd.h</FilePath>
+            </File>
+            <File>
+              <FileName>lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\lcd.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>
@@ -615,5 +625,14 @@
     </components>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>GAS_BOILER_CONTROLLER</LayName>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

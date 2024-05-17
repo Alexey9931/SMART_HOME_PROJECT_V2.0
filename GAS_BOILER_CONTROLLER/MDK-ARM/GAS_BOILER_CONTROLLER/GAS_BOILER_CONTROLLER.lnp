@@ -7,6 +7,7 @@
 "gas_boiler_controller\eeprom.o"
 "gas_boiler_controller\modbus.o"
 "gas_boiler_controller\w5500.o"
+"gas_boiler_controller\lcd.o"
 "gas_boiler_controller\main.o"
 "gas_boiler_controller\stm32f4xx_it.o"
 "gas_boiler_controller\stm32f4xx_hal_msp.o"
