@@ -1,6 +1,7 @@
-home_weather_station\modbus.o: ..\Core\Src\modbus.c
-home_weather_station\modbus.o: ../Core/Inc/modbus.h
-home_weather_station\modbus.o: ../Core/Inc/w5500.h
+home_weather_station\modbus.o: ..\..\COMMON_SRC\src\modbus.c
+home_weather_station\modbus.o: ..\..\COMMON_SRC\inc\modbus.h
+home_weather_station\modbus.o: ..\..\COMMON_SRC\inc\w5500.h
+home_weather_station\modbus.o: ../Core/Inc/device_defs.h
 home_weather_station\modbus.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 home_weather_station\modbus.o: ../Core/Inc/stm32f4xx_hal_conf.h
 home_weather_station\modbus.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
@@ -38,6 +39,7 @@ home_weather_station\modbus.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal
 home_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 home_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 home_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-home_weather_station\modbus.o: ../Core/Inc/eeprom.h
 home_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-home_weather_station\modbus.o: ../Core/Inc/ds3231_rtc.h
+home_weather_station\modbus.o: ..\..\COMMON_SRC\inc\eeprom.h
+home_weather_station\modbus.o: ..\..\COMMON_SRC\inc\ds3231_rtc.h
+home_weather_station\modbus.o: ../Core/Inc/ram.h

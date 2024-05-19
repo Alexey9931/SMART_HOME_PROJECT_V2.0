@@ -1,6 +1,7 @@
-street_weather_station\modbus.o: ..\Core\Src\modbus.c
-street_weather_station\modbus.o: ../Core/Inc/modbus.h
-street_weather_station\modbus.o: ../Core/Inc/w5500.h
+street_weather_station\modbus.o: ..\..\COMMON_SRC\src\modbus.c
+street_weather_station\modbus.o: ..\..\COMMON_SRC\inc\modbus.h
+street_weather_station\modbus.o: ..\..\COMMON_SRC\inc\w5500.h
+street_weather_station\modbus.o: ../Core/Inc/device_defs.h
 street_weather_station\modbus.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 street_weather_station\modbus.o: ../Core/Inc/stm32f1xx_hal_conf.h
 street_weather_station\modbus.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h
@@ -33,5 +34,7 @@ street_weather_station\modbus.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_h
 street_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 street_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 street_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-street_weather_station\modbus.o: ../Core/Inc/eeprom.h
 street_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+street_weather_station\modbus.o: ..\..\COMMON_SRC\inc\eeprom.h
+street_weather_station\modbus.o: ..\..\COMMON_SRC\inc\ds3231_rtc.h
+street_weather_station\modbus.o: ../Core/Inc/ram.h

@@ -33,6 +33,7 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "modbus.h"
 #include "eeprom.h"
+#include "ram.h"
 #include "ds3231_rtc.h"
 #include "dht22.h"
 #include "ds18b20.h"

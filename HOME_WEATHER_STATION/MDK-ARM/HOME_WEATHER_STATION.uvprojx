@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\..\COMMON_SRC\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -395,86 +395,6 @@
           <GroupName>Application/User/Core</GroupName>
           <Files>
             <File>
-              <FileName>network.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\network.c</FilePath>
-            </File>
-            <File>
-              <FileName>w5500.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\w5500.c</FilePath>
-            </File>
-            <File>
-              <FileName>modbus.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\modbus.h</FilePath>
-            </File>
-            <File>
-              <FileName>network.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\network.h</FilePath>
-            </File>
-            <File>
-              <FileName>w5500.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\w5500.h</FilePath>
-            </File>
-            <File>
-              <FileName>modbus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\modbus.c</FilePath>
-            </File>
-            <File>
-              <FileName>eeprom.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\eeprom.h</FilePath>
-            </File>
-            <File>
-              <FileName>eeprom.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\eeprom.c</FilePath>
-            </File>
-            <File>
-              <FileName>ds3231_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ds3231_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>ds3231_rtc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\ds3231_rtc.h</FilePath>
-            </File>
-            <File>
-              <FileName>bmp180.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\bmp180.h</FilePath>
-            </File>
-            <File>
-              <FileName>bmp180.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\bmp180.c</FilePath>
-            </File>
-            <File>
-              <FileName>dht22.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\dht22.c</FilePath>
-            </File>
-            <File>
-              <FileName>dht22.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\dht22.h</FilePath>
-            </File>
-            <File>
-              <FileName>ds18b20.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\ds18b20.h</FilePath>
-            </File>
-            <File>
-              <FileName>ds18b20.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ds18b20.c</FilePath>
-            </File>
-            <File>
               <FileName>common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\common.c</FilePath>
@@ -508,6 +428,26 @@
               <FileName>stm32f4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>device_defs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\device_defs.c</FilePath>
+            </File>
+            <File>
+              <FileName>ram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ram.c</FilePath>
+            </File>
+            <File>
+              <FileName>device_defs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\device_defs.h</FilePath>
+            </File>
+            <File>
+              <FileName>ram.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\ram.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -618,6 +558,81 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>CommonSrc</GroupName>
+          <Files>
+            <File>
+              <FileName>eeprom.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\eeprom.h</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\eeprom.c</FilePath>
+            </File>
+            <File>
+              <FileName>modbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\modbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>modbus.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\modbus.h</FilePath>
+            </File>
+            <File>
+              <FileName>dht22.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\dht22.h</FilePath>
+            </File>
+            <File>
+              <FileName>dht22.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\dht22.c</FilePath>
+            </File>
+            <File>
+              <FileName>ds3231_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\ds3231_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>ds3231_rtc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\ds3231_rtc.h</FilePath>
+            </File>
+            <File>
+              <FileName>ds18b20.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\ds18b20.h</FilePath>
+            </File>
+            <File>
+              <FileName>ds18b20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\ds18b20.c</FilePath>
+            </File>
+            <File>
+              <FileName>w5500.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\w5500.c</FilePath>
+            </File>
+            <File>
+              <FileName>w5500.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\w5500.h</FilePath>
+            </File>
+            <File>
+              <FileName>bmp180.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\bmp180.h</FilePath>
+            </File>
+            <File>
+              <FileName>bmp180.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\bmp180.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -138,17 +138,17 @@ int main(void)
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-	//eeproms_first_ini();
+	//eeproms_first_ini(&USED_I2C);
 	
 	// Инициализация микросхемы RTC (прошивается 1 раз)
-	//set_time(00, 48, 23, 5, 17, 5, 24);
-	get_time();
+	//set_time(&USED_I2C, 00, 48, 23, 5, 17, 5, 24);
+	get_time(&USED_I2C);
 	memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
 	memcpy(&ram_ptr->start_time, &sys_time, sizeof(sys_time));
 	hours_delta = ram_ptr->start_time.hour;
 	
 	// Зеркализация данных из ПЗУ в ОЗУ
-	eeprom_read(0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
+	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
 
 	// Инициализация контроллера Ethernet1 настройками из ПЗУ
 	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr_1, sizeof(ram_data.mirrored_to_rom_regs.ip_addr_1));
@@ -159,6 +159,10 @@ int main(void)
 	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
 	w5500_1_ptr->htim = htim2;
+	w5500_1_ptr->cs_eth_gpio_port = GPIOA;
+	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
+	w5500_1_ptr->rst_eth_gpio_port = GPIOC;
+	w5500_1_ptr->rst_eth_pin = GPIO_PIN_4;
 	
 	// Инициализация контроллера Ethernet2 настройками из ПЗУ
 	memcpy(w5500_2_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr_2, sizeof(ram_data.mirrored_to_rom_regs.ip_addr_2));
@@ -169,6 +173,10 @@ int main(void)
 	w5500_2_ptr->sock_num = 0;
 	w5500_2_ptr->spi_n = hspi2;
 	w5500_2_ptr->htim = htim4;
+	w5500_2_ptr->cs_eth_gpio_port = GPIOB;
+	w5500_2_ptr->cs_eth_pin = GPIO_PIN_12;
+	w5500_2_ptr->rst_eth_gpio_port = GPIOB;
+	w5500_2_ptr->rst_eth_pin = GPIO_PIN_13;
 	
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_TIM_Base_Start_IT(&htim4);
@@ -176,9 +184,9 @@ int main(void)
 	HAL_TIM_Base_Start(&htim3);
 	
 	// Инициализация датчиков
-	bmp180_init();
-	dht22_init();
-	ds18b20_init(SKIP_ROM);
+	bmp180_init(&USED_I2C);
+	dht22_init(GPIOD, GPIO_PIN_15);
+	ds18b20_init(GPIOD, GPIO_PIN_14, SKIP_ROM);
 	
 	//dwin_write_half_word(0x0450, 0x0500);
   /* USER CODE END 2 */
@@ -194,7 +202,7 @@ int main(void)
 		if (is_time_to_update_params == 1)
 		{
 			//обновление времени
-			get_time();
+			get_time(&USED_I2C);
 			memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
 			if (((ram_ptr->sys_time.hour - hours_delta) > 0 )||((hours_delta - ram_ptr->sys_time.hour) == 23))
 			{
@@ -202,13 +210,13 @@ int main(void)
 				ram_ptr->work_time++;
 			}
 			//обновление показаний датчиков
-			ram_ptr->pressure = bmp180_get_press(3);
+			ram_ptr->pressure = bmp180_get_press(&USED_I2C, 3);
 			uint8_t data[5];
-			if(!dht22_get_data(data))
+			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
 			{
 				ram_ptr->humidity = (float)(*(int16_t*)(data+3)) / 10;
 			}
-			ram_ptr->temperature = ds18b20_get_temp();
+			ram_ptr->temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
 			is_time_to_update_params = 0;
 		}
 		

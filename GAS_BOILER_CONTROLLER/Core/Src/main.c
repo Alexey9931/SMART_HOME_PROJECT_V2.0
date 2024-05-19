@@ -128,18 +128,18 @@ int main(void)
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-	//eeproms_first_ini();
+	//eeproms_first_ini(&USED_I2C);
 	
 	// Инициализация микросхемы RTC (прошивается 1 раз)
-	//set_time(00, 14, 0, 6, 18, 5, 24);
+	//set_time(&USED_I2C, 00, 14, 0, 6, 18, 5, 24);
 	
-	get_time();
+	get_time(&USED_I2C);
 	memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
 	memcpy(&ram_ptr->start_time, &sys_time, sizeof(sys_time));
 	hours_delta = ram_ptr->start_time.hour;
 	
 	// Зеркализация данных из ПЗУ в ОЗУ
-	eeprom_read(0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
+	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
 
 	// Инициализация контроллера Ethernet1 настройками из ПЗУ
 	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr_1, sizeof(ram_data.mirrored_to_rom_regs.ip_addr_1));
@@ -150,6 +150,10 @@ int main(void)
 	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
 	w5500_1_ptr->htim = htim2;
+	w5500_1_ptr->cs_eth_gpio_port = GPIOA;
+	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
+	w5500_1_ptr->rst_eth_gpio_port = GPIOC;
+	w5500_1_ptr->rst_eth_pin = GPIO_PIN_4;
 	
 	// Инициализация контроллера Ethernet2 настройками из ПЗУ
 	memcpy(w5500_2_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr_2, sizeof(ram_data.mirrored_to_rom_regs.ip_addr_2));
@@ -160,6 +164,10 @@ int main(void)
 	w5500_2_ptr->sock_num = 0;
 	w5500_2_ptr->spi_n = hspi2;
 	w5500_2_ptr->htim = htim4;
+	w5500_1_ptr->cs_eth_gpio_port = GPIOB;
+	w5500_1_ptr->cs_eth_pin = GPIO_PIN_12;
+	w5500_1_ptr->rst_eth_gpio_port = GPIOB;
+	w5500_1_ptr->rst_eth_pin = GPIO_PIN_13;
 	
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_TIM_Base_Start_IT(&htim4);
@@ -168,10 +176,10 @@ int main(void)
 	
 	// Инициализация дисплея
 	max7219_init();
-	
+	print_temp_max7219(270, 210);
 	// Инициализация датчиков
-	dht22_init();
-	ds18b20_init(SKIP_ROM);
+	dht22_init(GPIOD, GPIO_PIN_15);
+	ds18b20_init(GPIOD, GPIO_PIN_14, SKIP_ROM);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -185,7 +193,7 @@ int main(void)
 		if (is_time_to_update_params == 1)
 		{
 			//обновление времени
-			get_time();
+			get_time(&USED_I2C);
 			memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
 			if (((ram_ptr->sys_time.hour - hours_delta) > 0 )||((hours_delta - ram_ptr->sys_time.hour) == 23))
 			{
@@ -194,11 +202,11 @@ int main(void)
 			}
 			//обновление показаний датчиков
 			uint8_t data[5];
-			if(!dht22_get_data(data))
+			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
 			{
 				ram_ptr->humidity = (float)(*(int16_t*)(data+3)) / 10;
 			}
-			ram_ptr->temperature = ds18b20_get_temp();
+			ram_ptr->temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
 			is_time_to_update_params = 0;
 		}
 		
@@ -397,7 +405,7 @@ static void MX_SPI3_Init(void)
   hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi3.Init.NSS = SPI_NSS_SOFT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
+  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -720,10 +728,15 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LCD_NSS_Pin SD_NSS_Pin NRF24_CE_Pin led_link_Pin
-                           led_error_Pin */
-  GPIO_InitStruct.Pin = LCD_NSS_Pin|SD_NSS_Pin|NRF24_CE_Pin|led_link_Pin
-                          |led_error_Pin;
+  /*Configure GPIO pin : LCD_NSS_Pin */
+  GPIO_InitStruct.Pin = LCD_NSS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(LCD_NSS_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : SD_NSS_Pin NRF24_CE_Pin led_link_Pin led_error_Pin */
+  GPIO_InitStruct.Pin = SD_NSS_Pin|NRF24_CE_Pin|led_link_Pin|led_error_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

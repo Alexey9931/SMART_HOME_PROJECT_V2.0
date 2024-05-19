@@ -1,5 +1,6 @@
-home_weather_station\ds3231_rtc.o: ..\Core\Src\ds3231_rtc.c
-home_weather_station\ds3231_rtc.o: ../Core/Inc/ds3231_rtc.h
+home_weather_station\ds3231_rtc.o: ..\..\COMMON_SRC\src\ds3231_rtc.c
+home_weather_station\ds3231_rtc.o: ..\..\COMMON_SRC\inc\ds3231_rtc.h
+home_weather_station\ds3231_rtc.o: ../Core/Inc/device_defs.h
 home_weather_station\ds3231_rtc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 home_weather_station\ds3231_rtc.o: ../Core/Inc/stm32f4xx_hal_conf.h
 home_weather_station\ds3231_rtc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
@@ -34,5 +35,7 @@ home_weather_station\ds3231_rtc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx
 home_weather_station\ds3231_rtc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 home_weather_station\ds3231_rtc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 home_weather_station\ds3231_rtc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+home_weather_station\ds3231_rtc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 home_weather_station\ds3231_rtc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-home_weather_station\ds3231_rtc.o: ../Core/Inc/common.h
+home_weather_station\ds3231_rtc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+home_weather_station\ds3231_rtc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

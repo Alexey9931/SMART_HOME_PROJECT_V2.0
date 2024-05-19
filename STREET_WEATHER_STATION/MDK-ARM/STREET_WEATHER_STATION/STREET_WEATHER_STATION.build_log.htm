@@ -22,117 +22,131 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 E:\SMART_HOME_PROJECT_v.2.0\STREET_WEATHER_STATION\MDK-ARM\STREET_WEATHER_STATION.uvprojx
-Project File Date:  05/17/2024
+Project File Date:  05/19/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'STREET_WEATHER_STATION'
 assembling startup_stm32f103xb.s...
+compiling stm32f1xx_hal_gpio_ex.c...
+compiling ram.c...
+..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
+  #endif /* EEPROM_H_ */
+../Core/Inc/ram.h(34): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+..\Core\Src\ram.c(4): warning:  #1-D: last line of file ends without a newline
+  ram_data_struct *ram_ptr = &ram_data;	// Указатель на данные ОЗУ
+..\Core\Src\ram.c: 4 warnings, 0 errors
+compiling stm32f1xx_it.c...
+..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
+  #endif /* EEPROM_H_ */
+..\..\COMMON_SRC\inc\modbus.h(62): warning:  #1-D: last line of file ends without a newline
+  #endif /* MODBUS_H_ */
+../Core/Inc/ram.h(34): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+..\..\COMMON_SRC\inc\ds18b20.h(24): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS18B20_H */
+../Core/Src/stm32f1xx_it.c: 6 warnings, 0 errors
+compiling main.c...
+..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
+  #endif /* EEPROM_H_ */
+..\..\COMMON_SRC\inc\modbus.h(62): warning:  #1-D: last line of file ends without a newline
+  #endif /* MODBUS_H_ */
+../Core/Inc/ram.h(34): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+..\..\COMMON_SRC\inc\ds18b20.h(24): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS18B20_H */
+../Core/Src/main.c: 6 warnings, 0 errors
 compiling common.c...
 ../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
   #endif /* __COMMON_H */
 ..\Core\Src\common.c(27): warning:  #1-D: last line of file ends without a newline
   }
 ..\Core\Src\common.c: 2 warnings, 0 errors
+compiling device_defs.c...
+..\Core\Src\device_defs.c(10): warning:  #1-D: last line of file ends without a newline
+  uint32_t 	local_port_ini = 5151;																		//Порт соединения (сокета) по умолчанию
+..\Core\Src\device_defs.c: 1 warning, 0 errors
+compiling stm32f1xx_hal_msp.c...
+..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
+  #endif /* EEPROM_H_ */
+..\..\COMMON_SRC\inc\modbus.h(62): warning:  #1-D: last line of file ends without a newline
+  #endif /* MODBUS_H_ */
+../Core/Inc/ram.h(34): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+..\..\COMMON_SRC\inc\ds18b20.h(24): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS18B20_H */
+../Core/Src/stm32f1xx_hal_msp.c: 6 warnings, 0 errors
+compiling stm32f1xx_hal_gpio.c...
+compiling stm32f1xx_hal_rcc_ex.c...
+compiling stm32f1xx_hal_cortex.c...
+compiling stm32f1xx_hal_dma.c...
+compiling stm32f1xx_hal.c...
+compiling stm32f1xx_hal_rcc.c...
+compiling stm32f1xx_hal_i2c.c...
+compiling stm32f1xx_hal_exti.c...
+compiling stm32f1xx_hal_flash.c...
+compiling stm32f1xx_hal_flash_ex.c...
+compiling stm32f1xx_hal_pwr.c...
+compiling stm32f1xx_hal_tim_ex.c...
+compiling stm32f1xx_hal_tim.c...
+compiling stm32f1xx_hal_spi.c...
+compiling system_stm32f1xx.c...
+compiling w5500.c...
 compiling ds18b20.c...
 ../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
   #endif /* __COMMON_H */
-../Core/Inc/ds18b20.h(25): warning:  #1295-D: Deprecated declaration ds18b20_get_temp - give arg types
-  float ds18b20_get_temp();
-../Core/Inc/ds18b20.h(27): warning:  #1-D: last line of file ends without a newline
+..\..\COMMON_SRC\inc\ds18b20.h(24): warning:  #1-D: last line of file ends without a newline
   #endif /* __DS18B20_H */
-..\Core\Src\ds18b20.c(8): warning:  #188-D: enumerated type mixed with another type
+..\..\COMMON_SRC\src\ds18b20.c(8): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 0);
-..\Core\Src\ds18b20.c(10): warning:  #188-D: enumerated type mixed with another type
+..\..\COMMON_SRC\src\ds18b20.c(10): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 1);
-..\Core\Src\ds18b20.c(24): warning:  #188-D: enumerated type mixed with another type
+..\..\COMMON_SRC\src\ds18b20.c(24): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 0);
-..\Core\Src\ds18b20.c(26): warning:  #188-D: enumerated type mixed with another type
+..\..\COMMON_SRC\src\ds18b20.c(26): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 1);
-..\Core\Src\ds18b20.c(50): warning:  #188-D: enumerated type mixed with another type
+..\..\COMMON_SRC\src\ds18b20.c(50): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 0);
-..\Core\Src\ds18b20.c(52): warning:  #188-D: enumerated type mixed with another type
+..\..\COMMON_SRC\src\ds18b20.c(52): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 1);
-..\Core\Src\ds18b20.c: 9 warnings, 0 errors
-compiling eeprom.c...
-../Core/Inc/eeprom.h(67): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
-  void eeproms_first_ini();
-../Core/Inc/eeprom.h(79): warning:  #1-D: last line of file ends without a newline
-  #endif /* EEPROM_H_ */
-..\Core\Src\eeprom.c: 2 warnings, 0 errors
-compiling main.c...
-../Core/Inc/eeprom.h(67): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
-  void eeproms_first_ini();
-../Core/Inc/eeprom.h(79): warning:  #1-D: last line of file ends without a newline
-  #endif /* EEPROM_H_ */
-../Core/Inc/modbus.h(61): warning:  #1-D: last line of file ends without a newline
-  #endif /* MODBUS_H_ */
-../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
-  #endif /* __COMMON_H */
-../Core/Inc/ds18b20.h(25): warning:  #1295-D: Deprecated declaration ds18b20_get_temp - give arg types
-  float ds18b20_get_temp();
-../Core/Inc/ds18b20.h(27): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS18B20_H */
-../Core/Src/main.c: 6 warnings, 0 errors
+..\..\COMMON_SRC\src\ds18b20.c: 8 warnings, 0 errors
 compiling modbus.c...
-../Core/Inc/eeprom.h(67): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
-  void eeproms_first_ini();
-../Core/Inc/eeprom.h(79): warning:  #1-D: last line of file ends without a newline
+..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
   #endif /* EEPROM_H_ */
-../Core/Inc/modbus.h(61): warning:  #1-D: last line of file ends without a newline
+..\..\COMMON_SRC\inc\modbus.h(62): warning:  #1-D: last line of file ends without a newline
   #endif /* MODBUS_H_ */
-..\Core\Src\modbus.c(181): warning:  #1-D: last line of file ends without a newline
+../Core/Inc/ram.h(34): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+..\..\COMMON_SRC\src\modbus.c(182): warning:  #1-D: last line of file ends without a newline
   }
-..\Core\Src\modbus.c: 4 warnings, 0 errors
-compiling w5500.c...
-compiling stm32f1xx_it.c...
-../Core/Inc/eeprom.h(67): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
-  void eeproms_first_ini();
-../Core/Inc/eeprom.h(79): warning:  #1-D: last line of file ends without a newline
+..\..\COMMON_SRC\src\modbus.c: 5 warnings, 0 errors
+compiling eeprom.c...
+..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
   #endif /* EEPROM_H_ */
-../Core/Inc/modbus.h(61): warning:  #1-D: last line of file ends without a newline
-  #endif /* MODBUS_H_ */
-../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
-  #endif /* __COMMON_H */
-../Core/Inc/ds18b20.h(25): warning:  #1295-D: Deprecated declaration ds18b20_get_temp - give arg types
-  float ds18b20_get_temp();
-../Core/Inc/ds18b20.h(27): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS18B20_H */
-../Core/Src/stm32f1xx_it.c: 6 warnings, 0 errors
-compiling stm32f1xx_hal_rcc_ex.c...
-compiling stm32f1xx_hal_gpio.c...
-compiling stm32f1xx_hal.c...
-compiling stm32f1xx_hal_gpio_ex.c...
-compiling stm32f1xx_hal_rcc.c...
-compiling stm32f1xx_hal_msp.c...
-../Core/Inc/eeprom.h(67): warning:  #1295-D: Deprecated declaration eeproms_first_ini - give arg types
-  void eeproms_first_ini();
-../Core/Inc/eeprom.h(79): warning:  #1-D: last line of file ends without a newline
-  #endif /* EEPROM_H_ */
-../Core/Inc/modbus.h(61): warning:  #1-D: last line of file ends without a newline
-  #endif /* MODBUS_H_ */
-../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
-  #endif /* __COMMON_H */
-../Core/Inc/ds18b20.h(25): warning:  #1295-D: Deprecated declaration ds18b20_get_temp - give arg types
-  float ds18b20_get_temp();
-../Core/Inc/ds18b20.h(27): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS18B20_H */
-../Core/Src/stm32f1xx_hal_msp.c: 6 warnings, 0 errors
-compiling stm32f1xx_hal_i2c.c...
-compiling stm32f1xx_hal_pwr.c...
-compiling stm32f1xx_hal_dma.c...
-compiling stm32f1xx_hal_flash_ex.c...
-compiling stm32f1xx_hal_cortex.c...
-compiling stm32f1xx_hal_exti.c...
-compiling stm32f1xx_hal_flash.c...
-compiling stm32f1xx_hal_spi.c...
-compiling system_stm32f1xx.c...
-compiling stm32f1xx_hal_tim_ex.c...
-compiling stm32f1xx_hal_tim.c...
+..\..\COMMON_SRC\src\eeprom.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=16528 RO-data=376 RW-data=60 ZI-data=9716  
+Program Size: Code=17426 RO-data=374 RW-data=64 ZI-data=7488  
 FromELF: creating hex file...
-"STREET_WEATHER_STATION\STREET_WEATHER_STATION.axf" - 0 Error(s), 35 Warning(s).
+"STREET_WEATHER_STATION\STREET_WEATHER_STATION.axf" - 0 Error(s), 40 Warning(s).
 
 <h2>Software Packages used:</h2>
 

@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\..\COMMON_SRC\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -400,54 +400,14 @@
               <FilePath>..\Core\Inc\common.h</FilePath>
             </File>
             <File>
-              <FileName>ds18b20.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\ds18b20.h</FilePath>
-            </File>
-            <File>
-              <FileName>eeprom.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\eeprom.h</FilePath>
-            </File>
-            <File>
               <FileName>main.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Core\Inc\main.h</FilePath>
             </File>
             <File>
-              <FileName>modbus.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\modbus.h</FilePath>
-            </File>
-            <File>
-              <FileName>w5500.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\w5500.h</FilePath>
-            </File>
-            <File>
               <FileName>common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\common.c</FilePath>
-            </File>
-            <File>
-              <FileName>ds18b20.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ds18b20.c</FilePath>
-            </File>
-            <File>
-              <FileName>eeprom.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\eeprom.c</FilePath>
-            </File>
-            <File>
-              <FileName>modbus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\modbus.c</FilePath>
-            </File>
-            <File>
-              <FileName>w5500.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\w5500.c</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
@@ -463,6 +423,26 @@
               <FileName>stm32f1xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f1xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>device_defs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\device_defs.c</FilePath>
+            </File>
+            <File>
+              <FileName>ram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ram.c</FilePath>
+            </File>
+            <File>
+              <FileName>device_defs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\device_defs.h</FilePath>
+            </File>
+            <File>
+              <FileName>ram.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\ram.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -557,6 +537,51 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>CommonSrc</GroupName>
+          <Files>
+            <File>
+              <FileName>eeprom.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\eeprom.h</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\eeprom.c</FilePath>
+            </File>
+            <File>
+              <FileName>modbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\modbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>modbus.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\modbus.h</FilePath>
+            </File>
+            <File>
+              <FileName>ds18b20.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\ds18b20.h</FilePath>
+            </File>
+            <File>
+              <FileName>ds18b20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\ds18b20.c</FilePath>
+            </File>
+            <File>
+              <FileName>w5500.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\w5500.c</FilePath>
+            </File>
+            <File>
+              <FileName>w5500.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\w5500.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
@@ -575,5 +600,14 @@
     </components>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>STREET_WEATHER_STATION</LayName>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

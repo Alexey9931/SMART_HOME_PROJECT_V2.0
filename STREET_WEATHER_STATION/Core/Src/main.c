@@ -112,10 +112,10 @@ int main(void)
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-	//eeproms_first_ini();
+	//eeproms_first_ini(&USED_I2C);
 	
 	// Зеркализация данных из ПЗУ в ОЗУ
-	eeprom_read(0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
+	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
 
 	// Инициализация контроллера Ethernet1 настройками из ПЗУ
 	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr_1, sizeof(ram_data.mirrored_to_rom_regs.ip_addr_1));
@@ -126,13 +126,17 @@ int main(void)
 	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
 	w5500_1_ptr->htim = htim2;
+	w5500_1_ptr->cs_eth_gpio_port = GPIOA;
+	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
+	w5500_1_ptr->rst_eth_gpio_port = GPIOB;
+	w5500_1_ptr->rst_eth_pin = GPIO_PIN_0;
 	
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_TIM_Base_Start_IT(&htim4);
 	HAL_TIM_Base_Start(&htim3);
 	
 	// Инициализация датчиков
-	ds18b20_init(SKIP_ROM);
+	ds18b20_init(GPIOA, GPIO_PIN_3, SKIP_ROM);
 	
   /* USER CODE END 2 */
 
@@ -146,13 +150,8 @@ int main(void)
 		//если пришло время обновить параметры модуля
 		if (is_time_to_update_params == 1)
 		{
-//			//обновление показаний датчиков
-//			uint8_t data[5];
-//			if(!dht22_get_data(data))
-//			{
-//				ram_ptr->humidity = (float)(*(int16_t*)(data+3)) / 10;
-//			}
-//			ram_ptr->temperature = ds18b20_get_temp();
+			//обновление показаний датчиков
+			ram_ptr->temperature = ds18b20_get_temp(GPIOA, GPIO_PIN_3);
 			is_time_to_update_params = 0;
 		}
 		

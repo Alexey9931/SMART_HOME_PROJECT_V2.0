@@ -1,5 +1,5 @@
-home_weather_station\ds18b20.o: ..\Core\Src\ds18b20.c
-home_weather_station\ds18b20.o: ../Core/Inc/ds18b20.h
+home_weather_station\ds18b20.o: ..\..\COMMON_SRC\src\ds18b20.c
+home_weather_station\ds18b20.o: ..\..\COMMON_SRC\inc\ds18b20.h
 home_weather_station\ds18b20.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 home_weather_station\ds18b20.o: ../Core/Inc/stm32f4xx_hal_conf.h
 home_weather_station\ds18b20.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h

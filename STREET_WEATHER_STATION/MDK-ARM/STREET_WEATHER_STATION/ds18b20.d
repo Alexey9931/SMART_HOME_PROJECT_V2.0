@@ -1,5 +1,6 @@
-street_weather_station\ds18b20.o: ..\Core\Src\ds18b20.c
-street_weather_station\ds18b20.o: ../Core/Inc/ds18b20.h
+street_weather_station\ds18b20.o: ..\..\COMMON_SRC\src\ds18b20.c
+street_weather_station\ds18b20.o: ..\..\COMMON_SRC\inc\ds18b20.h
+street_weather_station\ds18b20.o: ../Core/Inc/device_defs.h
 street_weather_station\ds18b20.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 street_weather_station\ds18b20.o: ../Core/Inc/stm32f1xx_hal_conf.h
 street_weather_station\ds18b20.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h
@@ -31,4 +32,6 @@ street_weather_station\ds18b20.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_
 street_weather_station\ds18b20.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 street_weather_station\ds18b20.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 street_weather_station\ds18b20.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+street_weather_station\ds18b20.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+street_weather_station\ds18b20.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 street_weather_station\ds18b20.o: ../Core/Inc/common.h
