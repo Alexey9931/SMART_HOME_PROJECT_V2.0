@@ -1,5 +1,5 @@
 home_weather_station\w5500.o: ..\..\COMMON_SRC\src\w5500.c
-home_weather_station\w5500.o: ..\..\COMMON_SRC\inc\w5500.h
+home_weather_station\w5500.o: ../../COMMON_SRC/inc/w5500.h
 home_weather_station\w5500.o: ../Core/Inc/device_defs.h
 home_weather_station\w5500.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 home_weather_station\w5500.o: ../Core/Inc/stm32f4xx_hal_conf.h

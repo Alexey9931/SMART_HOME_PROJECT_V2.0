@@ -1,5 +1,5 @@
 home_weather_station\bmp180.o: ..\..\COMMON_SRC\src\bmp180.c
-home_weather_station\bmp180.o: ..\..\COMMON_SRC\inc\bmp180.h
+home_weather_station\bmp180.o: ../../COMMON_SRC/inc/bmp180.h
 home_weather_station\bmp180.o: ../Core/Inc/device_defs.h
 home_weather_station\bmp180.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 home_weather_station\bmp180.o: ../Core/Inc/stm32f4xx_hal_conf.h

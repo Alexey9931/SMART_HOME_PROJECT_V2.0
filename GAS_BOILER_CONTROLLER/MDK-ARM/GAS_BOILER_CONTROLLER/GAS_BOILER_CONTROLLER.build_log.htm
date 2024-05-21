@@ -28,44 +28,6 @@ Project File Date:  05/19/2024
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'GAS_BOILER_CONTROLLER'
 assembling startup_stm32f407xx.s...
-compiling stm32f4xx_it.c...
-..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS3231_RTC_H */
-..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
-  #endif /* EEPROM_H_ */
-..\..\COMMON_SRC\inc\modbus.h(62): warning:  #1-D: last line of file ends without a newline
-  #endif /* MODBUS_H_ */
-../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
-  #endif /* RAM_H_ */
-..\..\COMMON_SRC\inc\dht22.h(12): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DHT22_H */
-../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
-  #endif /* __COMMON_H */
-..\..\COMMON_SRC\inc\ds18b20.h(27): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS18B20_H */
-../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
-  void max7219_init();
-../Core/Inc/lcd.h(21): warning:  #1295-D: Deprecated declaration max7219_clear - give arg types
-  void max7219_clear();
-../Core/Inc/lcd.h(25): warning:  #1-D: last line of file ends without a newline
-  #endif /* LCD_H_ */
-../Core/Src/stm32f4xx_it.c: 10 warnings, 0 errors
-compiling common.c...
-../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
-  #endif /* __COMMON_H */
-..\Core\Src\common.c(27): warning:  #1-D: last line of file ends without a newline
-  }
-..\Core\Src\common.c: 2 warnings, 0 errors
-compiling ram.c...
-..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS3231_RTC_H */
-..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
-  #endif /* EEPROM_H_ */
-../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
-  #endif /* RAM_H_ */
-..\Core\Src\ram.c(4): warning:  #1-D: last line of file ends without a newline
-  ram_data_struct *ram_ptr = &ram_data;	// Указатель на данные ОЗУ
-..\Core\Src\ram.c: 4 warnings, 0 errors
 compiling lcd.c...
 ../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
   void max7219_init();
@@ -76,6 +38,12 @@ compiling lcd.c...
 ..\Core\Src\lcd.c(133): warning:  #1-D: last line of file ends without a newline
   }
 ..\Core\Src\lcd.c: 4 warnings, 0 errors
+compiling common.c...
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+..\Core\Src\common.c(27): warning:  #1-D: last line of file ends without a newline
+  }
+..\Core\Src\common.c: 2 warnings, 0 errors
 compiling stm32f4xx_hal_msp.c...
 ..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
   #endif /* __DS3231_RTC_H */
@@ -89,7 +57,7 @@ compiling stm32f4xx_hal_msp.c...
   #endif /* __DHT22_H */
 ../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
   #endif /* __COMMON_H */
-..\..\COMMON_SRC\inc\ds18b20.h(27): warning:  #1-D: last line of file ends without a newline
+..\..\COMMON_SRC\inc\ds18b20.h(24): warning:  #1-D: last line of file ends without a newline
   #endif /* __DS18B20_H */
 ../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
   void max7219_init();
@@ -102,6 +70,38 @@ compiling device_defs.c...
 ..\Core\Src\device_defs.c(10): warning:  #1-D: last line of file ends without a newline
   uint32_t 	local_port_ini = 5151;																		//Порт соединения (сокета) по умолчанию
 ..\Core\Src\device_defs.c: 1 warning, 0 errors
+compiling ram.c...
+..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
+  #endif /* EEPROM_H_ */
+../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+..\Core\Src\ram.c(4): warning:  #1-D: last line of file ends without a newline
+  ram_data_struct *ram_ptr = &ram_data;	// Указатель на данные ОЗУ
+..\Core\Src\ram.c: 4 warnings, 0 errors
+compiling stm32f4xx_it.c...
+..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
+  #endif /* EEPROM_H_ */
+..\..\COMMON_SRC\inc\modbus.h(62): warning:  #1-D: last line of file ends without a newline
+  #endif /* MODBUS_H_ */
+../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+..\..\COMMON_SRC\inc\dht22.h(12): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DHT22_H */
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+..\..\COMMON_SRC\inc\ds18b20.h(24): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS18B20_H */
+../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
+  void max7219_init();
+../Core/Inc/lcd.h(21): warning:  #1295-D: Deprecated declaration max7219_clear - give arg types
+  void max7219_clear();
+../Core/Inc/lcd.h(25): warning:  #1-D: last line of file ends without a newline
+  #endif /* LCD_H_ */
+../Core/Src/stm32f4xx_it.c: 10 warnings, 0 errors
 compiling main.c...
 ..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
   #endif /* __DS3231_RTC_H */
@@ -115,7 +115,7 @@ compiling main.c...
   #endif /* __DHT22_H */
 ../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
   #endif /* __COMMON_H */
-..\..\COMMON_SRC\inc\ds18b20.h(27): warning:  #1-D: last line of file ends without a newline
+..\..\COMMON_SRC\inc\ds18b20.h(24): warning:  #1-D: last line of file ends without a newline
   #endif /* __DS18B20_H */
 ../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
   void max7219_init();
@@ -124,55 +124,43 @@ compiling main.c...
 ../Core/Inc/lcd.h(25): warning:  #1-D: last line of file ends without a newline
   #endif /* LCD_H_ */
 ../Core/Src/main.c: 10 warnings, 0 errors
+compiling stm32f4xx_hal_i2c.c...
 compiling stm32f4xx_hal_i2c_ex.c...
 compiling stm32f4xx_hal_flash_ex.c...
-compiling stm32f4xx_hal_i2c.c...
+compiling stm32f4xx_hal_rcc_ex.c...
 compiling stm32f4xx_hal_rcc.c...
 compiling stm32f4xx_hal_flash_ramfunc.c...
-compiling stm32f4xx_hal_rcc_ex.c...
 compiling stm32f4xx_hal_flash.c...
 compiling stm32f4xx_hal_gpio.c...
-compiling stm32f4xx_hal_pwr_ex.c...
-compiling stm32f4xx_hal_pwr.c...
 compiling stm32f4xx_hal.c...
 compiling stm32f4xx_hal_cortex.c...
-compiling stm32f4xx_hal_dma.c...
-compiling stm32f4xx_hal_dma_ex.c...
-compiling system_stm32f4xx.c...
+compiling stm32f4xx_hal_pwr_ex.c...
 compiling stm32f4xx_hal_exti.c...
-compiling stm32f4xx_hal_spi.c...
-compiling stm32f4xx_hal_tim_ex.c...
+compiling stm32f4xx_hal_dma_ex.c...
+compiling stm32f4xx_hal_dma.c...
+compiling stm32f4xx_hal_pwr.c...
 compiling w5500.c...
-compiling stm32f4xx_hal_uart.c...
-compiling stm32f4xx_hal_tim.c...
-compiling modbus.c...
-..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS3231_RTC_H */
-..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
-  #endif /* EEPROM_H_ */
-..\..\COMMON_SRC\inc\modbus.h(62): warning:  #1-D: last line of file ends without a newline
-  #endif /* MODBUS_H_ */
-../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
-  #endif /* RAM_H_ */
-..\..\COMMON_SRC\src\modbus.c(182): warning:  #1-D: last line of file ends without a newline
-  }
-..\..\COMMON_SRC\src\modbus.c: 5 warnings, 0 errors
-compiling eeprom.c...
-..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
-  #endif /* __DS3231_RTC_H */
-..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
-  #endif /* EEPROM_H_ */
-..\..\COMMON_SRC\src\eeprom.c: 2 warnings, 0 errors
+compiling stm32f4xx_hal_spi.c...
 compiling ds3231_rtc.c...
 ..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
   #endif /* __DS3231_RTC_H */
 ..\..\COMMON_SRC\src\ds3231_rtc.c(63): warning:  #1-D: last line of file ends without a newline
   }
 ..\..\COMMON_SRC\src\ds3231_rtc.c: 2 warnings, 0 errors
+compiling stm32f4xx_hal_tim_ex.c...
+compiling system_stm32f4xx.c...
+compiling stm32f4xx_hal_uart.c...
+compiling stm32f4xx_hal_tim.c...
+compiling eeprom.c...
+..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
+  #endif /* EEPROM_H_ */
+..\..\COMMON_SRC\src\eeprom.c: 2 warnings, 0 errors
 compiling ds18b20.c...
 ../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
   #endif /* __COMMON_H */
-..\..\COMMON_SRC\inc\ds18b20.h(27): warning:  #1-D: last line of file ends without a newline
+..\..\COMMON_SRC\inc\ds18b20.h(24): warning:  #1-D: last line of file ends without a newline
   #endif /* __DS18B20_H */
 ..\..\COMMON_SRC\src\ds18b20.c(8): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 0);
@@ -205,8 +193,20 @@ compiling dht22.c...
 ..\..\COMMON_SRC\src\dht22.c(56): warning:  #1-D: last line of file ends without a newline
   }
 ..\..\COMMON_SRC\src\dht22.c: 8 warnings, 0 errors
+compiling modbus.c...
+..\..\COMMON_SRC\inc\ds3231_rtc.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DS3231_RTC_H */
+..\..\COMMON_SRC\inc\eeprom.h(46): warning:  #1-D: last line of file ends without a newline
+  #endif /* EEPROM_H_ */
+..\..\COMMON_SRC\inc\modbus.h(62): warning:  #1-D: last line of file ends without a newline
+  #endif /* MODBUS_H_ */
+../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+..\..\COMMON_SRC\src\modbus.c(182): warning:  #1-D: last line of file ends without a newline
+  }
+..\..\COMMON_SRC\src\modbus.c: 5 warnings, 0 errors
 linking...
-Program Size: Code=20014 RO-data=514 RW-data=76 ZI-data=10052  
+Program Size: Code=20098 RO-data=518 RW-data=76 ZI-data=10052  
 FromELF: creating hex file...
 ".\GAS_BOILER_CONTROLLER\GAS_BOILER_CONTROLLER.axf" - 0 Error(s), 66 Warning(s).
 
@@ -232,7 +232,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@5.6.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:27
+Build Time Elapsed:  00:00:24
 </pre>
 </body>
 </html>

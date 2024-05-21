@@ -1,5 +1,6 @@
 .\gas_boiler_controller\ds18b20.o: ..\..\COMMON_SRC\src\ds18b20.c
 .\gas_boiler_controller\ds18b20.o: ..\..\COMMON_SRC\inc\ds18b20.h
+.\gas_boiler_controller\ds18b20.o: ../Core/Inc/device_defs.h
 .\gas_boiler_controller\ds18b20.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\gas_boiler_controller\ds18b20.o: ../Core/Inc/stm32f4xx_hal_conf.h
 .\gas_boiler_controller\ds18b20.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
@@ -36,4 +37,6 @@
 .\gas_boiler_controller\ds18b20.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 .\gas_boiler_controller\ds18b20.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\gas_boiler_controller\ds18b20.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\gas_boiler_controller\ds18b20.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\gas_boiler_controller\ds18b20.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 .\gas_boiler_controller\ds18b20.o: ../Core/Inc/common.h
