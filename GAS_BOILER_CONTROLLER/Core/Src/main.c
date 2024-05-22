@@ -143,11 +143,11 @@ int main(void)
 	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
 
 	// Инициализация контроллера Ethernet1 настройками из ПЗУ
-	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr_1, sizeof(ram_data.mirrored_to_rom_regs.ip_addr_1));
-	memcpy(w5500_1_ptr->ipgate, &ram_data.mirrored_to_rom_regs.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.ip_gate));
-	memcpy(w5500_1_ptr->ipmask, &ram_data.mirrored_to_rom_regs.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.ip_mask));
-	w5500_1_ptr->local_port = ram_data.mirrored_to_rom_regs.local_port;
-	memcpy(w5500_1_ptr->macaddr, &ram_data.mirrored_to_rom_regs.mac_addr_1, sizeof(ram_data.mirrored_to_rom_regs.mac_addr_1));
+	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.common.ip_addr_1, sizeof(ram_data.mirrored_to_rom_regs.common.ip_addr_1));
+	memcpy(w5500_1_ptr->ipgate, &ram_data.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.common.ip_gate));
+	memcpy(w5500_1_ptr->ipmask, &ram_data.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.common.ip_mask));
+	w5500_1_ptr->local_port = ram_data.mirrored_to_rom_regs.common.local_port;
+	memcpy(w5500_1_ptr->macaddr, &ram_data.mirrored_to_rom_regs.common.mac_addr_1, sizeof(ram_data.mirrored_to_rom_regs.common.mac_addr_1));
 	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
 	w5500_1_ptr->htim = htim2;
@@ -158,11 +158,11 @@ int main(void)
 	w5500_hardware_rst(w5500_1_ptr);
 	
 	// Инициализация контроллера Ethernet2 настройками из ПЗУ
-	memcpy(w5500_2_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.ip_addr_2, sizeof(ram_data.mirrored_to_rom_regs.ip_addr_2));
-	memcpy(w5500_2_ptr->ipgate, &ram_data.mirrored_to_rom_regs.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.ip_gate));
-	memcpy(w5500_2_ptr->ipmask, &ram_data.mirrored_to_rom_regs.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.ip_mask));
-	w5500_2_ptr->local_port = ram_data.mirrored_to_rom_regs.local_port;
-	memcpy(w5500_2_ptr->macaddr, &ram_data.mirrored_to_rom_regs.mac_addr_2, sizeof(ram_data.mirrored_to_rom_regs.mac_addr_2));
+	memcpy(w5500_2_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.common.ip_addr_2, sizeof(ram_data.mirrored_to_rom_regs.common.ip_addr_2));
+	memcpy(w5500_2_ptr->ipgate, &ram_data.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.common.ip_gate));
+	memcpy(w5500_2_ptr->ipmask, &ram_data.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.common.ip_mask));
+	w5500_2_ptr->local_port = ram_data.mirrored_to_rom_regs.common.local_port;
+	memcpy(w5500_2_ptr->macaddr, &ram_data.mirrored_to_rom_regs.common.mac_addr_2, sizeof(ram_data.mirrored_to_rom_regs.common.mac_addr_2));
 	w5500_2_ptr->sock_num = 0;
 	w5500_2_ptr->spi_n = hspi2;
 	w5500_2_ptr->htim = htim4;

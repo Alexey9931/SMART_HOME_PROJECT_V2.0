@@ -3241,7 +3241,7 @@ Image component sizes
       1124         94          0          0          0       7322   eeprom.o
       2886        228          0          2       1032      13102   main.o
        890         78          0          4       3100       4845   modbus.o
-         0          0          0          4        110       2199   ram.o
+         0          0          0          4        110       2595   ram.o
         64         26        392          0       1536        856   startup_stm32f407xx.o
        212         36          0          9          0       9489   stm32f4xx_hal.o
        304         22          0          0          0      34535   stm32f4xx_hal_cortex.o
@@ -3259,7 +3259,7 @@ Image component sizes
       1462          0          0          8       4504      20263   w5500.o
 
     ----------------------------------------------------------------------
-     23614       1220        458        144      10284     888480   Object Totals
+     23614       1220        458        144      10284     888876   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         22          0          2          6          2          0   (incl. Padding)
 
@@ -3351,8 +3351,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     33086       1936        658        144      10384     874132   Grand Totals
-     33086       1936        658        144      10384     874132   ELF Image Totals
+     33086       1936        658        144      10384     874528   Grand Totals
+     33086       1936        658        144      10384     874528   ELF Image Totals
      33086       1936        658        144          0          0   ROM Totals
 
 ==============================================================================

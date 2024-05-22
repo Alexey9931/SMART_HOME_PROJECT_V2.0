@@ -15,8 +15,9 @@
 #define PAGE_SIZE 64     //Размер страницы
 #define PAGE_NUM  512    //Кол-во страниц
 
-// Структура с данными для хранения в ПЗУ
-typedef struct eeprom_struct 
+// Структура с общими для всех устройств данными
+// для хранения в ПЗУ
+typedef struct common_eeprom_struct 
 {
 	uint8_t 	device_name[32];	//Имя устройства
 	uint8_t 	ip_addr_1[4];			//IP адрес 1-го порта
@@ -26,8 +27,43 @@ typedef struct eeprom_struct
 	uint8_t 	mac_addr_1[6];		//MAC адрес 1-го порта
 	uint8_t 	mac_addr_2[6];		//MAC адрес 2-го порта
 	uint32_t 	local_port;				//Порт соединения (сокета)
-	float			temp_setpoint;		//Уставка температуры
-	float			temp_range;				//Нижний предел уставки температуры
+}__attribute__((packed)) common_eeprom;
+
+// Структура с данными для хранения в ПЗУ, 
+// характерными для панели управления
+typedef struct control_panel_eeprom_struct 
+{
+	uint8_t reserv[8];		//Резерв
+}__attribute__((packed)) control_panel_eeprom;
+
+// Структура с данными для хранения в ПЗУ,
+// характерными для контроллера газового котла
+typedef struct gas_boiler_eeprom_struct 
+{
+	float	temp_setpoint;		//Уставка температуры
+	float	temp_range;				//Нижний предел уставки температуры
+}__attribute__((packed)) gas_boiler_eeprom;
+
+// Структура с данными для хранения в ПЗУ,
+// характерными для уличной метеостанции
+typedef struct strweathstat_eeprom_struct 
+{
+	uint8_t reserv[8];		//Резерв
+}__attribute__((packed)) strweathstat_eeprom;
+
+// Обобщенная структура уникальных данных
+typedef union eeprom_uniq_struct
+{
+	control_panel_eeprom 	control_panel;
+	gas_boiler_eeprom			gas_boiler;
+	strweathstat_eeprom		str_weath_stat;
+} __attribute__((packed)) uniq_eeprom;
+
+// Обобщенная структура для всех устройств
+typedef struct eeprom_struct
+{
+	common_eeprom		common;	//Общие данные для всех устройств
+	uniq_eeprom			unig;		//Уникальные данные устройства
 }__attribute__((packed)) eeprom_data;
 
 // Функция первичной инициализации микросхем ПЗУ (выполняется один раз)

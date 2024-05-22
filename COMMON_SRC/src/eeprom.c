@@ -13,14 +13,14 @@ void eeproms_first_ini(I2C_HandleTypeDef* hi2c)
 {
 	eeprom_data rom_struct;
 	
-	strncpy((char*)&rom_struct.device_name, DEVICE_NAME, sizeof(DEVICE_NAME));	
-	memcpy(rom_struct.ip_addr_1, ip_addr_ini_1, sizeof(ip_addr_ini_1));
-	memcpy(rom_struct.ip_addr_2, ip_addr_ini_2, sizeof(ip_addr_ini_2));
-	memcpy(rom_struct.ip_gate, ip_gate_ini, sizeof(ip_gate_ini));
-	memcpy(rom_struct.ip_mask, ip_mask_ini, sizeof(ip_mask_ini));
-	rom_struct.local_port = local_port_ini;
-	memcpy(rom_struct.mac_addr_1, mac_addr_ini_1, sizeof(mac_addr_ini_1));
-	memcpy(rom_struct.mac_addr_2, mac_addr_ini_2, sizeof(mac_addr_ini_2));
+	strncpy((char*)&rom_struct.common.device_name, DEVICE_NAME, sizeof(DEVICE_NAME));	
+	memcpy(rom_struct.common.ip_addr_1, ip_addr_ini_1, sizeof(ip_addr_ini_1));
+	memcpy(rom_struct.common.ip_addr_2, ip_addr_ini_2, sizeof(ip_addr_ini_2));
+	memcpy(rom_struct.common.ip_gate, ip_gate_ini, sizeof(ip_gate_ini));
+	memcpy(rom_struct.common.ip_mask, ip_mask_ini, sizeof(ip_mask_ini));
+	rom_struct.common.local_port = local_port_ini;
+	memcpy(rom_struct.common.mac_addr_1, mac_addr_ini_1, sizeof(mac_addr_ini_1));
+	memcpy(rom_struct.common.mac_addr_2, mac_addr_ini_2, sizeof(mac_addr_ini_2));
 	
 	eeprom_page_erase(hi2c, 1, 0);
 	eeprom_page_erase(hi2c, 1, 1);
