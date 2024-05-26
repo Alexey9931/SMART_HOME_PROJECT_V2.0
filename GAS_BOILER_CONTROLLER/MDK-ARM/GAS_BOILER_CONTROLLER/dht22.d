@@ -1,5 +1,5 @@
 .\gas_boiler_controller\dht22.o: ..\..\COMMON_SRC\src\dht22.c
-.\gas_boiler_controller\dht22.o: ..\..\COMMON_SRC\inc\dht22.h
+.\gas_boiler_controller\dht22.o: ../../COMMON_SRC/inc/dht22.h
 .\gas_boiler_controller\dht22.o: ../Core/Inc/device_defs.h
 .\gas_boiler_controller\dht22.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\gas_boiler_controller\dht22.o: ../Core/Inc/stm32f4xx_hal_conf.h

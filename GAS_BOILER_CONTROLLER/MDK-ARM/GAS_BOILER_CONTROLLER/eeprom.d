@@ -1,5 +1,5 @@
 .\gas_boiler_controller\eeprom.o: ..\..\COMMON_SRC\src\eeprom.c
-.\gas_boiler_controller\eeprom.o: ..\..\COMMON_SRC\inc\eeprom.h
+.\gas_boiler_controller\eeprom.o: ../../COMMON_SRC/inc/eeprom.h
 .\gas_boiler_controller\eeprom.o: ../Core/Inc/device_defs.h
 .\gas_boiler_controller\eeprom.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\gas_boiler_controller\eeprom.o: ../Core/Inc/stm32f4xx_hal_conf.h
@@ -39,4 +39,4 @@
 .\gas_boiler_controller\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\gas_boiler_controller\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\gas_boiler_controller\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-.\gas_boiler_controller\eeprom.o: ..\..\COMMON_SRC\inc\ds3231_rtc.h
+.\gas_boiler_controller\eeprom.o: ../../COMMON_SRC/inc/ds3231_rtc.h

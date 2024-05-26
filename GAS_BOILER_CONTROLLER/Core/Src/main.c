@@ -211,6 +211,8 @@ int main(void)
 			}
 			ram_ptr->temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
 			is_time_to_update_params = 0;
+			//обновление показаний на дисплее
+			print_temp_max7219(ram_ptr->temperature*10, ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10);
 		}
 		
 		if (w5500_1_ptr->is_soc_active != 1) 
@@ -690,12 +692,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ETH2_INT_Pin ETH1_INT_Pin */
-  GPIO_InitStruct.Pin = ETH2_INT_Pin|ETH1_INT_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
   /*Configure GPIO pins : ETH1_SS_Pin NRF24_SS_Pin */
   GPIO_InitStruct.Pin = ETH1_SS_Pin|NRF24_SS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -710,16 +706,22 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : button_up_Pin */
-  GPIO_InitStruct.Pin = button_up_Pin;
+  /*Configure GPIO pin : ETH1_INT_Pin */
+  GPIO_InitStruct.Pin = ETH1_INT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(button_up_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(ETH1_INT_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : button_down_Pin button_up_Pin */
+  GPIO_InitStruct.Pin = button_down_Pin|button_up_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : button_ok_Pin */
   GPIO_InitStruct.Pin = button_ok_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(button_ok_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : ETH2_SS_Pin ETH2_RST_Pin led_rx_Pin led_tx_Pin
@@ -750,6 +752,16 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 }
 

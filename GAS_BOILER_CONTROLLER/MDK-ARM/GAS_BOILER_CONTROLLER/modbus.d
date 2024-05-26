@@ -1,6 +1,6 @@
 .\gas_boiler_controller\modbus.o: ..\..\COMMON_SRC\src\modbus.c
-.\gas_boiler_controller\modbus.o: ..\..\COMMON_SRC\inc\modbus.h
-.\gas_boiler_controller\modbus.o: ..\..\COMMON_SRC\inc\w5500.h
+.\gas_boiler_controller\modbus.o: ../../COMMON_SRC/inc/modbus.h
+.\gas_boiler_controller\modbus.o: ../../COMMON_SRC/inc/w5500.h
 .\gas_boiler_controller\modbus.o: ../Core/Inc/device_defs.h
 .\gas_boiler_controller\modbus.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\gas_boiler_controller\modbus.o: ../Core/Inc/stm32f4xx_hal_conf.h
@@ -40,6 +40,6 @@
 .\gas_boiler_controller\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\gas_boiler_controller\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\gas_boiler_controller\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-.\gas_boiler_controller\modbus.o: ..\..\COMMON_SRC\inc\eeprom.h
-.\gas_boiler_controller\modbus.o: ..\..\COMMON_SRC\inc\ds3231_rtc.h
+.\gas_boiler_controller\modbus.o: ../../COMMON_SRC/inc/eeprom.h
+.\gas_boiler_controller\modbus.o: ../../COMMON_SRC/inc/ds3231_rtc.h
 .\gas_boiler_controller\modbus.o: ../Core/Inc/ram.h

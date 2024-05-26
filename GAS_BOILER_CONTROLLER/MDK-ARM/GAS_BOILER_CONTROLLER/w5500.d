@@ -1,5 +1,5 @@
 .\gas_boiler_controller\w5500.o: ..\..\COMMON_SRC\src\w5500.c
-.\gas_boiler_controller\w5500.o: ..\..\COMMON_SRC\inc\w5500.h
+.\gas_boiler_controller\w5500.o: ../../COMMON_SRC/inc/w5500.h
 .\gas_boiler_controller\w5500.o: ../Core/Inc/device_defs.h
 .\gas_boiler_controller\w5500.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\gas_boiler_controller\w5500.o: ../Core/Inc/stm32f4xx_hal_conf.h

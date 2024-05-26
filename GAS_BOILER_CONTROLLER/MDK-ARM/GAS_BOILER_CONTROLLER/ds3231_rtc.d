@@ -1,5 +1,5 @@
 .\gas_boiler_controller\ds3231_rtc.o: ..\..\COMMON_SRC\src\ds3231_rtc.c
-.\gas_boiler_controller\ds3231_rtc.o: ..\..\COMMON_SRC\inc\ds3231_rtc.h
+.\gas_boiler_controller\ds3231_rtc.o: ../../COMMON_SRC/inc/ds3231_rtc.h
 .\gas_boiler_controller\ds3231_rtc.o: ../Core/Inc/device_defs.h
 .\gas_boiler_controller\ds3231_rtc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\gas_boiler_controller\ds3231_rtc.o: ../Core/Inc/stm32f4xx_hal_conf.h

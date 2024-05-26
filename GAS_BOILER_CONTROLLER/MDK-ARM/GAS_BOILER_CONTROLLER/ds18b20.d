@@ -1,5 +1,5 @@
 .\gas_boiler_controller\ds18b20.o: ..\..\COMMON_SRC\src\ds18b20.c
-.\gas_boiler_controller\ds18b20.o: ..\..\COMMON_SRC\inc\ds18b20.h
+.\gas_boiler_controller\ds18b20.o: ../../COMMON_SRC/inc/ds18b20.h
 .\gas_boiler_controller\ds18b20.o: ../Core/Inc/device_defs.h
 .\gas_boiler_controller\ds18b20.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\gas_boiler_controller\ds18b20.o: ../Core/Inc/stm32f4xx_hal_conf.h

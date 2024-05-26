@@ -205,6 +205,57 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles EXTI line0 interrupt.
+  */
+void EXTI0_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI0_IRQn 0 */
+
+  /* USER CODE END EXTI0_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(button_down_Pin);
+  /* USER CODE BEGIN EXTI0_IRQn 1 */
+	ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint -= TEMP_SET_INC;
+	if (ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint < MIN_TEMP_SET)
+	{
+		ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint = MAX_TEMP_SET;
+	}
+  /* USER CODE END EXTI0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line1 interrupt.
+  */
+void EXTI1_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI1_IRQn 0 */
+
+  /* USER CODE END EXTI1_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(button_up_Pin);
+  /* USER CODE BEGIN EXTI1_IRQn 1 */
+	ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint += TEMP_SET_INC;
+	if (ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint > MAX_TEMP_SET)
+	{
+		ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint = MIN_TEMP_SET;
+	}
+  /* USER CODE END EXTI1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line[9:5] interrupts.
+  */
+void EXTI9_5_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI9_5_IRQn 0 */
+
+  /* USER CODE END EXTI9_5_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(ETH1_INT_Pin);
+  HAL_GPIO_EXTI_IRQHandler(button_ok_Pin);
+  /* USER CODE BEGIN EXTI9_5_IRQn 1 */
+
+  /* USER CODE END EXTI9_5_IRQn 1 */
+}
+
+/**
   * @brief This function handles TIM2 global interrupt.
   */
 void TIM2_IRQHandler(void)

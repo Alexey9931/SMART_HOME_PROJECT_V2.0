@@ -17,5 +17,11 @@ extern I2C_HandleTypeDef hi2c1;
 #define DEVICE_NAME "Gas Boiler Controller"
 // Используемый I2C
 #define USED_I2C hi2c1
+// Максимально возможная уставка температуры
+#define MAX_TEMP_SET 35.0f
+// Минимально возможная уставка температуры
+#define MIN_TEMP_SET 0.0f
+// Шаг декремента/инкремента уставки температуры
+#define TEMP_SET_INC 0.5f
 
 #endif /* DEVICE_DEFS_H_ */
