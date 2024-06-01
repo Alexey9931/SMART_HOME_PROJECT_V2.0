@@ -48,4 +48,5 @@
 .\gas_boiler_controller\stm32f4xx_it.o: ../../COMMON_SRC/inc/ds18b20.h
 .\gas_boiler_controller\stm32f4xx_it.o: ../Core/Inc/common.h
 .\gas_boiler_controller\stm32f4xx_it.o: ../Core/Inc/lcd.h
+.\gas_boiler_controller\stm32f4xx_it.o: ../Core/Inc/thermostat_alg.h
 .\gas_boiler_controller\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h

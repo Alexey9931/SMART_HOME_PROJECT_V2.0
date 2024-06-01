@@ -13,6 +13,9 @@
 
 extern I2C_HandleTypeDef hi2c1;
 
+// Макрос типа устройства
+//#define _GAS_BOILER_CONTR_
+
 // Имя устройства
 #define DEVICE_NAME "Gas Boiler Controller"
 // Используемый I2C

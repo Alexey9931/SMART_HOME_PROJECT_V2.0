@@ -146,6 +146,7 @@ float ds18b20_get_temp(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pi
 	{
 		temp *= -1.0f;
 	}
+	if (temp == 85.0f) return 0.0f;
 	
 	return temp;
 }

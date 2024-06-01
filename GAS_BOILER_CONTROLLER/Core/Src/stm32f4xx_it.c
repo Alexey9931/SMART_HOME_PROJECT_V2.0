@@ -64,6 +64,8 @@ extern TIM_HandleTypeDef htim5;
 extern w5500_data* w5500_1_ptr;
 extern w5500_data* w5500_2_ptr;
 extern uint8_t is_time_to_update_params;
+extern uint8_t is_time_to_update_rom;
+uint8_t button_is_locked = 1;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -214,10 +216,13 @@ void EXTI0_IRQHandler(void)
   /* USER CODE END EXTI0_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(button_down_Pin);
   /* USER CODE BEGIN EXTI0_IRQn 1 */
-	ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint -= TEMP_SET_INC;
-	if (ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint < MIN_TEMP_SET)
+	if (button_is_locked == 0)
 	{
-		ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint = MAX_TEMP_SET;
+		ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint -= TEMP_SET_INC;
+		if (ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint < MIN_TEMP_SET)
+		{
+			ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint = MAX_TEMP_SET;
+		}
 	}
   /* USER CODE END EXTI0_IRQn 1 */
 }
@@ -232,10 +237,13 @@ void EXTI1_IRQHandler(void)
   /* USER CODE END EXTI1_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(button_up_Pin);
   /* USER CODE BEGIN EXTI1_IRQn 1 */
-	ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint += TEMP_SET_INC;
-	if (ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint > MAX_TEMP_SET)
+	if (button_is_locked == 0)
 	{
-		ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint = MIN_TEMP_SET;
+		ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint += TEMP_SET_INC;
+		if (ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint > MAX_TEMP_SET)
+		{
+			ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint = MIN_TEMP_SET;
+		}
 	}
   /* USER CODE END EXTI1_IRQn 1 */
 }
@@ -251,7 +259,11 @@ void EXTI9_5_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(ETH1_INT_Pin);
   HAL_GPIO_EXTI_IRQHandler(button_ok_Pin);
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
-
+	button_is_locked ? (button_is_locked = 0) : (button_is_locked = 1);
+	if (button_is_locked == 1)
+	{
+		is_time_to_update_rom = 1;
+	}
   /* USER CODE END EXTI9_5_IRQn 1 */
 }
 

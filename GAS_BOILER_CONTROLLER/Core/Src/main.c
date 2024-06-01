@@ -82,6 +82,7 @@ extern ram_data_struct ram_data;	//Пространство памяти ОЗУ 
 extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
 extern ds3231_time sys_time;	// Структура системного времени
 uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
+uint8_t is_time_to_update_rom;	// Флаг того, что пора обновлять ПЗУ
 uint8_t hours_delta; // Локальный счетчик часов
 /* USER CODE END 0 */
 
@@ -108,6 +109,12 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+//	__HAL_RCC_I2C1_CLK_ENABLE();
+//	HAL_Delay(100);
+//	__HAL_RCC_I2C1_FORCE_RESET();
+//	HAL_Delay(100);
+	//__HAL_RCC_I2C1_RELEASE_RESET();
+	//HAL_Delay(100);
 	// Костыль, с которым не возникает проблем с инициализацией i2c
 	HAL_Delay(2000);
   /* USER CODE END SysInit */
@@ -129,7 +136,7 @@ int main(void)
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-	//eeproms_first_ini(&USED_I2C);
+	eeproms_first_ini(&USED_I2C);
 	
 	// Инициализация микросхемы RTC (прошивается 1 раз)
 	//set_time(&USED_I2C, 00, 14, 0, 6, 18, 5, 24);
@@ -179,7 +186,6 @@ int main(void)
 	
 	// Инициализация дисплея
 	max7219_init();
-	print_temp_max7219(270, 210);
 	// Инициализация датчиков
 	dht22_init(GPIOD, GPIO_PIN_15);
 	ds18b20_init(GPIOD, GPIO_PIN_14, SKIP_ROM);
@@ -210,9 +216,24 @@ int main(void)
 				ram_ptr->humidity = (float)(*(int16_t*)(data+3)) / 10;
 			}
 			ram_ptr->temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
-			is_time_to_update_params = 0;
 			//обновление показаний на дисплее
 			print_temp_max7219(ram_ptr->temperature*10, ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10);
+			//алгоритм термостата
+			thermostat_task();
+
+			is_time_to_update_params = 0;
+		}
+		//если пришло время обновить ПЗУ
+		if (is_time_to_update_rom)
+		{
+//			//обновление данных в ПЗУ
+//			for (int i = 0; i < (1+(sizeof(ram_ptr->mirrored_to_rom_regs)/PAGE_SIZE)); i++)
+//			{
+//				eeprom_page_erase(&USED_I2C, 1, i);
+//			}
+//			eeprom_write(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(eeprom_data));
+//			eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
+			is_time_to_update_rom = 0;
 		}
 		
 		if (w5500_1_ptr->is_soc_active != 1) 

@@ -9,6 +9,18 @@ extern uint8_t 	mac_addr_ini_1[6];	//MAC адрес 1-го порта по ум�
 extern uint8_t 	mac_addr_ini_2[6];	//MAC адрес 2-го порта по умолчанию
 extern uint32_t local_port_ini;		  //Порт соединения (сокета) по умолчанию
 
+//// Настройки устройства по умолчанию
+//#ifdef _GAS_BOILER_CONTR_
+//extern float temp_setpoint;
+//extern float temp_range;	
+//#endif
+//#ifdef _CONTR_PANEL_
+//	
+//#endif
+//#ifdef _STREET_WEATH_ST_
+
+//#endif
+
 void eeproms_first_ini(I2C_HandleTypeDef* hi2c)
 {
 	eeprom_data rom_struct;
@@ -21,6 +33,17 @@ void eeproms_first_ini(I2C_HandleTypeDef* hi2c)
 	rom_struct.common.local_port = local_port_ini;
 	memcpy(rom_struct.common.mac_addr_1, mac_addr_ini_1, sizeof(mac_addr_ini_1));
 	memcpy(rom_struct.common.mac_addr_2, mac_addr_ini_2, sizeof(mac_addr_ini_2));
+	
+//#ifdef _GAS_BOILER_CONTR_
+//	rom_struct.unig.gas_boiler.temp_range = temp_range;
+//	rom_struct.unig.gas_boiler.temp_setpoint = temp_setpoint;
+//#endif
+//#ifdef _CONTR_PANEL_
+//	
+//#endif
+//#ifdef _STREET_WEATH_ST_
+
+//#endif
 	
 	eeprom_page_erase(hi2c, 1, 0);
 	eeprom_page_erase(hi2c, 1, 1);

@@ -38,6 +38,7 @@ extern "C" {
 #include "dht22.h"
 #include "ds18b20.h"
 #include "lcd.h"
+#include "thermostat_alg.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

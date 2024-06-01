@@ -12,38 +12,23 @@ void send_max7219(char rg, char dt)
 
 void max7219_init()
 {
+	max7219_clear();
 	send_max7219(0x0F, 0x00); //Тест индикатора выключен
-	HAL_Delay(10);
-	send_max7219(0x0C, 1); //включим индикатор
 	HAL_Delay(10);
 	send_max7219(0x0B, 7); //сколько разрядов используем
 	HAL_Delay(10);
-	send_max7219(0x09, 0xFF); //включим режим декодирования для всех разрядов 
-	HAL_Delay(10);
 	send_max7219(0x0A, 0x04); //яркость
 	HAL_Delay(10);
-	max7219_clear();
-	
-	send_max7219(0x09, 0x00); //включим режим декодирования для всех разрядов
+	send_max7219(0x0C, 1); //включим индикатор
 	HAL_Delay(10);
-	send_max7219(1, 0xFF);
-	send_max7219(2, 0xFF);
-	send_max7219(3, 0xFF);
-	send_max7219(4, 0xFF);
-	send_max7219(5, 0xFF);
-	send_max7219(6, 0xFF);
-	send_max7219(7, 0xFF);
-	send_max7219(8, 0xFF);
-	HAL_Delay(1000);
 }
 
 void max7219_clear()
 {
 	send_max7219(0x0F, 0x00); //Тест индикатора выключен
-	send_max7219(0x0C, 1); //включим индикатор
 	send_max7219(0x0B, 7); //сколько разрядов используем
 	send_max7219(0x09, 0xFF); //включим режим декодирования для всех разрядов
-	//_delay_ms(10);
+	send_max7219(0x0C, 1); //включим индикатор
 	uint8_t i=8;
 	 do
 	 {
