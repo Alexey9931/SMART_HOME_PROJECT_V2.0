@@ -22,16 +22,12 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 E:\SMART_HOME_PROJECT_v.2.0\GAS_BOILER_CONTROLLER\MDK-ARM\GAS_BOILER_CONTROLLER.uvprojx
-Project File Date:  06/01/2024
+Project File Date:  06/02/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'GAS_BOILER_CONTROLLER'
 assembling startup_stm32f407xx.s...
-compiling common.c...
-..\Core\Src\common.c(27): warning:  #1-D: last line of file ends without a newline
-  }
-..\Core\Src\common.c: 1 warning, 0 errors
 compiling lcd.c...
 ../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
   void max7219_init();
@@ -42,32 +38,11 @@ compiling lcd.c...
 ..\Core\Src\lcd.c(118): warning:  #1-D: last line of file ends without a newline
   }
 ..\Core\Src\lcd.c: 4 warnings, 0 errors
-compiling device_defs.c...
-..\Core\Src\device_defs.c(14): warning:  #1-D: last line of file ends without a newline
-  float temp_range = 5.0f;
-..\Core\Src\device_defs.c: 1 warning, 0 errors
-compiling ram.c...
-compiling main.c...
-../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
-  void max7219_init();
-../Core/Inc/lcd.h(21): warning:  #1295-D: Deprecated declaration max7219_clear - give arg types
-  void max7219_clear();
-../Core/Inc/lcd.h(25): warning:  #1-D: last line of file ends without a newline
-  #endif /* LCD_H_ */
-../Core/Inc/thermostat_alg.h(18): warning:  #1-D: last line of file ends without a newline
-  #endif /* __THERMOSTAT_ALG_H */
-../Core/Src/main.c: 4 warnings, 0 errors
-compiling stm32f4xx_it.c...
-../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
-  void max7219_init();
-../Core/Inc/lcd.h(21): warning:  #1295-D: Deprecated declaration max7219_clear - give arg types
-  void max7219_clear();
-../Core/Inc/lcd.h(25): warning:  #1-D: last line of file ends without a newline
-  #endif /* LCD_H_ */
-../Core/Inc/thermostat_alg.h(18): warning:  #1-D: last line of file ends without a newline
-  #endif /* __THERMOSTAT_ALG_H */
-../Core/Src/stm32f4xx_it.c: 4 warnings, 0 errors
 compiling stm32f4xx_hal_msp.c...
+../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
 ../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
   void max7219_init();
 ../Core/Inc/lcd.h(21): warning:  #1295-D: Deprecated declaration max7219_clear - give arg types
@@ -76,49 +51,76 @@ compiling stm32f4xx_hal_msp.c...
   #endif /* LCD_H_ */
 ../Core/Inc/thermostat_alg.h(18): warning:  #1-D: last line of file ends without a newline
   #endif /* __THERMOSTAT_ALG_H */
-../Core/Src/stm32f4xx_hal_msp.c: 4 warnings, 0 errors
-compiling stm32f4xx_hal_i2c_ex.c...
-compiling stm32f4xx_hal_rcc.c...
+../Core/Src/stm32f4xx_hal_msp.c: 6 warnings, 0 errors
 compiling thermostat_alg.c...
+../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
 ../Core/Inc/thermostat_alg.h(18): warning:  #1-D: last line of file ends without a newline
   #endif /* __THERMOSTAT_ALG_H */
 ..\Core\Src\thermostat_alg.c(21): warning:  #1-D: last line of file ends without a newline
   }
-..\Core\Src\thermostat_alg.c: 2 warnings, 0 errors
-compiling stm32f4xx_hal_i2c.c...
+..\Core\Src\thermostat_alg.c: 3 warnings, 0 errors
+compiling common.c...
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+..\Core\Src\common.c(27): warning:  #1-D: last line of file ends without a newline
+  }
+..\Core\Src\common.c: 2 warnings, 0 errors
+compiling device_defs.c...
+compiling stm32f4xx_it.c...
+../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
+  void max7219_init();
+../Core/Inc/lcd.h(21): warning:  #1295-D: Deprecated declaration max7219_clear - give arg types
+  void max7219_clear();
+../Core/Inc/lcd.h(25): warning:  #1-D: last line of file ends without a newline
+  #endif /* LCD_H_ */
+../Core/Inc/thermostat_alg.h(18): warning:  #1-D: last line of file ends without a newline
+  #endif /* __THERMOSTAT_ALG_H */
+../Core/Src/stm32f4xx_it.c: 6 warnings, 0 errors
+compiling ram.c...
+../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+..\Core\Src\ram.c(4): warning:  #1-D: last line of file ends without a newline
+  ram_data_struct *ram_ptr = &ram_data;	// Указатель на данные ОЗУ
+..\Core\Src\ram.c: 2 warnings, 0 errors
+compiling main.c...
+../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+../Core/Inc/lcd.h(20): warning:  #1295-D: Deprecated declaration max7219_init - give arg types
+  void max7219_init();
+../Core/Inc/lcd.h(21): warning:  #1295-D: Deprecated declaration max7219_clear - give arg types
+  void max7219_clear();
+../Core/Inc/lcd.h(25): warning:  #1-D: last line of file ends without a newline
+  #endif /* LCD_H_ */
+../Core/Inc/thermostat_alg.h(18): warning:  #1-D: last line of file ends without a newline
+  #endif /* __THERMOSTAT_ALG_H */
+../Core/Src/main.c: 6 warnings, 0 errors
 compiling stm32f4xx_hal_flash_ex.c...
+compiling stm32f4xx_hal_rcc.c...
+compiling stm32f4xx_hal_i2c.c...
+compiling stm32f4xx_hal_flash_ramfunc.c...
+compiling stm32f4xx_hal_i2c_ex.c...
 compiling stm32f4xx_hal_flash.c...
 compiling stm32f4xx_hal_rcc_ex.c...
-compiling stm32f4xx_hal_cortex.c...
-compiling stm32f4xx_hal_dma.c...
-compiling stm32f4xx_hal_flash_ramfunc.c...
 compiling stm32f4xx_hal_gpio.c...
-compiling stm32f4xx_hal_pwr.c...
-compiling stm32f4xx_hal_pwr_ex.c...
-compiling stm32f4xx_hal_dma_ex.c...
-compiling stm32f4xx_hal.c...
-compiling stm32f4xx_hal_spi.c...
-compiling stm32f4xx_hal_uart.c...
-compiling stm32f4xx_hal_tim_ex.c...
-compiling system_stm32f4xx.c...
 compiling stm32f4xx_hal_exti.c...
-compiling w5500.c...
+compiling stm32f4xx_hal_dma.c...
+compiling stm32f4xx_hal_pwr_ex.c...
+compiling stm32f4xx_hal_cortex.c...
+compiling stm32f4xx_hal_dma_ex.c...
+compiling stm32f4xx_hal_pwr.c...
+compiling stm32f4xx_hal.c...
 compiling ds3231_rtc.c...
-compiling stm32f4xx_hal_tim.c...
-compiling modbus.c...
-compiling dht22.c...
-..\..\COMMON_SRC\src\dht22.c(8): warning:  #188-D: enumerated type mixed with another type
-  	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, 1);
-..\..\COMMON_SRC\src\dht22.c(17): warning:  #188-D: enumerated type mixed with another type
-  	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, 0);
-..\..\COMMON_SRC\src\dht22.c(18): warning:  #188-D: enumerated type mixed with another type
-  	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, 1);
-..\..\COMMON_SRC\src\dht22.c(20): warning:  #188-D: enumerated type mixed with another type
-  	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, 0);
-..\..\COMMON_SRC\src\dht22.c(22): warning:  #188-D: enumerated type mixed with another type
-  	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, 1);
-..\..\COMMON_SRC\src\dht22.c: 5 warnings, 0 errors
+compiling stm32f4xx_hal_spi.c...
 compiling ds18b20.c...
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
 ..\..\COMMON_SRC\src\ds18b20.c(8): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 0);
 ..\..\COMMON_SRC\src\ds18b20.c(10): warning:  #188-D: enumerated type mixed with another type
@@ -131,12 +133,34 @@ compiling ds18b20.c...
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 0);
 ..\..\COMMON_SRC\src\ds18b20.c(52): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 1);
-..\..\COMMON_SRC\src\ds18b20.c: 6 warnings, 0 errors
+..\..\COMMON_SRC\src\ds18b20.c: 7 warnings, 0 errors
+compiling stm32f4xx_hal_tim_ex.c...
+compiling system_stm32f4xx.c...
 compiling eeprom.c...
+compiling w5500.c...
+compiling stm32f4xx_hal_tim.c...
+compiling dht22.c...
+../Core/Inc/common.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif /* __COMMON_H */
+..\..\COMMON_SRC\src\dht22.c(8): warning:  #188-D: enumerated type mixed with another type
+  	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, 1);
+..\..\COMMON_SRC\src\dht22.c(17): warning:  #188-D: enumerated type mixed with another type
+  	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, 0);
+..\..\COMMON_SRC\src\dht22.c(18): warning:  #188-D: enumerated type mixed with another type
+  	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, 1);
+..\..\COMMON_SRC\src\dht22.c(20): warning:  #188-D: enumerated type mixed with another type
+  	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, 0);
+..\..\COMMON_SRC\src\dht22.c(22): warning:  #188-D: enumerated type mixed with another type
+  	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, 1);
+..\..\COMMON_SRC\src\dht22.c: 6 warnings, 0 errors
+compiling modbus.c...
+../Core/Inc/ram.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif /* RAM_H_ */
+..\..\COMMON_SRC\src\modbus.c: 1 warning, 0 errors
 linking...
-Program Size: Code=20426 RO-data=518 RW-data=76 ZI-data=10052  
+Program Size: Code=23842 RO-data=518 RW-data=88 ZI-data=10056  
 FromELF: creating hex file...
-".\GAS_BOILER_CONTROLLER\GAS_BOILER_CONTROLLER.axf" - 0 Error(s), 31 Warning(s).
+".\GAS_BOILER_CONTROLLER\GAS_BOILER_CONTROLLER.axf" - 0 Error(s), 43 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -160,7 +184,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@5.6.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:25
+Build Time Elapsed:  00:00:23
 </pre>
 </body>
 </html>

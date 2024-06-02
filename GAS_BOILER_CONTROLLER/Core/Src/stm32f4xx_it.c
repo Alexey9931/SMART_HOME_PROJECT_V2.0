@@ -60,11 +60,13 @@ extern ds3231_time time;	// Структура времени
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim5;
+extern TIM_HandleTypeDef htim6;
 /* USER CODE BEGIN EV */
 extern w5500_data* w5500_1_ptr;
 extern w5500_data* w5500_2_ptr;
-extern uint8_t is_time_to_update_params;
-extern uint8_t is_time_to_update_rom;
+uint8_t is_time_to_update_params;
+uint8_t is_time_to_update_rom;
+uint8_t is_time_to_update_lcd;
 uint8_t button_is_locked = 1;
 /* USER CODE END EV */
 
@@ -237,7 +239,7 @@ void EXTI1_IRQHandler(void)
   /* USER CODE END EXTI1_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(button_up_Pin);
   /* USER CODE BEGIN EXTI1_IRQn 1 */
-	if (button_is_locked == 0)
+	if (!button_is_locked)
 	{
 		ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint += TEMP_SET_INC;
 		if (ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint > MAX_TEMP_SET)
@@ -260,7 +262,7 @@ void EXTI9_5_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(button_ok_Pin);
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
 	button_is_locked ? (button_is_locked = 0) : (button_is_locked = 1);
-	if (button_is_locked == 1)
+	if (button_is_locked)
 	{
 		is_time_to_update_rom = 1;
 	}
@@ -310,6 +312,20 @@ void TIM5_IRQHandler(void)
 	//Каждую секунду обновление параметров модуля
 	is_time_to_update_params = 1;
   /* USER CODE END TIM5_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
+  */
+void TIM6_DAC_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
+
+  /* USER CODE END TIM6_DAC_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim6);
+  /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
+	is_time_to_update_lcd = 1;
+  /* USER CODE END TIM6_DAC_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

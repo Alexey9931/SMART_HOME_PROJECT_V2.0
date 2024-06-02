@@ -33,7 +33,6 @@
 .\gas_boiler_controller\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 .\gas_boiler_controller\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 .\gas_boiler_controller\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
-.\gas_boiler_controller\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 .\gas_boiler_controller\main.o: ../../COMMON_SRC/inc/modbus.h
 .\gas_boiler_controller\main.o: ../../COMMON_SRC/inc/w5500.h
 .\gas_boiler_controller\main.o: ../Core/Inc/device_defs.h

@@ -49,8 +49,7 @@ TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
-
-UART_HandleTypeDef huart1;
+TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN PV */
 
@@ -62,12 +61,12 @@ static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_I2C1_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM5_Init(void);
+static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -81,8 +80,9 @@ extern w5500_data* w5500_2_ptr;
 extern ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
 extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
 extern ds3231_time sys_time;	// Структура системного времени
-uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
-uint8_t is_time_to_update_rom;	// Флаг того, что пора обновлять ПЗУ
+extern uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
+extern uint8_t is_time_to_update_rom;	// Флаг того, что пора обновлять ПЗУ
+extern uint8_t is_time_to_update_lcd; // Флаг того, что пора обновлять дисплей
 uint8_t hours_delta; // Локальный счетчик часов
 /* USER CODE END 0 */
 
@@ -109,12 +109,6 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-//	__HAL_RCC_I2C1_CLK_ENABLE();
-//	HAL_Delay(100);
-//	__HAL_RCC_I2C1_FORCE_RESET();
-//	HAL_Delay(100);
-	//__HAL_RCC_I2C1_RELEASE_RESET();
-	//HAL_Delay(100);
 	// Костыль, с которым не возникает проблем с инициализацией i2c
 	HAL_Delay(2000);
   /* USER CODE END SysInit */
@@ -124,19 +118,19 @@ int main(void)
   MX_SPI1_Init();
   MX_SPI2_Init();
   MX_I2C1_Init();
-  MX_USART1_UART_Init();
   MX_SPI3_Init();
   MX_TIM3_Init();
   MX_TIM2_Init();
   MX_TIM4_Init();
   MX_TIM5_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
 	// Заполнение таблицы CRC32
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-	eeproms_first_ini(&USED_I2C);
+	//eeproms_first_ini(&USED_I2C);
 	
 	// Инициализация микросхемы RTC (прошивается 1 раз)
 	//set_time(&USED_I2C, 00, 14, 0, 6, 18, 5, 24);
@@ -182,6 +176,7 @@ int main(void)
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_TIM_Base_Start_IT(&htim4);
 	HAL_TIM_Base_Start_IT(&htim5);
+	HAL_TIM_Base_Start_IT(&htim6);
 	HAL_TIM_Base_Start(&htim3);
 	
 	// Инициализация дисплея
@@ -199,7 +194,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		//если пришло время обновить параметры модуля
-		if (is_time_to_update_params == 1)
+		if (is_time_to_update_params)
 		{
 			//обновление времени
 			get_time(&USED_I2C);
@@ -216,26 +211,28 @@ int main(void)
 				ram_ptr->humidity = (float)(*(int16_t*)(data+3)) / 10;
 			}
 			ram_ptr->temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
-			//обновление показаний на дисплее
-			print_temp_max7219(ram_ptr->temperature*10, ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10);
 			//алгоритм термостата
 			thermostat_task();
-
 			is_time_to_update_params = 0;
+		}
+		if (is_time_to_update_lcd)
+		{
+			//обновление показаний на дисплее
+			print_temp_max7219(ram_ptr->temperature*10, ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10);
+			is_time_to_update_lcd = 0;
 		}
 		//если пришло время обновить ПЗУ
 		if (is_time_to_update_rom)
 		{
-//			//обновление данных в ПЗУ
-//			for (int i = 0; i < (1+(sizeof(ram_ptr->mirrored_to_rom_regs)/PAGE_SIZE)); i++)
-//			{
-//				eeprom_page_erase(&USED_I2C, 1, i);
-//			}
-//			eeprom_write(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(eeprom_data));
-//			eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
+			//обновление данных в ПЗУ
+			for (int i = 0; i < (1+(sizeof(eeprom_data)/PAGE_SIZE)); i++)
+			{
+				eeprom_page_erase(&USED_I2C, 1, i);
+			}
+			eeprom_write(&USED_I2C, 0, (uint8_t*)&ram_data.mirrored_to_rom_regs, sizeof(eeprom_data));
+			eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
 			is_time_to_update_rom = 0;
 		}
-		
 		if (w5500_1_ptr->is_soc_active != 1) 
 		{
 			w5500_ini(w5500_1_ptr);
@@ -627,35 +624,40 @@ static void MX_TIM5_Init(void)
 }
 
 /**
-  * @brief USART1 Initialization Function
+  * @brief TIM6 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_USART1_UART_Init(void)
+static void MX_TIM6_Init(void)
 {
 
-  /* USER CODE BEGIN USART1_Init 0 */
+  /* USER CODE BEGIN TIM6_Init 0 */
 
-  /* USER CODE END USART1_Init 0 */
+  /* USER CODE END TIM6_Init 0 */
 
-  /* USER CODE BEGIN USART1_Init 1 */
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
 
-  /* USER CODE END USART1_Init 1 */
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
+  /* USER CODE BEGIN TIM6_Init 1 */
+
+  /* USER CODE END TIM6_Init 1 */
+  htim6.Instance = TIM6;
+  htim6.Init.Prescaler = 8399;
+  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim6.Init.Period = 999;
+  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN USART1_Init 2 */
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM6_Init 2 */
 
-  /* USER CODE END USART1_Init 2 */
+  /* USER CODE END TIM6_Init 2 */
 
 }
 

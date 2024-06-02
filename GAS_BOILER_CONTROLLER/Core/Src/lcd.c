@@ -30,10 +30,10 @@ void max7219_clear()
 	send_max7219(0x09, 0xFF); //включим режим декодирования для всех разрядов
 	send_max7219(0x0C, 1); //включим индикатор
 	uint8_t i=8;
-	 do
-	 {
-		 send_max7219(i,0xF);//символ пустоты
-	 } while (--i);
+	do
+	{
+		send_max7219(i,0xF);//символ пустоты
+	} while (--i);
 }
 
 void number_max7219(volatile long n)

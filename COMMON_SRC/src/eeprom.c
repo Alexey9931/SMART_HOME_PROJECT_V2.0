@@ -9,17 +9,17 @@ extern uint8_t 	mac_addr_ini_1[6];	//MAC адрес 1-го порта по ум�
 extern uint8_t 	mac_addr_ini_2[6];	//MAC адрес 2-го порта по умолчанию
 extern uint32_t local_port_ini;		  //Порт соединения (сокета) по умолчанию
 
-//// Настройки устройства по умолчанию
-//#ifdef _GAS_BOILER_CONTR_
-//extern float temp_setpoint;
-//extern float temp_range;	
-//#endif
-//#ifdef _CONTR_PANEL_
-//	
-//#endif
-//#ifdef _STREET_WEATH_ST_
+// Настройки устройства по умолчанию
+#ifdef _GAS_BOILER_CONTR_
+extern float temp_setpoint;
+extern float temp_range;	
+#endif
+#ifdef _CONTR_PANEL_
+	
+#endif
+#ifdef _STREET_WEATH_ST_
 
-//#endif
+#endif
 
 void eeproms_first_ini(I2C_HandleTypeDef* hi2c)
 {
@@ -34,19 +34,21 @@ void eeproms_first_ini(I2C_HandleTypeDef* hi2c)
 	memcpy(rom_struct.common.mac_addr_1, mac_addr_ini_1, sizeof(mac_addr_ini_1));
 	memcpy(rom_struct.common.mac_addr_2, mac_addr_ini_2, sizeof(mac_addr_ini_2));
 	
-//#ifdef _GAS_BOILER_CONTR_
-//	rom_struct.unig.gas_boiler.temp_range = temp_range;
-//	rom_struct.unig.gas_boiler.temp_setpoint = temp_setpoint;
-//#endif
-//#ifdef _CONTR_PANEL_
-//	
-//#endif
-//#ifdef _STREET_WEATH_ST_
-
-//#endif
+#ifdef _GAS_BOILER_CONTR_
+	rom_struct.unig.gas_boiler.temp_range = temp_range;
+	rom_struct.unig.gas_boiler.temp_setpoint = temp_setpoint;
+#endif
+#ifdef _CONTR_PANEL_
 	
-	eeprom_page_erase(hi2c, 1, 0);
-	eeprom_page_erase(hi2c, 1, 1);
+#endif
+#ifdef _STREET_WEATH_ST_
+
+#endif
+	
+	for (int i = 0; i < (1+(sizeof(eeprom_data)/PAGE_SIZE)); i++)
+	{
+		eeprom_page_erase(&USED_I2C, 1, i);
+	}
 	
 	eeprom_write(hi2c, 0, (uint8_t*)&rom_struct, sizeof(rom_struct));
 }
@@ -143,7 +145,7 @@ void _eeprom_write(I2C_HandleTypeDef* hi2c, uint8_t rom_num, uint16_t page, uint
 		size = size-bytesremaining;
 		pos += bytesremaining;
 
-		HAL_Delay(5);
+		HAL_Delay(10);
 	}
 }
 
@@ -209,5 +211,5 @@ void eeprom_page_erase(I2C_HandleTypeDef* hi2c, uint8_t rom_num, uint16_t page)
 
 	HAL_I2C_Mem_Write(hi2c, eeprom_addr, MemAddress, 2, data, PAGE_SIZE, 10);
 
-	HAL_Delay(5); 
+	HAL_Delay(10); 
 }
