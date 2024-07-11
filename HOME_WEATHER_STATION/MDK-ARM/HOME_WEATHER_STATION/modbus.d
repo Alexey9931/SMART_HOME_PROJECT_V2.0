@@ -42,4 +42,4 @@ home_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 home_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 home_weather_station\modbus.o: ../../COMMON_SRC/inc/eeprom.h
 home_weather_station\modbus.o: ../../COMMON_SRC/inc/ds3231_rtc.h
-home_weather_station\modbus.o: ../Core/Inc/ram.h
+home_weather_station\modbus.o: ../../COMMON_SRC/inc/ram.h

@@ -1,5 +1,5 @@
-home_weather_station\ram.o: ..\Core\Src\ram.c
-home_weather_station\ram.o: ../Core/Inc/ram.h
+home_weather_station\ram.o: ..\..\COMMON_SRC\src\ram.c
+home_weather_station\ram.o: ../../COMMON_SRC/inc/ram.h
 home_weather_station\ram.o: ../../COMMON_SRC/inc/eeprom.h
 home_weather_station\ram.o: ../Core/Inc/device_defs.h
 home_weather_station\ram.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h

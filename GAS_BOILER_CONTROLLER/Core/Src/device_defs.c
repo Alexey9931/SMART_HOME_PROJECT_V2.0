@@ -11,4 +11,4 @@ uint32_t 	local_port_ini = 5151;																		//Порт соединени�
 
 // Настройки устройства по умолчанию
 float temp_setpoint = 20.0f;
-float temp_range = 5.0f;
+float temp_range = 0.5f;

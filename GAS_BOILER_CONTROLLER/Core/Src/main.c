@@ -133,7 +133,7 @@ int main(void)
 	//eeproms_first_ini(&USED_I2C);
 	
 	// Инициализация микросхемы RTC (прошивается 1 раз)
-	//set_time(&USED_I2C, 00, 14, 0, 6, 18, 5, 24);
+	//set_time(&USED_I2C, 00, 13, 21, 7, 23, 6, 24);
 	
 	get_time(&USED_I2C);
 	memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
@@ -209,6 +209,11 @@ int main(void)
 			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
 			{
 				ram_ptr->humidity = (float)(*(int16_t*)(data+3)) / 10;
+//				ram_ptr->temperature = (float)((*(uint16_t*)(data+1))&0x3FFF) / 10;
+//				if((*(uint16_t*)(data+1)) & 0x8000)
+//				{
+//					ram_ptr->temperature *= -1.0f;
+//				}
 			}
 			ram_ptr->temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
 			//алгоритм термостата

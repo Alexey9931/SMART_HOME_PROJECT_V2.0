@@ -420,19 +420,9 @@
               <FilePath>..\Core\Src\device_defs.c</FilePath>
             </File>
             <File>
-              <FileName>ram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ram.c</FilePath>
-            </File>
-            <File>
               <FileName>device_defs.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Core\Inc\device_defs.h</FilePath>
-            </File>
-            <File>
-              <FileName>ram.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\ram.h</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
@@ -633,6 +623,16 @@
               <FileName>bmp180.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\COMMON_SRC\src\bmp180.c</FilePath>
+            </File>
+            <File>
+              <FileName>ram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\ram.c</FilePath>
+            </File>
+            <File>
+              <FileName>ram.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\ram.h</FilePath>
             </File>
           </Files>
         </Group>

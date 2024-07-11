@@ -67,7 +67,7 @@ uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn)
 			return 1;
 		}
 		
-		ram_ptr->num_rx_pack++;
+		ram_ptr->common.num_rx_pack++;
 		
 		return 0;
 	}
@@ -111,7 +111,7 @@ void transmit_packet(w5500_data* w5500_n, uint8_t sn)
 // Функция выполнения команды
 void do_cmd(void)
 {
-	ram_ptr->num_tx_pack++;
+	ram_ptr->common.num_tx_pack++;
 	
 	uint16_t reg_addr;
 	uint16_t reg_size;
@@ -144,9 +144,9 @@ void do_cmd(void)
 				tx_data_size = 1;
 				break;
 		case type_cmd:
-				memcpy((char*)&tx_packet.data, (char*)&ram_data.mirrored_to_rom_regs.common.device_name, 
-					sizeof(ram_data.mirrored_to_rom_regs.common.device_name));
-				tx_data_size = sizeof(ram_data.mirrored_to_rom_regs.common.device_name);
+				memcpy((char*)&tx_packet.data, (char*)&ram_data.common.mirrored_to_rom_regs.common.device_name, 
+					sizeof(ram_data.common.mirrored_to_rom_regs.common.device_name));
+				tx_data_size = sizeof(ram_data.common.mirrored_to_rom_regs.common.device_name);
 				break;
 		case init_cmd:
 				memcpy((char*)&tx_packet.data, (char*)&ram_data, sizeof(ram_data));

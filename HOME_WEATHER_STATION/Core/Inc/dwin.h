@@ -2,8 +2,10 @@
 #define __DWIN_H
 
 #include "stm32f4xx_hal.h"
+#include "ram.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdint.h>
 
 #define DWIN_UART huart1
@@ -30,6 +32,10 @@ typedef struct packet_data_struct
     uint8_t data[249];    // Данные
 }__attribute__((packed)) packet_struct;
 
-void dwin_write_half_word(uint16_t addr, uint16_t data);
+void dwin_write_half_word(uint16_t data, uint16_t addr);
+
+void dwin_write_variable(char* data, uint16_t addr, uint8_t len);
+
+void dwin_print_home_page();
 
 #endif /* __DWIN_H */

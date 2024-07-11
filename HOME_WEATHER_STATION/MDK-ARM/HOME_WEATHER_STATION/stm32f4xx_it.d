@@ -43,7 +43,7 @@ home_weather_station\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 home_weather_station\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 home_weather_station\stm32f4xx_it.o: ../../COMMON_SRC/inc/eeprom.h
 home_weather_station\stm32f4xx_it.o: ../../COMMON_SRC/inc/ds3231_rtc.h
-home_weather_station\stm32f4xx_it.o: ../Core/Inc/ram.h
+home_weather_station\stm32f4xx_it.o: ../../COMMON_SRC/inc/ram.h
 home_weather_station\stm32f4xx_it.o: ../../COMMON_SRC/inc/bmp180.h
 home_weather_station\stm32f4xx_it.o: ../../COMMON_SRC/inc/dht22.h
 home_weather_station\stm32f4xx_it.o: ../../COMMON_SRC/inc/ds18b20.h
