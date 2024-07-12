@@ -38,6 +38,6 @@ street_weather_station\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 street_weather_station\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 street_weather_station\main.o: ..\..\COMMON_SRC\inc\eeprom.h
 street_weather_station\main.o: ..\..\COMMON_SRC\inc\ds3231_rtc.h
-street_weather_station\main.o: ../Core/Inc/ram.h
+street_weather_station\main.o: ..\..\COMMON_SRC\inc\ram.h
 street_weather_station\main.o: ..\..\COMMON_SRC\inc\ds18b20.h
 street_weather_station\main.o: ../Core/Inc/common.h

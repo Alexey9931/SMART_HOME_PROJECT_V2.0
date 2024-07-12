@@ -3,9 +3,9 @@
 <title>Static Call Graph - [STREET_WEATHER_STATION\STREET_WEATHER_STATION.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image STREET_WEATHER_STATION\STREET_WEATHER_STATION.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sun Jun 02 01:59:54 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sat Jul 13 00:39:50 2024
 <BR><P>
-<H3>Maximum Stack Usage =        384 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        392 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main &rArr; request_reply_iteration &rArr; do_cmd &rArr; eeproms_first_ini &rArr; eeprom_write &rArr; _eeprom_write &rArr; log &rArr; __kernel_poly &rArr; __aeabi_dmul
 <P>
@@ -201,7 +201,7 @@ Global Symbols
 <P><STRONG><a name="[11a]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[43]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 384 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 392 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; request_reply_iteration &rArr; do_cmd &rArr; eeproms_first_ini &rArr; eeprom_write &rArr; _eeprom_write &rArr; log &rArr; __kernel_poly &rArr; __aeabi_dmul
 </UL>
 <BR>[Calls]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -974,8 +974,8 @@ Global Symbols
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ds18b20_read_bit
 </UL>
 
-<P><STRONG><a name="[a3]"></a>do_cmd</STRONG> (Thumb, 148 bytes, Stack size 24 bytes, modbus.o(i.do_cmd))
-<BR><BR>[Stack]<UL><LI>Max Depth = 368 + Unknown Stack Size
+<P><STRONG><a name="[a3]"></a>do_cmd</STRONG> (Thumb, 144 bytes, Stack size 24 bytes, modbus.o(i.do_cmd))
+<BR><BR>[Stack]<UL><LI>Max Depth = 376 + Unknown Stack Size
 <LI>Call Chain = do_cmd &rArr; eeproms_first_ini &rArr; eeprom_write &rArr; _eeprom_write &rArr; log &rArr; __kernel_poly &rArr; __aeabi_dmul
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
@@ -1120,8 +1120,8 @@ Global Symbols
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eeproms_first_ini
 </UL>
 
-<P><STRONG><a name="[a6]"></a>eeproms_first_ini</STRONG> (Thumb, 108 bytes, Stack size 80 bytes, eeprom.o(i.eeproms_first_ini))
-<BR><BR>[Stack]<UL><LI>Max Depth = 344 + Unknown Stack Size
+<P><STRONG><a name="[a6]"></a>eeproms_first_ini</STRONG> (Thumb, 106 bytes, Stack size 88 bytes, eeprom.o(i.eeproms_first_ini))
+<BR><BR>[Stack]<UL><LI>Max Depth = 352 + Unknown Stack Size
 <LI>Call Chain = eeproms_first_ini &rArr; eeprom_write &rArr; _eeprom_write &rArr; log &rArr; __kernel_poly &rArr; __aeabi_dmul
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
@@ -1201,7 +1201,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[44]"></a>main</STRONG> (Thumb, 398 bytes, Stack size 0 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 384 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 392 + Unknown Stack Size
 <LI>Call Chain = main &rArr; request_reply_iteration &rArr; do_cmd &rArr; eeproms_first_ini &rArr; eeprom_write &rArr; _eeprom_write &rArr; log &rArr; __kernel_poly &rArr; __aeabi_dmul
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;w5500_ini
@@ -1258,7 +1258,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[ca]"></a>request_reply_iteration</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, modbus.o(i.request_reply_iteration))
-<BR><BR>[Stack]<UL><LI>Max Depth = 384 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 392 + Unknown Stack Size
 <LI>Call Chain = request_reply_iteration &rArr; do_cmd &rArr; eeproms_first_ini &rArr; eeprom_write &rArr; _eeprom_write &rArr; log &rArr; __kernel_poly &rArr; __aeabi_dmul
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;transmit_packet

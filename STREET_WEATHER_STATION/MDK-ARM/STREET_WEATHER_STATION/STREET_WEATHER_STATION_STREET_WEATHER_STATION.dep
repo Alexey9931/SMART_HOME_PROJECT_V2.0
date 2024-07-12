@@ -33,7 +33,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x649DDCD0)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h)(0x649DDCD0)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h)(0x649DDCD0)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h)(0x649DDCD0)
-F (../Core/Src/main.c)(0x664E551C)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\main.o --omf_browse street_weather_station\main.crf --depend street_weather_station\main.d)
+F (../Core/Src/main.c)(0x6691A29E)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\main.o --omf_browse street_weather_station\main.crf --depend street_weather_station\main.d)
 I (../Core/Inc/main.h)(0x664A5D93)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x649DDCD0)
 I (../Core/Inc/stm32f1xx_hal_conf.h)(0x6647BD25)
@@ -70,9 +70,9 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
-I (..\..\COMMON_SRC\inc\eeprom.h)(0x665B7DCE)
+I (..\..\COMMON_SRC\inc\eeprom.h)(0x665CA6C7)
 I (..\..\COMMON_SRC\inc\ds3231_rtc.h)(0x665B7DCE)
-I (../Core/Inc/ram.h)(0x664A5BDA)
+I (..\..\COMMON_SRC\inc\ram.h)(0x669033CB)
 I (..\..\COMMON_SRC\inc\ds18b20.h)(0x665B7DCE)
 I (../Core/Inc/common.h)(0x6612D314)
 F (../Core/Src/stm32f1xx_it.c)(0x664A5CBE)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\stm32f1xx_it.o --omf_browse street_weather_station\stm32f1xx_it.crf --depend street_weather_station\stm32f1xx_it.d)
@@ -112,9 +112,9 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
-I (..\..\COMMON_SRC\inc\eeprom.h)(0x665B7DCE)
+I (..\..\COMMON_SRC\inc\eeprom.h)(0x665CA6C7)
 I (..\..\COMMON_SRC\inc\ds3231_rtc.h)(0x665B7DCE)
-I (../Core/Inc/ram.h)(0x664A5BDA)
+I (..\..\COMMON_SRC\inc\ram.h)(0x669033CB)
 I (..\..\COMMON_SRC\inc\ds18b20.h)(0x665B7DCE)
 I (../Core/Inc/common.h)(0x6612D314)
 I (../Core/Inc/stm32f1xx_it.h)(0x6612DCAF)
@@ -155,9 +155,9 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
-I (..\..\COMMON_SRC\inc\eeprom.h)(0x665B7DCE)
+I (..\..\COMMON_SRC\inc\eeprom.h)(0x665CA6C7)
 I (..\..\COMMON_SRC\inc\ds3231_rtc.h)(0x665B7DCE)
-I (../Core/Inc/ram.h)(0x664A5BDA)
+I (..\..\COMMON_SRC\inc\ram.h)(0x669033CB)
 I (..\..\COMMON_SRC\inc\ds18b20.h)(0x665B7DCE)
 I (../Core/Inc/common.h)(0x6612D314)
 F (..\Core\Src\device_defs.c)(0x664A5DF8)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\device_defs.o --omf_browse street_weather_station\device_defs.crf --depend street_weather_station\device_defs.d)
@@ -194,45 +194,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
-F (..\Core\Src\ram.c)(0x664A2783)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\ram.o --omf_browse street_weather_station\ram.crf --depend street_weather_station\ram.d)
-I (../Core/Inc/ram.h)(0x664A5BDA)
-I (..\..\COMMON_SRC\inc\eeprom.h)(0x665B7DCE)
-I (../Core/Inc/device_defs.h)(0x664A5ACA)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x649DDCD0)
-I (../Core/Inc/stm32f1xx_hal_conf.h)(0x6647BD25)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h)(0x649DDCD0)
-I (../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h)(0x649DDCD0)
-I (../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h)(0x649DDCD0)
-I (../Drivers/CMSIS/Include/core_cm3.h)(0x649DDCC7)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63CDCC)
-I (../Drivers/CMSIS/Include/cmsis_version.h)(0x649DDCC7)
-I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x649DDCC7)
-I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x649DDCC7)
-I (../Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x649DDCD0)
-I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5F63CDCC)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio_ex.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_exti.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h)(0x649DDCD0)
-I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h)(0x649DDCD0)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
-I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
-I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
-I (..\..\COMMON_SRC\inc\ds3231_rtc.h)(0x665B7DCE)
 F (..\Core\Inc\device_defs.h)(0x664A5ACA)()
-F (..\Core\Inc\ram.h)(0x664A5BDA)()
 F (../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c)(0x649DDCD0)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\stm32f1xx_hal_gpio_ex.o --omf_browse street_weather_station\stm32f1xx_hal_gpio_ex.crf --depend street_weather_station\stm32f1xx_hal_gpio_ex.d)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x649DDCD0)
 I (../Core/Inc/stm32f1xx_hal_conf.h)(0x6647BD25)
@@ -697,9 +659,9 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x649DDCD0)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h)(0x649DDCD0)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h)(0x649DDCD0)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h)(0x649DDCD0)
-F (..\..\COMMON_SRC\inc\eeprom.h)(0x665B7DCE)()
-F (..\..\COMMON_SRC\src\eeprom.c)(0x665BA25E)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\eeprom.o --omf_browse street_weather_station\eeprom.crf --depend street_weather_station\eeprom.d)
-I (..\..\COMMON_SRC\inc\eeprom.h)(0x665B7DCE)
+F (..\..\COMMON_SRC\inc\eeprom.h)(0x665CA6C7)()
+F (..\..\COMMON_SRC\src\eeprom.c)(0x665CA6C7)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\eeprom.o --omf_browse street_weather_station\eeprom.crf --depend street_weather_station\eeprom.d)
+I (..\..\COMMON_SRC\inc\eeprom.h)(0x665CA6C7)
 I (../Core/Inc/device_defs.h)(0x664A5ACA)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x649DDCD0)
 I (../Core/Inc/stm32f1xx_hal_conf.h)(0x6647BD25)
@@ -734,7 +696,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
 I (..\..\COMMON_SRC\inc\ds3231_rtc.h)(0x665B7DCE)
-F (..\..\COMMON_SRC\src\modbus.c)(0x665B7DCE)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\modbus.o --omf_browse street_weather_station\modbus.crf --depend street_weather_station\modbus.d)
+F (..\..\COMMON_SRC\src\modbus.c)(0x66903175)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\modbus.o --omf_browse street_weather_station\modbus.crf --depend street_weather_station\modbus.d)
 I (..\..\COMMON_SRC\inc\modbus.h)(0x665B7DCE)
 I (..\..\COMMON_SRC\inc\w5500.h)(0x664A59ED)
 I (../Core/Inc/device_defs.h)(0x664A5ACA)
@@ -770,9 +732,9 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
-I (..\..\COMMON_SRC\inc\eeprom.h)(0x665B7DCE)
+I (..\..\COMMON_SRC\inc\eeprom.h)(0x665CA6C7)
 I (..\..\COMMON_SRC\inc\ds3231_rtc.h)(0x665B7DCE)
-I (../Core/Inc/ram.h)(0x664A5BDA)
+I (..\..\COMMON_SRC\inc\ram.h)(0x669033CB)
 F (..\..\COMMON_SRC\inc\modbus.h)(0x665B7DCE)()
 F (..\..\COMMON_SRC\inc\ds18b20.h)(0x665B7DCE)()
 F (..\..\COMMON_SRC\src\ds18b20.c)(0x665B1126)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\ds18b20.o --omf_browse street_weather_station\ds18b20.crf --depend street_weather_station\ds18b20.d)
@@ -847,3 +809,41 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
 F (..\..\COMMON_SRC\inc\w5500.h)(0x664A59ED)()
+F (..\..\COMMON_SRC\inc\ram.h)(0x669033CB)()
+F (..\..\COMMON_SRC\src\ram.c)(0x664A2783)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\..\COMMON_SRC\inc-I.\RTE\_STREET_WEATHER_STATION-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o street_weather_station\ram.o --omf_browse street_weather_station\ram.crf --depend street_weather_station\ram.d)
+I (..\..\COMMON_SRC\inc\ram.h)(0x669033CB)
+I (..\..\COMMON_SRC\inc\eeprom.h)(0x665CA6C7)
+I (../Core/Inc/device_defs.h)(0x664A5ACA)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x649DDCD0)
+I (../Core/Inc/stm32f1xx_hal_conf.h)(0x6647BD25)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h)(0x649DDCD0)
+I (../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h)(0x649DDCD0)
+I (../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h)(0x649DDCD0)
+I (../Drivers/CMSIS/Include/core_cm3.h)(0x649DDCC7)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63CDCC)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x649DDCC7)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x649DDCC7)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x649DDCC7)
+I (../Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x649DDCD0)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5F63CDCC)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio_ex.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_exti.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h)(0x649DDCD0)
+I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h)(0x649DDCD0)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
+I (..\..\COMMON_SRC\inc\ds3231_rtc.h)(0x665B7DCE)

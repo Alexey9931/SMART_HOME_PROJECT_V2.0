@@ -114,49 +114,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
-F (..\Core\Inc\ram.h)(0x6653925E)()
-F (..\Core\Src\ram.c)(0x6653925E)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../../COMMON_SRC/inc-I.\RTE\_GAS_BOILER_CONTROLLER-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o .\gas_boiler_controller\ram.o --omf_browse .\gas_boiler_controller\ram.crf --depend .\gas_boiler_controller\ram.d)
-I (../Core/Inc/ram.h)(0x6653925E)
-I (../../COMMON_SRC/inc/eeprom.h)(0x665CA6C7)
-I (../Core/Inc/device_defs.h)(0x665C5522)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65993E2F)
-I (../Core/Inc/stm32f4xx_hal_conf.h)(0x665CAA44)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h)(0x65993E2F)
-I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x65993DB5)
-I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x65993DB5)
-I (../Drivers/CMSIS/Include/core_cm4.h)(0x65993DB8)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63CDCC)
-I (../Drivers/CMSIS/Include/cmsis_version.h)(0x65993DB8)
-I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x65993DB8)
-I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x65993DB8)
-I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x65993DB8)
-I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x65993DB5)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x65993E2F)
-I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5F63CDCC)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x65993E2F)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x65993E2F)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
-I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
-I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
-I (../../COMMON_SRC/inc/ds3231_rtc.h)(0x665B7DCE)
-F (..\Core\Src\thermostat_alg.c)(0x665AFB02)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../../COMMON_SRC/inc-I.\RTE\_GAS_BOILER_CONTROLLER-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o .\gas_boiler_controller\thermostat_alg.o --omf_browse .\gas_boiler_controller\thermostat_alg.crf --depend .\gas_boiler_controller\thermostat_alg.d)
+F (..\Core\Src\thermostat_alg.c)(0x6691A1F9)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../../COMMON_SRC/inc-I.\RTE\_GAS_BOILER_CONTROLLER-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o .\gas_boiler_controller\thermostat_alg.o --omf_browse .\gas_boiler_controller\thermostat_alg.crf --depend .\gas_boiler_controller\thermostat_alg.d)
 I (../Core/Inc/thermostat_alg.h)(0x665AFB02)
 I (../Core/Inc/device_defs.h)(0x665C5522)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65993E2F)
@@ -195,11 +153,11 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
-I (../Core/Inc/ram.h)(0x6653925E)
+I (../../COMMON_SRC/inc/ram.h)(0x669033CB)
 I (../../COMMON_SRC/inc/eeprom.h)(0x665CA6C7)
 I (../../COMMON_SRC/inc/ds3231_rtc.h)(0x665B7DCE)
 F (..\Core\Inc\thermostat_alg.h)(0x665AFB02)()
-F (../Core/Src/main.c)(0x66786CB7)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../../COMMON_SRC/inc-I.\RTE\_GAS_BOILER_CONTROLLER-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o .\gas_boiler_controller\main.o --omf_browse .\gas_boiler_controller\main.crf --depend .\gas_boiler_controller\main.d)
+F (../Core/Src/main.c)(0x6691A170)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../../COMMON_SRC/inc-I.\RTE\_GAS_BOILER_CONTROLLER-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o .\gas_boiler_controller\main.o --omf_browse .\gas_boiler_controller\main.crf --depend .\gas_boiler_controller\main.d)
 I (../Core/Inc/main.h)(0x665C5522)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65993E2F)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x665CAA44)
@@ -242,13 +200,13 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
 I (../../COMMON_SRC/inc/eeprom.h)(0x665CA6C7)
 I (../../COMMON_SRC/inc/ds3231_rtc.h)(0x665B7DCE)
-I (../Core/Inc/ram.h)(0x6653925E)
+I (../../COMMON_SRC/inc/ram.h)(0x669033CB)
 I (../../COMMON_SRC/inc/dht22.h)(0x665B7DCE)
 I (../../COMMON_SRC/inc/ds18b20.h)(0x665B7DCE)
 I (../Core/Inc/common.h)(0x6653925E)
 I (../Core/Inc/lcd.h)(0x6653925E)
 I (../Core/Inc/thermostat_alg.h)(0x665AFB02)
-F (../Core/Src/stm32f4xx_it.c)(0x665CAAC7)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../../COMMON_SRC/inc-I.\RTE\_GAS_BOILER_CONTROLLER-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o .\gas_boiler_controller\stm32f4xx_it.o --omf_browse .\gas_boiler_controller\stm32f4xx_it.crf --depend .\gas_boiler_controller\stm32f4xx_it.d)
+F (../Core/Src/stm32f4xx_it.c)(0x6691A1F9)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../../COMMON_SRC/inc-I.\RTE\_GAS_BOILER_CONTROLLER-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o .\gas_boiler_controller\stm32f4xx_it.o --omf_browse .\gas_boiler_controller\stm32f4xx_it.crf --depend .\gas_boiler_controller\stm32f4xx_it.d)
 I (../Core/Inc/main.h)(0x665C5522)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65993E2F)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x665CAA44)
@@ -291,7 +249,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
 I (../../COMMON_SRC/inc/eeprom.h)(0x665CA6C7)
 I (../../COMMON_SRC/inc/ds3231_rtc.h)(0x665B7DCE)
-I (../Core/Inc/ram.h)(0x6653925E)
+I (../../COMMON_SRC/inc/ram.h)(0x669033CB)
 I (../../COMMON_SRC/inc/dht22.h)(0x665B7DCE)
 I (../../COMMON_SRC/inc/ds18b20.h)(0x665B7DCE)
 I (../Core/Inc/common.h)(0x6653925E)
@@ -341,7 +299,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
 I (../../COMMON_SRC/inc/eeprom.h)(0x665CA6C7)
 I (../../COMMON_SRC/inc/ds3231_rtc.h)(0x665B7DCE)
-I (../Core/Inc/ram.h)(0x6653925E)
+I (../../COMMON_SRC/inc/ram.h)(0x669033CB)
 I (../../COMMON_SRC/inc/dht22.h)(0x665B7DCE)
 I (../../COMMON_SRC/inc/ds18b20.h)(0x665B7DCE)
 I (../Core/Inc/common.h)(0x6653925E)
@@ -1178,7 +1136,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
 I (../Core/Inc/common.h)(0x6653925E)
 F (..\..\COMMON_SRC\inc\ds18b20.h)(0x665B7DCE)()
 F (..\..\COMMON_SRC\inc\modbus.h)(0x665B7DCE)()
-F (..\..\COMMON_SRC\src\modbus.c)(0x665B7DCE)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../../COMMON_SRC/inc-I.\RTE\_GAS_BOILER_CONTROLLER-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o .\gas_boiler_controller\modbus.o --omf_browse .\gas_boiler_controller\modbus.crf --depend .\gas_boiler_controller\modbus.d)
+F (..\..\COMMON_SRC\src\modbus.c)(0x66903175)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../../COMMON_SRC/inc-I.\RTE\_GAS_BOILER_CONTROLLER-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o .\gas_boiler_controller\modbus.o --omf_browse .\gas_boiler_controller\modbus.crf --depend .\gas_boiler_controller\modbus.d)
 I (../../COMMON_SRC/inc/modbus.h)(0x665B7DCE)
 I (../../COMMON_SRC/inc/w5500.h)(0x664A59ED)
 I (../Core/Inc/device_defs.h)(0x665C5522)
@@ -1220,4 +1178,46 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
 I (../../COMMON_SRC/inc/eeprom.h)(0x665CA6C7)
 I (../../COMMON_SRC/inc/ds3231_rtc.h)(0x665B7DCE)
-I (../Core/Inc/ram.h)(0x6653925E)
+I (../../COMMON_SRC/inc/ram.h)(0x669033CB)
+F (..\..\COMMON_SRC\src\ram.c)(0x664A2783)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../../COMMON_SRC/inc-I.\RTE\_GAS_BOILER_CONTROLLER-IC:\Users\Alex2\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\Alex2\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o .\gas_boiler_controller\ram.o --omf_browse .\gas_boiler_controller\ram.crf --depend .\gas_boiler_controller\ram.d)
+I (../../COMMON_SRC/inc/ram.h)(0x669033CB)
+I (../../COMMON_SRC/inc/eeprom.h)(0x665CA6C7)
+I (../Core/Inc/device_defs.h)(0x665C5522)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65993E2F)
+I (../Core/Inc/stm32f4xx_hal_conf.h)(0x665CAA44)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h)(0x65993E2F)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x65993DB5)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x65993DB5)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x65993DB8)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63CDCC)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x65993DB8)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x65993DB8)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x65993DB8)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x65993DB8)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x65993DB5)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x65993E2F)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5F63CDCC)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x65993E2F)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x65993E2F)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63CDDA)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63CDCC)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5F63CDCC)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63CDCC)
+I (../../COMMON_SRC/inc/ds3231_rtc.h)(0x665B7DCE)
+F (..\..\COMMON_SRC\inc\ram.h)(0x669033CB)()

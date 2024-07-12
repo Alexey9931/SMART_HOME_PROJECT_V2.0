@@ -136,19 +136,19 @@ int main(void)
 	//set_time(&USED_I2C, 00, 13, 21, 7, 23, 6, 24);
 	
 	get_time(&USED_I2C);
-	memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
-	memcpy(&ram_ptr->start_time, &sys_time, sizeof(sys_time));
-	hours_delta = ram_ptr->start_time.hour;
+	memcpy(&ram_ptr->uniq.gas_boiler.sys_time, &sys_time, sizeof(sys_time));
+	memcpy(&ram_ptr->uniq.gas_boiler.start_time, &sys_time, sizeof(sys_time));
+	hours_delta = ram_ptr->uniq.gas_boiler.start_time.hour;
 	
 	// Зеркализация данных из ПЗУ в ОЗУ
-	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
+	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.common.mirrored_to_rom_regs));
 
 	// Инициализация контроллера Ethernet1 настройками из ПЗУ
-	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.common.ip_addr_1, sizeof(ram_data.mirrored_to_rom_regs.common.ip_addr_1));
-	memcpy(w5500_1_ptr->ipgate, &ram_data.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.common.ip_gate));
-	memcpy(w5500_1_ptr->ipmask, &ram_data.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.common.ip_mask));
-	w5500_1_ptr->local_port = ram_data.mirrored_to_rom_regs.common.local_port;
-	memcpy(w5500_1_ptr->macaddr, &ram_data.mirrored_to_rom_regs.common.mac_addr_1, sizeof(ram_data.mirrored_to_rom_regs.common.mac_addr_1));
+	memcpy(w5500_1_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_1));
+	memcpy(w5500_1_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
+	memcpy(w5500_1_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
+	w5500_1_ptr->local_port = ram_data.common.mirrored_to_rom_regs.common.local_port;
+	memcpy(w5500_1_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_1));
 	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
 	w5500_1_ptr->htim = htim2;
@@ -159,11 +159,11 @@ int main(void)
 	w5500_hardware_rst(w5500_1_ptr);
 	
 	// Инициализация контроллера Ethernet2 настройками из ПЗУ
-	memcpy(w5500_2_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.common.ip_addr_2, sizeof(ram_data.mirrored_to_rom_regs.common.ip_addr_2));
-	memcpy(w5500_2_ptr->ipgate, &ram_data.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.common.ip_gate));
-	memcpy(w5500_2_ptr->ipmask, &ram_data.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.common.ip_mask));
-	w5500_2_ptr->local_port = ram_data.mirrored_to_rom_regs.common.local_port;
-	memcpy(w5500_2_ptr->macaddr, &ram_data.mirrored_to_rom_regs.common.mac_addr_2, sizeof(ram_data.mirrored_to_rom_regs.common.mac_addr_2));
+	memcpy(w5500_2_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_2));
+	memcpy(w5500_2_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
+	memcpy(w5500_2_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
+	w5500_2_ptr->local_port = ram_data.common.mirrored_to_rom_regs.common.local_port;
+	memcpy(w5500_2_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_2));
 	w5500_2_ptr->sock_num = 0;
 	w5500_2_ptr->spi_n = hspi2;
 	w5500_2_ptr->htim = htim4;
@@ -198,24 +198,24 @@ int main(void)
 		{
 			//обновление времени
 			get_time(&USED_I2C);
-			memcpy(&ram_ptr->sys_time, &sys_time, sizeof(sys_time));
-			if (((ram_ptr->sys_time.hour - hours_delta) > 0 )||((hours_delta - ram_ptr->sys_time.hour) == 23))
+			memcpy(&ram_ptr->uniq.gas_boiler.sys_time, &sys_time, sizeof(sys_time));
+			if (((ram_ptr->uniq.gas_boiler.sys_time.hour - hours_delta) > 0 )||((hours_delta - ram_ptr->uniq.gas_boiler.sys_time.hour) == 23))
 			{
-				hours_delta = ram_ptr->sys_time.hour;
-				ram_ptr->work_time++;
+				hours_delta = ram_ptr->uniq.gas_boiler.sys_time.hour;
+				ram_ptr->common.work_time++;
 			}
 			//обновление показаний датчиков
 			uint8_t data[5];
 			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
 			{
-				ram_ptr->humidity = (float)(*(int16_t*)(data+3)) / 10;
+				ram_ptr->uniq.gas_boiler.humidity = (float)(*(int16_t*)(data+3)) / 10;
 //				ram_ptr->temperature = (float)((*(uint16_t*)(data+1))&0x3FFF) / 10;
 //				if((*(uint16_t*)(data+1)) & 0x8000)
 //				{
 //					ram_ptr->temperature *= -1.0f;
 //				}
 			}
-			ram_ptr->temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
+			ram_ptr->uniq.gas_boiler.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
 			//алгоритм термостата
 			thermostat_task();
 			is_time_to_update_params = 0;
@@ -223,7 +223,7 @@ int main(void)
 		if (is_time_to_update_lcd)
 		{
 			//обновление показаний на дисплее
-			print_temp_max7219(ram_ptr->temperature*10, ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10);
+			print_temp_max7219(ram_ptr->uniq.gas_boiler.temperature*10, ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10);
 			is_time_to_update_lcd = 0;
 		}
 		//если пришло время обновить ПЗУ
@@ -234,8 +234,8 @@ int main(void)
 			{
 				eeprom_page_erase(&USED_I2C, 1, i);
 			}
-			eeprom_write(&USED_I2C, 0, (uint8_t*)&ram_data.mirrored_to_rom_regs, sizeof(eeprom_data));
-			eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
+			eeprom_write(&USED_I2C, 0, (uint8_t*)&ram_data.common.mirrored_to_rom_regs, sizeof(eeprom_data));
+			eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.common.mirrored_to_rom_regs));
 			is_time_to_update_rom = 0;
 		}
 		if (w5500_1_ptr->is_soc_active != 1) 

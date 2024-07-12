@@ -3,7 +3,6 @@
 ".\gas_boiler_controller\common.o"
 ".\gas_boiler_controller\lcd.o"
 ".\gas_boiler_controller\device_defs.o"
-".\gas_boiler_controller\ram.o"
 ".\gas_boiler_controller\thermostat_alg.o"
 ".\gas_boiler_controller\main.o"
 ".\gas_boiler_controller\stm32f4xx_it.o"
@@ -33,6 +32,7 @@
 ".\gas_boiler_controller\dht22.o"
 ".\gas_boiler_controller\ds18b20.o"
 ".\gas_boiler_controller\modbus.o"
+".\gas_boiler_controller\ram.o"
 --strict --scatter ".\GAS_BOILER_CONTROLLER\GAS_BOILER_CONTROLLER.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

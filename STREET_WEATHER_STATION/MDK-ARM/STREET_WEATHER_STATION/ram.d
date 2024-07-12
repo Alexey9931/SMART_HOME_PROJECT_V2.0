@@ -1,5 +1,5 @@
-street_weather_station\ram.o: ..\Core\Src\ram.c
-street_weather_station\ram.o: ../Core/Inc/ram.h
+street_weather_station\ram.o: ..\..\COMMON_SRC\src\ram.c
+street_weather_station\ram.o: ..\..\COMMON_SRC\inc\ram.h
 street_weather_station\ram.o: ..\..\COMMON_SRC\inc\eeprom.h
 street_weather_station\ram.o: ../Core/Inc/device_defs.h
 street_weather_station\ram.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h

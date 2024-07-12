@@ -220,10 +220,10 @@ void EXTI0_IRQHandler(void)
   /* USER CODE BEGIN EXTI0_IRQn 1 */
 	if (button_is_locked == 0)
 	{
-		ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint -= TEMP_SET_INC;
-		if (ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint < MIN_TEMP_SET)
+		ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint -= TEMP_SET_INC;
+		if (ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint < MIN_TEMP_SET)
 		{
-			ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint = MAX_TEMP_SET;
+			ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint = MAX_TEMP_SET;
 		}
 	}
   /* USER CODE END EXTI0_IRQn 1 */
@@ -241,10 +241,10 @@ void EXTI1_IRQHandler(void)
   /* USER CODE BEGIN EXTI1_IRQn 1 */
 	if (!button_is_locked)
 	{
-		ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint += TEMP_SET_INC;
-		if (ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint > MAX_TEMP_SET)
+		ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint += TEMP_SET_INC;
+		if (ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint > MAX_TEMP_SET)
 		{
-			ram_ptr->mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint = MIN_TEMP_SET;
+			ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint = MIN_TEMP_SET;
 		}
 	}
   /* USER CODE END EXTI1_IRQn 1 */

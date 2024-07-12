@@ -41,4 +41,4 @@
 .\gas_boiler_controller\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 .\gas_boiler_controller\modbus.o: ../../COMMON_SRC/inc/eeprom.h
 .\gas_boiler_controller\modbus.o: ../../COMMON_SRC/inc/ds3231_rtc.h
-.\gas_boiler_controller\modbus.o: ../Core/Inc/ram.h
+.\gas_boiler_controller\modbus.o: ../../COMMON_SRC/inc/ram.h

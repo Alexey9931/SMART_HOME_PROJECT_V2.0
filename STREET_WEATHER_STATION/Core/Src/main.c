@@ -116,14 +116,14 @@ int main(void)
 	//eeproms_first_ini(&USED_I2C);
 	
 	// Зеркализация данных из ПЗУ в ОЗУ
-	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.mirrored_to_rom_regs));
+	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.common.mirrored_to_rom_regs));
 
 	// Инициализация контроллера Ethernet1 настройками из ПЗУ
-	memcpy(w5500_1_ptr->ipaddr, &ram_data.mirrored_to_rom_regs.common.ip_addr_1, sizeof(ram_data.mirrored_to_rom_regs.common.ip_addr_1));
-	memcpy(w5500_1_ptr->ipgate, &ram_data.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.mirrored_to_rom_regs.common.ip_gate));
-	memcpy(w5500_1_ptr->ipmask, &ram_data.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.mirrored_to_rom_regs.common.ip_mask));
-	w5500_1_ptr->local_port = ram_data.mirrored_to_rom_regs.common.local_port;
-	memcpy(w5500_1_ptr->macaddr, &ram_data.mirrored_to_rom_regs.common.mac_addr_1, sizeof(ram_data.mirrored_to_rom_regs.common.mac_addr_1));
+	memcpy(w5500_1_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_1));
+	memcpy(w5500_1_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
+	memcpy(w5500_1_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
+	w5500_1_ptr->local_port = ram_data.common.mirrored_to_rom_regs.common.local_port;
+	memcpy(w5500_1_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_1));
 	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
 	w5500_1_ptr->htim = htim2;
@@ -153,7 +153,7 @@ int main(void)
 		if (is_time_to_update_params == 1)
 		{
 			//обновление показаний датчиков
-			ram_ptr->temperature = ds18b20_get_temp(GPIOA, GPIO_PIN_3);
+			ram_ptr->uniq.str_weath_stat.temperature = ds18b20_get_temp(GPIOA, GPIO_PIN_3);
 			is_time_to_update_params = 0;
 		}
 		

@@ -38,6 +38,6 @@
 .\gas_boiler_controller\thermostat_alg.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\gas_boiler_controller\thermostat_alg.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\gas_boiler_controller\thermostat_alg.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-.\gas_boiler_controller\thermostat_alg.o: ../Core/Inc/ram.h
+.\gas_boiler_controller\thermostat_alg.o: ../../COMMON_SRC/inc/ram.h
 .\gas_boiler_controller\thermostat_alg.o: ../../COMMON_SRC/inc/eeprom.h
 .\gas_boiler_controller\thermostat_alg.o: ../../COMMON_SRC/inc/ds3231_rtc.h

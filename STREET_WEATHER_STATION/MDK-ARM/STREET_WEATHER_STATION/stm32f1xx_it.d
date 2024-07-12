@@ -38,7 +38,7 @@ street_weather_station\stm32f1xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio
 street_weather_station\stm32f1xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 street_weather_station\stm32f1xx_it.o: ..\..\COMMON_SRC\inc\eeprom.h
 street_weather_station\stm32f1xx_it.o: ..\..\COMMON_SRC\inc\ds3231_rtc.h
-street_weather_station\stm32f1xx_it.o: ../Core/Inc/ram.h
+street_weather_station\stm32f1xx_it.o: ..\..\COMMON_SRC\inc\ram.h
 street_weather_station\stm32f1xx_it.o: ..\..\COMMON_SRC\inc\ds18b20.h
 street_weather_station\stm32f1xx_it.o: ../Core/Inc/common.h
 street_weather_station\stm32f1xx_it.o: ../Core/Inc/stm32f1xx_it.h

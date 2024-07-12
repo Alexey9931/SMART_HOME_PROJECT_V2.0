@@ -37,4 +37,4 @@ street_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 street_weather_station\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 street_weather_station\modbus.o: ..\..\COMMON_SRC\inc\eeprom.h
 street_weather_station\modbus.o: ..\..\COMMON_SRC\inc\ds3231_rtc.h
-street_weather_station\modbus.o: ../Core/Inc/ram.h
+street_weather_station\modbus.o: ..\..\COMMON_SRC\inc\ram.h

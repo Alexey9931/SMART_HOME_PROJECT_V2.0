@@ -1,5 +1,5 @@
-.\gas_boiler_controller\ram.o: ..\Core\Src\ram.c
-.\gas_boiler_controller\ram.o: ../Core/Inc/ram.h
+.\gas_boiler_controller\ram.o: ..\..\COMMON_SRC\src\ram.c
+.\gas_boiler_controller\ram.o: ../../COMMON_SRC/inc/ram.h
 .\gas_boiler_controller\ram.o: ../../COMMON_SRC/inc/eeprom.h
 .\gas_boiler_controller\ram.o: ../Core/Inc/device_defs.h
 .\gas_boiler_controller\ram.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h

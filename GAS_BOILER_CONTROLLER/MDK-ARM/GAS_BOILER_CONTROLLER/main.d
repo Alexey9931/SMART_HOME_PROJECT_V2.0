@@ -42,7 +42,7 @@
 .\gas_boiler_controller\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 .\gas_boiler_controller\main.o: ../../COMMON_SRC/inc/eeprom.h
 .\gas_boiler_controller\main.o: ../../COMMON_SRC/inc/ds3231_rtc.h
-.\gas_boiler_controller\main.o: ../Core/Inc/ram.h
+.\gas_boiler_controller\main.o: ../../COMMON_SRC/inc/ram.h
 .\gas_boiler_controller\main.o: ../../COMMON_SRC/inc/dht22.h
 .\gas_boiler_controller\main.o: ../../COMMON_SRC/inc/ds18b20.h
 .\gas_boiler_controller\main.o: ../Core/Inc/common.h
