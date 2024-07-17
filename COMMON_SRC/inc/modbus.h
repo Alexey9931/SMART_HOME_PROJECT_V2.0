@@ -12,6 +12,11 @@
 #define PACKET_HEADER 0x55
 #define PACKET_TAIL 	0xAAAA
 
+//Device's register space
+#define CONTROL_PANEL_REGS_SIZE          114
+#define GAS_BOILER_CONTROLLER_REGS_SIZE  111
+#define WEATH_STATION_REGS_SIZE          119
+
 // Поддерживаемые протоколом команды
 typedef enum
 {
@@ -46,14 +51,22 @@ typedef struct modbus_struct
     packet_end      end_fields;     // Поля конца пакета
 }__attribute__((packed)) modbus_packet;
 
-// Функция, реализующая обмен данными по принципу запрос-ответ
-uint8_t request_reply_iteration(w5500_data* w5500_n, uint8_t sn);
+// Серверная функция, обеспечивающая обмен данными
+uint8_t reply_iteration(w5500_data* w5500_n, uint8_t sn);
+// Клиентская функция, инициирующая обмен данными
+uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn);
 // Функция получения пакета
 uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn);
 // Функция отправки пакета
 void transmit_packet(w5500_data* w5500_n, uint8_t sn);
 // Функция выполнения команды
 void do_cmd(void);
+// Функция отправки команды read
+void do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, uint16_t value_size);
+// Функция отправки команды write
+void do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size);
+// Функция отправки команды type
+void do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn);
 // Функция для заполнения таблицы CRC32
 void fill_crc32_table(void);
 // Функция вычисления контрольной суммы буфера по алгоритму CRC32

@@ -79,7 +79,7 @@ void open_socket(w5500_data* w5500_n, uint8_t sock_num, uint16_t mode)
   uint8_t opcode=0;
   opcode = (((sock_num<<2)|BSB_S0)<<3)|OM_FDM1;
   w5500_write_reg(w5500_n, opcode, Sn_MR, mode);
-  w5500_write_reg(w5500_n, opcode, Sn_CR, 0x01);
+  w5500_write_reg(w5500_n, opcode, Sn_CR, 0x01); //OPEN SOCKET
 }
 // Функция ожидания окончания инициализации сокета
 void socket_init_wait(w5500_data* w5500_n, uint8_t sock_num)
@@ -126,6 +126,13 @@ void socket_closed_wait(w5500_data* w5500_n, uint8_t sock_num)
       break;
     }
   }
+}
+// Функция открытия соединения
+void connect_socket(w5500_data* w5500_n, uint8_t sock_num)
+{
+  uint8_t opcode=0;
+  opcode = (((sock_num<<2)|BSB_S0)<<3)|OM_FDM1;
+  w5500_write_reg(w5500_n, opcode, Sn_CR, 0x04); //CONNECT
 }
 // Функция закрытия соединения
 void disconnect_socket(w5500_data* w5500_n, uint8_t sock_num)
@@ -258,6 +265,25 @@ void w5500_set_ipaddr(w5500_data* w5500_n, uint8_t ipaddr[4])
   w5500_write_reg(w5500_n, opcode, SIPR2, ipaddr[2]);
   w5500_write_reg(w5500_n, opcode, SIPR3, ipaddr[3]);
 }
+// Функция установки ip адреса назначения
+void w5500_set_target_ipaddr(w5500_data* w5500_n,  uint8_t ipaddr[4], uint8_t sock_num)
+{
+  uint8_t opcode=0;
+  opcode = (((sock_num<<2)|BSB_S0)<<3)|OM_FDM1;
+
+  w5500_write_reg(w5500_n, opcode, Sn_DIPR0, ipaddr[0]);
+  w5500_write_reg(w5500_n, opcode, Sn_DIPR1, ipaddr[1]);
+  w5500_write_reg(w5500_n, opcode, Sn_DIPR2, ipaddr[2]);
+  w5500_write_reg(w5500_n, opcode, Sn_DIPR3, ipaddr[3]);
+}
+// Функция установки порта назначения
+void w5500_set_target_port(w5500_data* w5500_n, uint16_t port, uint8_t sock_num)
+{
+  uint8_t opcode=0;
+  opcode = (((sock_num<<2)|BSB_S0)<<3)|OM_FDM1;
+  w5500_write_reg(w5500_n, opcode, Sn_DPORTR0, port>>8);
+  w5500_write_reg(w5500_n, opcode, Sn_DPORTR1, port);
+}
 // Функция инициализации микросхемы
 void w5500_ini(w5500_data* w5500_n)
 { 
@@ -272,21 +298,71 @@ void w5500_ini(w5500_data* w5500_n)
   w5500_set_ip_gate_addr(w5500_n, w5500_n->ipgate);
   w5500_set_ipmask(w5500_n, w5500_n->ipmask);
   w5500_set_ipaddr(w5500_n, w5500_n->ipaddr);
-
+	
   // Настраиваем сокеты
-  set_sock_port(w5500_n, w5500_n->sock_num, w5500_n->local_port);
+  set_sock_port(w5500_n, w5500_n->port_set[0].sock_num, w5500_n->port_set[0].local_port);
+	set_sock_port(w5500_n, w5500_n->port_set[1].sock_num, w5500_n->port_set[1].local_port);
 
-  // Открываем сокет
-  open_socket(w5500_n, w5500_n->sock_num, Mode_TCP);
-  socket_init_wait(w5500_n, w5500_n->sock_num);
+  // Открываем сокеты
+  open_socket(w5500_n, w5500_n->port_set[0].sock_num, Mode_TCP);
+  socket_init_wait(w5500_n, w5500_n->port_set[0].sock_num);
+	open_socket(w5500_n, w5500_n->port_set[1].sock_num, Mode_TCP);
+  socket_init_wait(w5500_n, w5500_n->port_set[1].sock_num);
 
-  // Начинаем слушать сокет
-  listen_socket(w5500_n, w5500_n->sock_num);
-  socket_listen_wait(w5500_n, w5500_n->sock_num);
+  // Начинаем слушать сокеты - для сервера,
+	// коннектимся для клиента
+	for (uint8_t i = 0; i < 2; i++)
+	{
+		if (w5500_n->port_set[i].is_client != 1)
+		{
+			w5500_set_target_port(w5500_n, w5500_n->port_set[i].local_port, w5500_n->port_set[i].sock_num);
+			listen_socket(w5500_n, w5500_n->port_set[i].sock_num);
+			socket_listen_wait(w5500_n, w5500_n->port_set[i].sock_num);
+		}
+		else
+		{
+			w5500_set_target_port(w5500_n, w5500_n->port_set[i].local_port, w5500_n->port_set[i].sock_num);
+			w5500_set_target_ipaddr(w5500_n, w5500_n->port_set[i].target_ip_addr, w5500_n->port_set[i].sock_num);
+			connect_socket(w5500_n, w5500_n->port_set[i].sock_num);
+		}
+	}
   HAL_Delay(500);
 
   // Проверяем статусы
-	get_socket_status(w5500_n, w5500_n->sock_num);
+	get_socket_status(w5500_n, w5500_n->port_set[0].sock_num);
+	get_socket_status(w5500_n, w5500_n->port_set[1].sock_num);
+}
+// Функция реинициализации сокета
+void w5500_reini_sock(w5500_data* w5500_n, uint8_t sn)
+{
+	// Настраиваем сокет
+  set_sock_port(w5500_n, w5500_n->port_set[sn].sock_num, w5500_n->port_set[sn].local_port);
+	
+	if (w5500_n->port_set[sn].is_client == 1)
+	{
+		w5500_set_target_ipaddr(w5500_n, w5500_n->port_set[sn].target_ip_addr, w5500_n->port_set[sn].sock_num);
+	}
+	w5500_set_target_port(w5500_n, w5500_n->port_set[sn].local_port, w5500_n->port_set[1].sock_num);
+	
+  // Открываем сокет
+  open_socket(w5500_n, w5500_n->port_set[sn].sock_num, Mode_TCP);
+  socket_init_wait(w5500_n, w5500_n->port_set[sn].sock_num);
+
+  // Начинаем слушать сокеты - для сервера,
+	// коннектимся для клиента
+  if (w5500_n->port_set[sn].is_client != 1)
+	{
+		listen_socket(w5500_n, w5500_n->port_set[sn].sock_num);
+		socket_listen_wait(w5500_n, w5500_n->port_set[sn].sock_num);
+	}
+	else
+	{
+		connect_socket(w5500_n, w5500_n->port_set[sn].sock_num);
+	}
+  HAL_Delay(500);
+
+  // Проверяем статус
+	get_socket_status(w5500_n, w5500_n->port_set[sn].sock_num);
 }
 // Функция установки ss
 void ss_select(w5500_data* w5500_n)

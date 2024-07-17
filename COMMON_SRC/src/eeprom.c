@@ -7,7 +7,7 @@ extern uint8_t 	ip_gate_ini[4];			//IP маршрутизатора по умо�
 extern uint8_t 	ip_mask_ini[4];			//Маскирование по умолчанию
 extern uint8_t 	mac_addr_ini_1[6];	//MAC адрес 1-го порта по умолчанию
 extern uint8_t 	mac_addr_ini_2[6];	//MAC адрес 2-го порта по умолчанию
-extern uint32_t local_port_ini;		  //Порт соединения (сокета) по умолчанию
+extern uint32_t local_port_ini[2];	//Порты соединения (сокета) по умолчанию
 
 // Настройки устройства по умолчанию
 #ifdef _GAS_BOILER_CONTR_
@@ -30,7 +30,8 @@ void eeproms_first_ini(I2C_HandleTypeDef* hi2c)
 	memcpy(rom_struct.common.ip_addr_2, ip_addr_ini_2, sizeof(ip_addr_ini_2));
 	memcpy(rom_struct.common.ip_gate, ip_gate_ini, sizeof(ip_gate_ini));
 	memcpy(rom_struct.common.ip_mask, ip_mask_ini, sizeof(ip_mask_ini));
-	rom_struct.common.local_port = local_port_ini;
+	rom_struct.common.local_port[0] = local_port_ini[0];
+	rom_struct.common.local_port[1] = local_port_ini[1];
 	memcpy(rom_struct.common.mac_addr_1, mac_addr_ini_1, sizeof(mac_addr_ini_1));
 	memcpy(rom_struct.common.mac_addr_2, mac_addr_ini_2, sizeof(mac_addr_ini_2));
 	

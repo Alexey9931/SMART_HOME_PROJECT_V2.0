@@ -49,6 +49,8 @@ TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
+TIM_HandleTypeDef htim12;
+TIM_HandleTypeDef htim13;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
@@ -75,6 +77,8 @@ static void MX_TIM5_Init(void);
 static void MX_DMA_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_TIM12_Init(void);
+static void MX_TIM13_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -133,13 +137,15 @@ int main(void)
   MX_DMA_Init();
   MX_TIM4_Init();
   MX_TIM3_Init();
+  MX_TIM12_Init();
+  MX_TIM13_Init();
   /* USER CODE BEGIN 2 */
 
 	// Заполнение таблицы CRC32
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-	//eeproms_first_ini(&USED_I2C);
+	eeproms_first_ini(&USED_I2C);
 	
 	// Инициализация микросхемы RTC (прошивается 1 раз)
 	//set_time(&USED_I2C, 00, 48, 23, 5, 17, 5, 24);
@@ -155,43 +161,64 @@ int main(void)
 	memcpy(w5500_1_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_1));
 	memcpy(w5500_1_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
 	memcpy(w5500_1_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
-	w5500_1_ptr->local_port = ram_data.common.mirrored_to_rom_regs.common.local_port;
 	memcpy(w5500_1_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_1));
-	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
-	w5500_1_ptr->htim = htim2;
+	w5500_1_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
+	w5500_1_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
+	w5500_1_ptr->port_set[0].sock_num = 0;
+	w5500_1_ptr->port_set[1].sock_num = 1;
+	w5500_1_ptr->port_set[0].is_soc_active = 1;
+	w5500_1_ptr->port_set[1].is_soc_active = 1;
+	w5500_1_ptr->port_set[0].is_client = 0;
+	w5500_1_ptr->port_set[1].is_client = 1;
+	w5500_1_ptr->port_set[0].htim = htim2;
+	w5500_1_ptr->port_set[1].htim = htim12;
+	w5500_1_ptr->port_set[1].target_ip_addr[0] = 192;
+	w5500_1_ptr->port_set[1].target_ip_addr[1] = 168;
+	w5500_1_ptr->port_set[1].target_ip_addr[2] = 1;
+	w5500_1_ptr->port_set[1].target_ip_addr[3] = 43;
 	w5500_1_ptr->cs_eth_gpio_port = GPIOA;
 	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
 	w5500_1_ptr->rst_eth_gpio_port = GPIOC;
 	w5500_1_ptr->rst_eth_pin = GPIO_PIN_4;
 	w5500_hardware_rst(w5500_1_ptr);
+	w5500_ini(w5500_1_ptr);
 	
 	// Инициализация контроллера Ethernet2 настройками из ПЗУ
 	memcpy(w5500_2_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_2));
 	memcpy(w5500_2_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
 	memcpy(w5500_2_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
-	w5500_2_ptr->local_port = ram_data.common.mirrored_to_rom_regs.common.local_port;
 	memcpy(w5500_2_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_2));
-	w5500_2_ptr->sock_num = 0;
 	w5500_2_ptr->spi_n = hspi2;
-	w5500_2_ptr->htim = htim4;
+	w5500_2_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
+	w5500_2_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
+	w5500_2_ptr->port_set[0].sock_num = 0;
+	w5500_2_ptr->port_set[1].sock_num = 1;
+	w5500_2_ptr->port_set[0].is_soc_active = 1;
+	w5500_2_ptr->port_set[1].is_soc_active = 1;
+	w5500_2_ptr->port_set[0].is_client = 0;
+	w5500_2_ptr->port_set[1].is_client = 1;
+	w5500_2_ptr->port_set[0].htim = htim4;
+	w5500_2_ptr->port_set[1].htim = htim13;
 	w5500_2_ptr->cs_eth_gpio_port = GPIOB;
 	w5500_2_ptr->cs_eth_pin = GPIO_PIN_12;
 	w5500_2_ptr->rst_eth_gpio_port = GPIOB;
 	w5500_2_ptr->rst_eth_pin = GPIO_PIN_13;
 	w5500_hardware_rst(w5500_2_ptr);
+	//w5500_ini(w5500_2_ptr);
 	
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_TIM_Base_Start_IT(&htim4);
 	HAL_TIM_Base_Start_IT(&htim5);
-	HAL_TIM_Base_Start(&htim3);
+	HAL_TIM_Base_Start_IT(&htim12);
+	HAL_TIM_Base_Start_IT(&htim13);
+  HAL_TIM_Base_Start(&htim3);
 	
 	// Инициализация датчиков
 	bmp180_init(&USED_I2C);
 	dht22_init(GPIOD, GPIO_PIN_15);
 	ds18b20_init(GPIOD, GPIO_PIN_14, SKIP_ROM);
 	
-	//dwin_write_half_word(0x0450, 0x0500);
 	dwin_print_home_page();
   /* USER CODE END 2 */
 
@@ -203,42 +230,61 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		//если пришло время обновить параметры модуля
-		if (is_time_to_update_params == 1)
-		{
-			//обновление времени
-			get_time(&USED_I2C);
-			memcpy(&ram_ptr->uniq.control_panel.sys_time, &sys_time, sizeof(sys_time));
-			if (((ram_ptr->uniq.control_panel.sys_time.hour - hours_delta) > 0 )||((hours_delta - ram_ptr->uniq.control_panel.sys_time.hour) == 23))
-			{
-				hours_delta = ram_ptr->uniq.control_panel.sys_time.hour;
-				ram_ptr->common.work_time++;
-			}
-			//обновление показаний датчиков
-			ram_ptr->uniq.control_panel.pressure = bmp180_get_press(&USED_I2C, 3);
-			uint8_t data[5];
-			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
-			{
-				ram_ptr->uniq.control_panel.humidity = (float)(*(int16_t*)(data+3)) / 10;
-			}
-			ram_ptr->uniq.control_panel.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
-			is_time_to_update_params = 0;
-			//обновление дисплея
-			dwin_print_home_page();
-		}
+//		if (is_time_to_update_params == 1)
+//		{
+//			//обновление времени
+//			get_time(&USED_I2C);
+//			memcpy(&ram_ptr->uniq.control_panel.sys_time, &sys_time, sizeof(sys_time));
+//			if (((ram_ptr->uniq.control_panel.sys_time.hour - hours_delta) > 0 )||((hours_delta - ram_ptr->uniq.control_panel.sys_time.hour) == 23))
+//			{
+//				hours_delta = ram_ptr->uniq.control_panel.sys_time.hour;
+//				ram_ptr->common.work_time++;
+//			}
+//			//обновление показаний датчиков
+//			ram_ptr->uniq.control_panel.pressure = bmp180_get_press(&USED_I2C, 3);
+//			uint8_t data[5];
+//			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
+//			{
+//				ram_ptr->uniq.control_panel.humidity = (float)(*(int16_t*)(data+3)) / 10;
+//			}
+//			ram_ptr->uniq.control_panel.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
+//			is_time_to_update_params = 0;
+//			//обновление дисплея
+//			dwin_print_home_page();
+//		}
 		
-		if (w5500_1_ptr->is_soc_active != 1) 
-		{
-			w5500_ini(w5500_1_ptr);
-			w5500_1_ptr->is_soc_active = 1;
-		}
-		request_reply_iteration(w5500_1_ptr, w5500_1_ptr->sock_num);
+//		// серверная часть (взаимодействие с raspberry)
+//		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
+//		{
+//			w5500_reini_sock(w5500_1_ptr, 0);
+//			w5500_1_ptr->port_set[0].is_soc_active = 1;
+//		}
+//		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
+//		
+//		if (w5500_2_ptr->port_set[0].is_soc_active != 1) 
+//		{
+//			w5500_reini_sock(w5500_2_ptr, 0);
+//			w5500_2_ptr->port_set[0].is_soc_active = 1;
+//		}
+//		reply_iteration(w5500_2_ptr, w5500_2_ptr->port_set[0].sock_num);
 		
-		if (w5500_2_ptr->is_soc_active != 1) 
-		{
-			w5500_ini(w5500_2_ptr);
-			w5500_2_ptr->is_soc_active = 1;
-		}
-		request_reply_iteration(w5500_2_ptr, w5500_2_ptr->sock_num);
+//		// клиентская часть (взаимодействие с другими у-вами)
+//		if (w5500_1_ptr->port_set[1].is_soc_active != 1)
+//		{		
+//			//w5500_reini_sock(w5500_1_ptr, 1);
+//			w5500_1_ptr->port_set[1].is_soc_active = 1;
+//		}
+		request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
+		//do_type_cmd(w5500_1_ptr, 43, w5500_1_ptr->port_set[1].sock_num);
+		HAL_Delay(1000);
+		
+//		if (w5500_2_ptr->port_set[1].is_soc_active != 1)
+//		{		
+//			w5500_reini_sock(w5500_2_ptr, 1);
+//			w5500_2_ptr->port_set[1].is_soc_active = 1;
+//		}
+//		request_iteration(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
+
   }
   /* USER CODE END 3 */
 }
@@ -613,6 +659,75 @@ static void MX_TIM5_Init(void)
   /* USER CODE BEGIN TIM5_Init 2 */
 
   /* USER CODE END TIM5_Init 2 */
+
+}
+
+/**
+  * @brief TIM12 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM12_Init(void)
+{
+
+  /* USER CODE BEGIN TIM12_Init 0 */
+
+  /* USER CODE END TIM12_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+
+  /* USER CODE BEGIN TIM12_Init 1 */
+
+  /* USER CODE END TIM12_Init 1 */
+  htim12.Instance = TIM12;
+  htim12.Init.Prescaler = 8399;
+  htim12.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim12.Init.Period = 29999;
+  htim12.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim12.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim12) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim12, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM12_Init 2 */
+
+  /* USER CODE END TIM12_Init 2 */
+
+}
+
+/**
+  * @brief TIM13 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM13_Init(void)
+{
+
+  /* USER CODE BEGIN TIM13_Init 0 */
+
+  /* USER CODE END TIM13_Init 0 */
+
+  /* USER CODE BEGIN TIM13_Init 1 */
+
+  /* USER CODE END TIM13_Init 1 */
+  htim13.Instance = TIM13;
+  htim13.Init.Prescaler = 8399;
+  htim13.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim13.Init.Period = 29999;
+  htim13.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim13.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim13) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM13_Init 2 */
+
+  /* USER CODE END TIM13_Init 2 */
 
 }
 

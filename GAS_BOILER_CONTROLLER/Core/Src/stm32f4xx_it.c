@@ -61,6 +61,8 @@ extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim5;
 extern TIM_HandleTypeDef htim6;
+extern TIM_HandleTypeDef htim12;
+extern TIM_HandleTypeDef htim13;
 /* USER CODE BEGIN EV */
 extern w5500_data* w5500_1_ptr;
 extern w5500_data* w5500_2_ptr;
@@ -280,7 +282,7 @@ void TIM2_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
 	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_6);
-	w5500_1_ptr->is_soc_active = 0;
+	w5500_1_ptr->port_set[0].is_soc_active = 0;
   /* USER CODE END TIM2_IRQn 1 */
 }
 
@@ -295,8 +297,36 @@ void TIM4_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */
 	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_5);
-	w5500_2_ptr->is_soc_active = 0;
+	w5500_2_ptr->port_set[0].is_soc_active = 0;
   /* USER CODE END TIM4_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM8 break interrupt and TIM12 global interrupt.
+  */
+void TIM8_BRK_TIM12_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_BRK_TIM12_IRQn 0 */
+
+  /* USER CODE END TIM8_BRK_TIM12_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim12);
+  /* USER CODE BEGIN TIM8_BRK_TIM12_IRQn 1 */
+  w5500_1_ptr->port_set[1].is_soc_active = 0;
+  /* USER CODE END TIM8_BRK_TIM12_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM8 update interrupt and TIM13 global interrupt.
+  */
+void TIM8_UP_TIM13_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 0 */
+
+  /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim13);
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
+  w5500_2_ptr->port_set[1].is_soc_active = 0;
+  /* USER CODE END TIM8_UP_TIM13_IRQn 1 */
 }
 
 /**

@@ -8,6 +8,17 @@
 
 #define BUF_LEN 1024
 
+// Структура с сетевыми настройками порта
+typedef struct port_setting_struct
+{
+  uint16_t 					local_port;      		// Порт соединения
+	uint8_t						target_ip_addr[4];	// ip адрес назначения (для клиента)
+  uint8_t 					sock_num;         	// Номер сокета
+	uint8_t						is_client;					// Порт клиента/сервера
+	uint8_t 					is_soc_active;			// Статус сокета (активен/не активен)
+	TIM_HandleTypeDef htim;								// Таймер для ведения таймаута
+} port_settings;
+
 // Структура с настройками и данными микросхемы w5500
 typedef struct w5500_struct
 {
@@ -20,10 +31,7 @@ typedef struct w5500_struct
   uint8_t 					ipaddr[4];        	// IP адрес
   uint8_t 					ipgate[4];        	// IP адрес маршрутизатора
   uint8_t 					ipmask[4];        	// Маска подсети
-  uint16_t 					local_port;      		// Порт соединения
-  uint8_t 					sock_num;         	// Номер сокета
-	uint8_t 					is_soc_active;			// Статус сокета (активен/не активен)
-	TIM_HandleTypeDef htim;								// Таймер для ведения таймаута
+  port_settings			port_set[2];				// Сетевые настройки портов
 	uint8_t 					rx_buf[BUF_LEN];		// Буфер приемника
 	uint8_t 					tx_buf[BUF_LEN];		// Буфер передатчика
 	uint32_t 					rx_buf_len;					// Длина буфера приемника
@@ -66,6 +74,13 @@ typedef struct w5500_struct
 
 #define Sn_PORT0 0x0004 // Socket 0 Source Port Register MSB
 #define Sn_PORT1 0x0005 // Socket 0 Source Port Register LSB
+
+#define Sn_DIPR0		0x000C	//Target IP Address Register MSB
+#define Sn_DIPR1		0x000D
+#define Sn_DIPR2		0x000E
+#define Sn_DIPR3		0x000F
+#define Sn_DPORTR0	0x0010	// Socket 0 Target Port Register MSB
+#define Sn_DPORTR1	0x0011
 
 #define Sn_MR 0x0000 // Socket 0 Mode Register
 #define Sn_CR 0x0001 // Socket 0 Command Register
@@ -131,6 +146,8 @@ void listen_socket(w5500_data* w5500_n, uint8_t sock_num);
 void socket_listen_wait(w5500_data* w5500_n, uint8_t sock_num);
 // Функция ожидания закрытия сокета
 void socket_closed_wait(w5500_data* w5500_n, uint8_t sock_num);
+// Функция открытия соединения
+void connect_socket(w5500_data* w5500_n, uint8_t sock_num);
 // Функция закрытия соединения
 void disconnect_socket(w5500_data* w5500_n, uint8_t sock_num);
 // Функция определения текущего состояния сокета
@@ -161,8 +178,14 @@ void w5500_set_ip_gate_addr(w5500_data* w5500_n, uint8_t ipgate[4]);
 void w5500_set_ipmask(w5500_data* w5500_n, uint8_t ipmask[4]);
 // Функция установки ip адреса микросхемы
 void w5500_set_ipaddr(w5500_data* w5500_n, uint8_t ipaddr[4]);
+// Функция установки порта сервера (для клиентского сокета)
+void w5500_set_target_port(w5500_data* w5500_n, uint16_t port, uint8_t sock_num);
+// Функция установки ip адреса сервера (для клиентского сокета)
+void w5500_set_target_ipaddr(w5500_data* w5500_n,  uint8_t ipaddr[4], uint8_t sock_num);
 // Функция инициализации микросхемы
 void w5500_ini(w5500_data* w5500_n);
+// Функция реинициализации сокета
+void w5500_reini_sock(w5500_data* w5500_n, uint8_t sn);
 // Функция установки ss
 void ss_select(w5500_data* w5500_n);
 // Функция сброса ss
