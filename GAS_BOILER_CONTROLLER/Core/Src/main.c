@@ -169,7 +169,6 @@ int main(void)
 	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
 	w5500_1_ptr->rst_eth_gpio_port = GPIOC;
 	w5500_1_ptr->rst_eth_pin = GPIO_PIN_4;
-	w5500_hardware_rst(w5500_1_ptr);
 	w5500_ini(w5500_1_ptr);
 	
 	// Инициализация контроллера Ethernet2 настройками из ПЗУ
@@ -217,68 +216,68 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//		//если пришло время обновить параметры модуля
-//		if (is_time_to_update_params)
-//		{
-//			//обновление времени
-//			get_time(&USED_I2C);
-//			memcpy(&ram_ptr->uniq.gas_boiler.sys_time, &sys_time, sizeof(sys_time));
-//			if (((ram_ptr->uniq.gas_boiler.sys_time.hour - hours_delta) > 0 )||((hours_delta - ram_ptr->uniq.gas_boiler.sys_time.hour) == 23))
-//			{
-//				hours_delta = ram_ptr->uniq.gas_boiler.sys_time.hour;
-//				ram_ptr->common.work_time++;
-//			}
-//			//обновление показаний датчиков
-//			uint8_t data[5];
-//			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
-//			{
-//				ram_ptr->uniq.gas_boiler.humidity = (float)(*(int16_t*)(data+3)) / 10;
-////				ram_ptr->temperature = (float)((*(uint16_t*)(data+1))&0x3FFF) / 10;
-////				if((*(uint16_t*)(data+1)) & 0x8000)
-////				{
-////					ram_ptr->temperature *= -1.0f;
-////				}
-//			}
-//			ram_ptr->uniq.gas_boiler.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
-//			//алгоритм термостата
-//			thermostat_task();
-//			is_time_to_update_params = 0;
-//		}
-//		if (is_time_to_update_lcd)
-//		{
-//			//обновление показаний на дисплее
-//			print_temp_max7219(ram_ptr->uniq.gas_boiler.temperature*10, ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10);
-//			is_time_to_update_lcd = 0;
-//		}
-//		//если пришло время обновить ПЗУ
-//		if (is_time_to_update_rom)
-//		{
-//			//обновление данных в ПЗУ
-//			for (int i = 0; i < (1+(sizeof(eeprom_data)/PAGE_SIZE)); i++)
-//			{
-//				eeprom_page_erase(&USED_I2C, 1, i);
-//			}
-//			eeprom_write(&USED_I2C, 0, (uint8_t*)&ram_data.common.mirrored_to_rom_regs, sizeof(eeprom_data));
-//			eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.common.mirrored_to_rom_regs));
-//			is_time_to_update_rom = 0;
-//		}
+		//если пришло время обновить параметры модуля
+		if (is_time_to_update_params)
+		{
+			//обновление времени
+			get_time(&USED_I2C);
+			memcpy(&ram_ptr->uniq.gas_boiler.sys_time, &sys_time, sizeof(sys_time));
+			if (((ram_ptr->uniq.gas_boiler.sys_time.hour - hours_delta) > 0 )||((hours_delta - ram_ptr->uniq.gas_boiler.sys_time.hour) == 23))
+			{
+				hours_delta = ram_ptr->uniq.gas_boiler.sys_time.hour;
+				ram_ptr->common.work_time++;
+			}
+			//обновление показаний датчиков
+			uint8_t data[5];
+			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
+			{
+				ram_ptr->uniq.gas_boiler.humidity = (float)(*(int16_t*)(data+3)) / 10;
+//				ram_ptr->temperature = (float)((*(uint16_t*)(data+1))&0x3FFF) / 10;
+//				if((*(uint16_t*)(data+1)) & 0x8000)
+//				{
+//					ram_ptr->temperature *= -1.0f;
+//				}
+			}
+			ram_ptr->uniq.gas_boiler.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
+			//алгоритм термостата
+			thermostat_task();
+			is_time_to_update_params = 0;
+		}
+		if (is_time_to_update_lcd)
+		{
+			//обновление показаний на дисплее
+			print_temp_max7219(ram_ptr->uniq.gas_boiler.temperature*10, ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10);
+			is_time_to_update_lcd = 0;
+		}
+		//если пришло время обновить ПЗУ
+		if (is_time_to_update_rom)
+		{
+			//обновление данных в ПЗУ
+			for (int i = 0; i < (1+(sizeof(eeprom_data)/PAGE_SIZE)); i++)
+			{
+				eeprom_page_erase(&USED_I2C, 1, i);
+			}
+			eeprom_write(&USED_I2C, 0, (uint8_t*)&ram_data.common.mirrored_to_rom_regs, sizeof(eeprom_data));
+			eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.common.mirrored_to_rom_regs));
+			is_time_to_update_rom = 0;
+		}
 		
-//		// серверная часть (взаимодействие с raspberry)
+		// серверная часть (взаимодействие с raspberry)
 //		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
 //		{
 //			w5500_reini_sock(w5500_1_ptr, 0);
 //			w5500_1_ptr->port_set[0].is_soc_active = 1;
 //		}
 //		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
-//		
-//		if (w5500_2_ptr->port_set[0].is_soc_active != 1) 
-//		{
-//			w5500_reini_sock(w5500_2_ptr, 0);
-//			w5500_2_ptr->port_set[0].is_soc_active = 1;
-//		}
-//		reply_iteration(w5500_2_ptr, w5500_2_ptr->port_set[0].sock_num);
 		
-//		// серверная часть (взаимодействие с control panel)
+		if (w5500_2_ptr->port_set[0].is_soc_active != 1) 
+		{
+			w5500_reini_sock(w5500_2_ptr, 0);
+			w5500_2_ptr->port_set[0].is_soc_active = 1;
+		}
+		reply_iteration(w5500_2_ptr, w5500_2_ptr->port_set[0].sock_num);
+		
+		// серверная часть (взаимодействие с control panel)
 //		if (w5500_1_ptr->port_set[1].is_soc_active != 1) 
 //		{
 //			w5500_reini_sock(w5500_1_ptr, 1);
@@ -286,11 +285,11 @@ int main(void)
 //		}
 //		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
 		
-//		if (w5500_2_ptr->port_set[1].is_soc_active != 1) 
-//		{
-////			w5500_reini_sock(w5500_2_ptr, 1);
-//			w5500_2_ptr->port_set[1].is_soc_active = 1;
-//		}
+		if (w5500_2_ptr->port_set[1].is_soc_active != 1) 
+		{
+			w5500_reini_sock(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
+			w5500_2_ptr->port_set[1].is_soc_active = 1;
+		}
 		reply_iteration(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
 		
   }

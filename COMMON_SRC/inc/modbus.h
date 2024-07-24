@@ -8,6 +8,11 @@
 #include "eeprom.h"
 #include "device_defs.h"
 
+// Имена устройств
+#define CONTR_PAN_NAME 	"Control Panel"
+#define GAS_BOIL_NAME 	"Gas Boiler Controller"
+#define STR_WEATH_NAME 	"Weather Station"
+
 // Константные поля протокола
 #define PACKET_HEADER 0x55
 #define PACKET_TAIL 	0xAAAA
@@ -54,7 +59,7 @@ typedef struct modbus_struct
 // Серверная функция, обеспечивающая обмен данными
 uint8_t reply_iteration(w5500_data* w5500_n, uint8_t sn);
 // Клиентская функция, инициирующая обмен данными
-uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn);
+uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t dev_addr, uint8_t cmd);
 // Функция получения пакета
 uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn);
 // Функция отправки пакета
@@ -62,11 +67,11 @@ void transmit_packet(w5500_data* w5500_n, uint8_t sn);
 // Функция выполнения команды
 void do_cmd(void);
 // Функция отправки команды read
-void do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, uint16_t value_size);
+uint8_t do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, uint16_t value_size);
 // Функция отправки команды write
-void do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size);
+uint8_t do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size);
 // Функция отправки команды type
-void do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn);
+uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn);
 // Функция для заполнения таблицы CRC32
 void fill_crc32_table(void);
 // Функция вычисления контрольной суммы буфера по алгоритму CRC32

@@ -1,7 +1,9 @@
 #include "dwin.h"
+#include "modbus.h"
 
 extern UART_HandleTypeDef huart1;
 extern ram_data_struct *ram_ptr;
+extern network_map dev_net_map;
 
 void dwin_write_half_word(uint16_t data, uint16_t addr)
 {
@@ -47,18 +49,18 @@ void dwin_print_home_page()
 	ram_ptr->uniq.control_panel.temperature >= 0.0f ? dwin_write_variable("+", 0x4010, 1):
 		dwin_write_variable("-", 0x4010, 1);
 	//уличная температура
-	if (ram_ptr->uniq.str_weath_stat.temperature < 10.0f)
+	if (ram_ptr->uniq.control_panel.str_weath_stat_data.temperature < 10.0f)
 	{
-		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.str_weath_stat.temperature);
+		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.control_panel.str_weath_stat_data.temperature);
 	}
 	else
 	{
-		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.str_weath_stat.temperature);
+		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.control_panel.str_weath_stat_data.temperature);
 	}
 	dwin_write_variable(tmp_str, 0x2010, 3);
-	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.str_weath_stat.temperature*10.0f)%10);
+	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.str_weath_stat_data.temperature*10.0f)%10);
 	dwin_write_variable(tmp_str, 0x7010, 1);
-	ram_ptr->uniq.str_weath_stat.temperature >= 0.0f ? dwin_write_variable("+", 0x5010, 1):
+	ram_ptr->uniq.control_panel.str_weath_stat_data.temperature >= 0.0f ? dwin_write_variable("+", 0x5010, 1):
 		dwin_write_variable("-", 0x5010, 1);
 	//домашняя влажность
 	if (ram_ptr->uniq.control_panel.humidity < 10.0f)
@@ -73,16 +75,16 @@ void dwin_print_home_page()
 	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.humidity*10.0f)%10);
 	dwin_write_variable(tmp_str, 0x8010, 1);
 	//уличная влажность
-	if (ram_ptr->uniq.str_weath_stat.humidity < 10.0f)
+	if (ram_ptr->uniq.control_panel.str_weath_stat_data.humidity < 10.0f)
 	{
-		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.str_weath_stat.humidity);
+		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.control_panel.str_weath_stat_data.humidity);
 	}
 	else
 	{
-		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.str_weath_stat.humidity);
+		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.control_panel.str_weath_stat_data.humidity);
 	}
 	dwin_write_variable(tmp_str, 0x3010, 3);
-	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.str_weath_stat.humidity*10.0f)%10);
+	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.str_weath_stat_data.humidity*10.0f)%10);
 	dwin_write_variable(tmp_str, 0x9010, 1);
 	//атм.давление
 	if (ram_ptr->uniq.control_panel.pressure < 100.0f)
@@ -95,24 +97,24 @@ void dwin_print_home_page()
 	}
 	dwin_write_variable(tmp_str, 0x0011, 3);
 	//скорость ветра
-	if (ram_ptr->uniq.str_weath_stat.wind_speed < 10.0f)
+	if (ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed < 10.0f)
 	{
-		sprintf(tmp_str, " %.1f", ram_ptr->uniq.str_weath_stat.wind_speed);
+		sprintf(tmp_str, " %.1f", ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed);
 	}
 	else
 	{
-		sprintf(tmp_str, "%.1f", ram_ptr->uniq.str_weath_stat.wind_speed);
+		sprintf(tmp_str, "%.1f", ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed);
 	}
 	dwin_write_variable(tmp_str, 0x1011, 4);
 	//направление ветра
-	if (ram_ptr->uniq.str_weath_stat.wind_direct.north) dwin_write_variable(" N ", 0x2011, 3);
-	else if (ram_ptr->uniq.str_weath_stat.wind_direct.northeast) dwin_write_variable("N-E", 0x2011, 3);
-	else if (ram_ptr->uniq.str_weath_stat.wind_direct.east) dwin_write_variable(" E ", 0x2011, 3);
-	else if (ram_ptr->uniq.str_weath_stat.wind_direct.southeast) dwin_write_variable("S-E", 0x2011, 3);
-	else if (ram_ptr->uniq.str_weath_stat.wind_direct.south) dwin_write_variable(" S ", 0x2011, 3);
-	else if (ram_ptr->uniq.str_weath_stat.wind_direct.southwest) dwin_write_variable("S-W", 0x2011, 3);
-	else if (ram_ptr->uniq.str_weath_stat.wind_direct.west) dwin_write_variable(" W ", 0x2011, 3);
-	else if (ram_ptr->uniq.str_weath_stat.wind_direct.northwest) dwin_write_variable("N-W", 0x2011, 3);
+	if (ram_ptr->uniq.control_panel.str_weath_stat_data.wind_direct.north) dwin_write_variable(" N ", 0x2011, 3);
+	else if (ram_ptr->uniq.control_panel.str_weath_stat_data.wind_direct.northeast) dwin_write_variable("N-E", 0x2011, 3);
+	else if (ram_ptr->uniq.control_panel.str_weath_stat_data.wind_direct.east) dwin_write_variable(" E ", 0x2011, 3);
+	else if (ram_ptr->uniq.control_panel.str_weath_stat_data.wind_direct.southeast) dwin_write_variable("S-E", 0x2011, 3);
+	else if (ram_ptr->uniq.control_panel.str_weath_stat_data.wind_direct.south) dwin_write_variable(" S ", 0x2011, 3);
+	else if (ram_ptr->uniq.control_panel.str_weath_stat_data.wind_direct.southwest) dwin_write_variable("S-W", 0x2011, 3);
+	else if (ram_ptr->uniq.control_panel.str_weath_stat_data.wind_direct.west) dwin_write_variable(" W ", 0x2011, 3);
+	else if (ram_ptr->uniq.control_panel.str_weath_stat_data.wind_direct.northwest) dwin_write_variable("N-W", 0x2011, 3);
 	else dwin_write_variable("   ", 0x2011, 3);
 	//время/дата
 	sprintf(tmp_str, "%.2d:%.2d", ram_ptr->uniq.control_panel.sys_time.hour,
@@ -184,7 +186,7 @@ void dwin_print_home_page()
 			break;
 	}
 	//статус газового котла
-	ram_ptr->uniq.gas_boiler.rele_status == 1 ? dwin_write_variable("ON", 0x6012, 3):
+	ram_ptr->uniq.control_panel.gas_boiler_uniq.rele_status == 1 ? dwin_write_variable("ON", 0x6012, 3):
 		dwin_write_variable("OFF", 0x6012, 3);
 	//уставка температуры
 	if (ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint < 10.0f)
@@ -210,12 +212,22 @@ void dwin_print_home_page()
 	dwin_write_variable(tmp_str, 0x3011, 3);
 	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature*10.0f)%10);
 	dwin_write_variable(tmp_str, 0x7011, 1);
-	//статус сети газового котла
-	dwin_write_variable("FAILED", 0x3012, 6);
+	
+	for (uint8_t i = 0; i < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); i++)
+	{
+		if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+		{
+			//статус сети газового котла
+			dev_net_map[i].is_inited == 1 ? dwin_write_variable("LINKED", 0x3012, 6) : dwin_write_variable("FAILED", 0x3012, 6);
+    } 
+		else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+		{
+			//статус сети метеостанции
+			dev_net_map[i].is_inited == 1 ? dwin_write_variable("LINKED", 0x5012, 6) : dwin_write_variable("FAILED", 0x5012, 6);
+    }
+	}
 	//статус сети сервера
 	dwin_write_variable("FAILED", 0x4012, 6);
-	//статус сети метеостанции
-	dwin_write_variable("FAILED", 0x5012, 6);
 	//картинка прогноза погоды
 	
 }

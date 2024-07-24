@@ -1,4 +1,5 @@
 #include "eeprom.h"
+#include "modbus.h"
 
 // Сетевые настройки по умолчанию
 extern uint8_t 	ip_addr_ini_1[4];		//IP адрес 1-го порта по умолчанию
@@ -13,12 +14,13 @@ extern uint32_t local_port_ini[2];	//Порты соединения (сокет
 #ifdef _GAS_BOILER_CONTR_
 extern float temp_setpoint;
 extern float temp_range;	
+#define DEVICE_NAME GAS_BOIL_NAME
 #endif
 #ifdef _CONTR_PANEL_
-	
+#define DEVICE_NAME CONTR_PAN_NAME
 #endif
 #ifdef _STREET_WEATH_ST_
-
+#define DEVICE_NAME STR_WEATH_NAME
 #endif
 
 void eeproms_first_ini(I2C_HandleTypeDef* hi2c)

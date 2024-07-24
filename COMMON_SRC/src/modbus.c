@@ -20,21 +20,34 @@ uint8_t reply_iteration(w5500_data* w5500_n, uint8_t sn)
 	do_cmd();
 	transmit_packet(w5500_n, sn);
 	__HAL_TIM_SET_COUNTER(&w5500_n->port_set[sn].htim, 0);
+	w5500_n->port_set[sn].is_soc_active = 1;
 	
 	return 0;
 }
 // Клиентская функция, инициирующая обмен данными
-uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn)
+uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t dev_addr, uint8_t cmd)
 {
-	do_type_cmd(w5500_n, 43, sn);
-	__HAL_TIM_SET_COUNTER(&w5500_n->port_set[sn].htim, 0);
+	switch(cmd)
+	{
+		case type_cmd:
+				if (do_type_cmd(w5500_n, dev_addr, sn) != 0) return 1;
+				break;
+		case read_cmd:
+				if (do_read_cmd(w5500_n, dev_addr, sn, 0, GAS_BOILER_CONTROLLER_REGS_SIZE) != 0) return 1;
+				break;
+		default:
+				return 1;
+	}
 	while (1)
 	{
-		if (!receive_packet(w5500_n, sn)) break;
+		if (!receive_packet(w5500_n, sn)) 
+		{
+			__HAL_TIM_SET_COUNTER(&w5500_n->port_set[sn].htim, 0);
+			w5500_n->port_set[sn].is_soc_active = 1;
+			return 0;
+		}
 		else if (!w5500_n->port_set[sn].is_soc_active) return 1;
 	}
-	
-	return 0;
 }
 // Функция получения пакета-запроса
 uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn)
@@ -173,7 +186,7 @@ void do_cmd(void)
 	}
 }
 // Функция отправки команды read
-void do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, uint16_t value_size)
+uint8_t do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, uint16_t value_size)
 {
 	uint8_t start_tx_buf_index = 3;
 	// Если статус текущего сокета "Соединено"
@@ -207,10 +220,13 @@ void do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg
 				
 		recv_socket(w5500_n, sn);
 		send_socket(w5500_n, sn);
+		
+		return 0;
 	}
+	return 1;
 }
 // Функция отправки команды write
-void do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size)
+uint8_t do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size)
 {
 	uint8_t start_tx_buf_index = 3;
 	// Если статус текущего сокета "Соединено"
@@ -245,10 +261,13 @@ void do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t re
 				
 		recv_socket(w5500_n, sn);
 		send_socket(w5500_n, sn);
+		
+		return 0;
 	}
+	return 1;
 }
 // Функция отправки команды type
-void do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn)
+uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn)
 {
 	uint8_t start_tx_buf_index = 3;
 	// Если статус текущего сокета "Соединено"
@@ -281,7 +300,10 @@ void do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn)
 				
 		recv_socket(w5500_n, sn);
 		send_socket(w5500_n, sn);
+		
+		return 0;
 	}
+	return 1;
 }
 // Функция вычисления контрольной суммы буфера по алгоритму CRC32
 uint_least32_t crc32(unsigned char *buf, size_t len)
