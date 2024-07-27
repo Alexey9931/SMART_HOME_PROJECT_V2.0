@@ -144,6 +144,14 @@ int main(void)
   MX_TIM13_Init();
   /* USER CODE BEGIN 2 */
 
+	// Запуск таймеров и прерываний
+	HAL_TIM_Base_Start_IT(&htim2);
+	HAL_TIM_Base_Start_IT(&htim4);
+	HAL_TIM_Base_Start_IT(&htim5);
+	HAL_TIM_Base_Start_IT(&htim12);
+	HAL_TIM_Base_Start_IT(&htim13);
+  HAL_TIM_Base_Start(&htim3);
+
 	// Заполнение таблицы CRC32
 	fill_crc32_table();
 	
@@ -184,6 +192,7 @@ int main(void)
 	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
 	w5500_1_ptr->rst_eth_gpio_port = GPIOC;
 	w5500_1_ptr->rst_eth_pin = GPIO_PIN_4;
+	w5500_hardware_rst(w5500_1_ptr);
 	w5500_ini(w5500_1_ptr);
 	
 	// Инициализация контроллера Ethernet2 настройками из ПЗУ
@@ -210,14 +219,8 @@ int main(void)
 	w5500_2_ptr->cs_eth_pin = GPIO_PIN_12;
 	w5500_2_ptr->rst_eth_gpio_port = GPIOB;
 	w5500_2_ptr->rst_eth_pin = GPIO_PIN_13;
+	w5500_hardware_rst(w5500_2_ptr);
 	w5500_ini(w5500_2_ptr);
-	
-	HAL_TIM_Base_Start_IT(&htim2);
-	HAL_TIM_Base_Start_IT(&htim4);
-	HAL_TIM_Base_Start_IT(&htim5);
-	HAL_TIM_Base_Start_IT(&htim12);
-	HAL_TIM_Base_Start_IT(&htim13);
-  HAL_TIM_Base_Start(&htim3);
 	
 	// Инициализация датчиков
 	bmp180_init(&USED_I2C);
@@ -261,24 +264,16 @@ int main(void)
 		// серверная часть (взаимодействие с raspberry)
 		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
 		{
-			w5500_reini_sock(w5500_1_ptr, 0);
+			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
 			w5500_1_ptr->port_set[0].is_soc_active = 1;
 			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[0].htim, 0);
 		}
 		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
 		
-//		if (w5500_2_ptr->port_set[0].is_soc_active != 1) 
-//		{
-//			w5500_reini_sock(w5500_2_ptr, 0);
-//			w5500_2_ptr->port_set[0].is_soc_active = 1;
-//			__HAL_TIM_SET_COUNTER(&w5500_2_ptr->port_set[0].htim, 0);
-//		}
-//		reply_iteration(w5500_2_ptr, w5500_2_ptr->port_set[0].sock_num);
-		
 		// клиентская часть (взаимодействие с другими у-вами)
 		if (w5500_1_ptr->port_set[1].is_soc_active != 1)
 		{		
-			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
+			w5500_ini(w5500_1_ptr);
 			w5500_1_ptr->port_set[1].is_soc_active = 1;
 			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[1].htim, 0);
 		}
@@ -315,21 +310,6 @@ int main(void)
 				}
 			}
 		}
-//		if (w5500_1_ptr->port_set[1].is_soc_active != 1)
-//		{		
-//			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
-//			w5500_1_ptr->port_set[1].is_soc_active = 1;
-//			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[1].htim, 0);
-//		}
-//		request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num, 43);
-		
-//		if (w5500_2_ptr->port_set[1].is_soc_active != 1)
-//		{		
-//			w5500_reini_sock(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
-//			w5500_2_ptr->port_set[1].is_soc_active = 1;
-//		__HAL_TIM_SET_COUNTER(&w5500_2_ptr->port_set[1].htim, 0);
-//		}
-//		request_iteration(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
 
   }
   /* USER CODE END 3 */

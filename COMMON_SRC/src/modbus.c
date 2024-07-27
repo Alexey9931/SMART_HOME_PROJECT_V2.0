@@ -38,6 +38,8 @@ uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t dev_addr, uin
 		default:
 				return 1;
 	}
+	__HAL_TIM_SET_COUNTER(&w5500_n->port_set[sn].htim, 0);
+	w5500_n->port_set[sn].is_soc_active = 1;
 	while (1)
 	{
 		if (!receive_packet(w5500_n, sn)) 

@@ -288,7 +288,7 @@ void w5500_set_target_port(w5500_data* w5500_n, uint16_t port, uint8_t sock_num)
 void w5500_ini(w5500_data* w5500_n)
 { 
   // Аппаратный сброс
-  w5500_hardware_rst(w5500_n);
+//  w5500_hardware_rst(w5500_n);
 
   // Программный сброс
   w5500_soft_rst(w5500_n);
@@ -321,11 +321,16 @@ void w5500_ini(w5500_data* w5500_n)
 			connect_socket(w5500_n, w5500_n->port_set[i].sock_num);
 		}
 	}
-  HAL_Delay(500);
+  HAL_Delay(100);
 }
 // Функция реинициализации сокета
 void w5500_reini_sock(w5500_data* w5500_n, uint8_t sn)
 {
+	// Конфигурация сети
+  w5500_set_mac_addr(w5500_n, w5500_n->macaddr);
+  w5500_set_ip_gate_addr(w5500_n, w5500_n->ipgate);
+  w5500_set_ipmask(w5500_n, w5500_n->ipmask);
+  w5500_set_ipaddr(w5500_n, w5500_n->ipaddr);
 	// Закрываем сокет
 	disconnect_socket(w5500_n, w5500_n->port_set[sn].sock_num);
 	//socket_closed_wait(w5500_n, w5500_n->port_set[sn].sock_num);
@@ -348,7 +353,7 @@ void w5500_reini_sock(w5500_data* w5500_n, uint8_t sn)
 		w5500_set_target_ipaddr(w5500_n, w5500_n->port_set[sn].target_ip_addr, w5500_n->port_set[sn].sock_num);
 		connect_socket(w5500_n, w5500_n->port_set[sn].sock_num);
 	}
-  HAL_Delay(500);
+  HAL_Delay(100);
 }
 // Функция установки ss
 void ss_select(w5500_data* w5500_n)
