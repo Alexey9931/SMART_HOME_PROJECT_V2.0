@@ -6,7 +6,8 @@
 
 #include "device_defs.h"
 
-#define BUF_LEN 1024
+// Максимальная длина буффера
+#define BUF_LEN 			1024
 
 // Структура с сетевыми настройками порта
 typedef struct port_setting_struct
@@ -22,20 +23,20 @@ typedef struct port_setting_struct
 // Структура с настройками и данными микросхемы w5500
 typedef struct w5500_struct
 {
-  SPI_HandleTypeDef spi_n;  						// Выбранный интерфейс SPI для микросхемы w5500
-	GPIO_TypeDef*			cs_eth_gpio_port;		// Настройки порта линии cs
-	uint16_t					cs_eth_pin;					// Номер вывода cs
-	GPIO_TypeDef*			rst_eth_gpio_port;	// Настройки порта линии rst
-	uint16_t					rst_eth_pin;				// Номер вывода rst
-  uint8_t 					macaddr[6];       	// MAC адрес
-  uint8_t 					ipaddr[4];        	// IP адрес
-  uint8_t 					ipgate[4];        	// IP адрес маршрутизатора
-  uint8_t 					ipmask[4];        	// Маска подсети
-  port_settings			port_set[2];				// Сетевые настройки портов
-	uint8_t 					rx_buf[BUF_LEN];		// Буфер приемника
-	uint8_t 					tx_buf[BUF_LEN];		// Буфер передатчика
-	uint32_t 					rx_buf_len;					// Длина буфера приемника
-	uint32_t 					tx_buf_len;					// Длина буфера передатчика
+  SPI_HandleTypeDef spi_n;  									// Выбранный интерфейс SPI для микросхемы w5500
+	GPIO_TypeDef*			cs_eth_gpio_port;					// Настройки порта линии cs
+	uint16_t					cs_eth_pin;								// Номер вывода cs
+	GPIO_TypeDef*			rst_eth_gpio_port;				// Настройки порта линии rst
+	uint16_t					rst_eth_pin;							// Номер вывода rst
+  uint8_t 					macaddr[6];       				// MAC адрес
+  uint8_t 					ipaddr[4];        				// IP адрес
+  uint8_t 					ipgate[4];        				// IP адрес маршрутизатора
+  uint8_t 					ipmask[4];        				// Маска подсети
+  port_settings			port_set[MAX_DEV_NUM-1];	// Сетевые настройки портов
+	uint8_t 					rx_buf[BUF_LEN];					// Буфер приемника
+	uint8_t 					tx_buf[BUF_LEN];					// Буфер передатчика
+	uint32_t 					rx_buf_len;								// Длина буфера приемника
+	uint32_t 					tx_buf_len;								// Длина буфера передатчика
 } w5500_data;
 
 #define BSB_COMMON  0x00

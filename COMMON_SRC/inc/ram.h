@@ -23,7 +23,7 @@ typedef struct common_ram_struct
 	eeprom_data 	mirrored_to_rom_regs;
 	int 					num_rx_pack;
 	int 					num_tx_pack;
-	int         		work_time;
+	int         	work_time;
 }__attribute__((packed)) common_ram;
 
 // Структура с данными для хранения в ОЗУ

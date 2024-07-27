@@ -25,15 +25,25 @@ uint8_t reply_iteration(w5500_data* w5500_n, uint8_t sn)
 	return 0;
 }
 // Клиентская функция, инициирующая обмен данными
-uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t dev_addr, uint8_t cmd)
+uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t *dev_name, uint8_t dev_addr, uint8_t cmd)
 {
+	uint16_t read_size;
+	if (strstr((const char*)dev_name, GAS_BOIL_NAME) != NULL) 
+	{
+		read_size = GAS_BOILER_CONTROLLER_REGS_SIZE;
+  } 
+	else if (strstr((const char*)dev_name, STR_WEATH_NAME)!= NULL) 
+	{
+		read_size = WEATH_STATION_REGS_SIZE;
+  }
+	
 	switch(cmd)
 	{
 		case type_cmd:
 				if (do_type_cmd(w5500_n, dev_addr, sn) != 0) return 1;
 				break;
 		case read_cmd:
-				if (do_read_cmd(w5500_n, dev_addr, sn, 0, GAS_BOILER_CONTROLLER_REGS_SIZE) != 0) return 1;
+				if (do_read_cmd(w5500_n, dev_addr, sn, 0, read_size) != 0) return 1;
 				break;
 		default:
 				return 1;

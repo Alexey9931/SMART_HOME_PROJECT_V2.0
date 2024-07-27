@@ -59,7 +59,7 @@ typedef struct modbus_struct
 // Серверная функция, обеспечивающая обмен данными
 uint8_t reply_iteration(w5500_data* w5500_n, uint8_t sn);
 // Клиентская функция, инициирующая обмен данными
-uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t dev_addr, uint8_t cmd);
+uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t *dev_name, uint8_t dev_addr, uint8_t cmd);
 // Функция получения пакета
 uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn);
 // Функция отправки пакета

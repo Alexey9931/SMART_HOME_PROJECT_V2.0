@@ -51,6 +51,7 @@ TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
 TIM_HandleTypeDef htim12;
 TIM_HandleTypeDef htim13;
+TIM_HandleTypeDef htim14;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
@@ -79,6 +80,7 @@ static void MX_TIM4_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM12_Init(void);
 static void MX_TIM13_Init(void);
+static void MX_TIM14_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -96,7 +98,7 @@ uint8_t is_time_to_update_params; // Флаг того, что пора обно
 uint8_t hours_delta; // Локальный счетчик часов
 extern modbus_packet rx_packet;
 extern modbus_packet tx_packet;
-network_map dev_net_map = { {.dev_addr = 43} }; //Карта клиентских устройств
+network_map dev_net_map = { {.dev_addr = 43}, {.dev_addr = 33} }; //Карта клиентских устройств
 /* USER CODE END 0 */
 
 /**
@@ -142,6 +144,7 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM12_Init();
   MX_TIM13_Init();
+  MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
 
 	// Запуск таймеров и прерываний
@@ -150,6 +153,7 @@ int main(void)
 	HAL_TIM_Base_Start_IT(&htim5);
 	HAL_TIM_Base_Start_IT(&htim12);
 	HAL_TIM_Base_Start_IT(&htim13);
+	HAL_TIM_Base_Start_IT(&htim14);
   HAL_TIM_Base_Start(&htim3);
 
 	// Заполнение таблицы CRC32
@@ -176,18 +180,27 @@ int main(void)
 	w5500_1_ptr->spi_n = hspi1;
 	w5500_1_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
 	w5500_1_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
+	w5500_1_ptr->port_set[2].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
 	w5500_1_ptr->port_set[0].sock_num = 0;
 	w5500_1_ptr->port_set[1].sock_num = 1;
+	w5500_1_ptr->port_set[2].sock_num = 2;
 	w5500_1_ptr->port_set[0].is_soc_active = 1;
 	w5500_1_ptr->port_set[1].is_soc_active = 1;
+	w5500_1_ptr->port_set[2].is_soc_active = 1;
 	w5500_1_ptr->port_set[0].is_client = 0;
 	w5500_1_ptr->port_set[1].is_client = 1;
+	w5500_1_ptr->port_set[2].is_client = 1;
 	w5500_1_ptr->port_set[0].htim = htim2;
 	w5500_1_ptr->port_set[1].htim = htim12;
+	w5500_1_ptr->port_set[2].htim = htim14;
 	w5500_1_ptr->port_set[1].target_ip_addr[0] = 192;
 	w5500_1_ptr->port_set[1].target_ip_addr[1] = 168;
 	w5500_1_ptr->port_set[1].target_ip_addr[2] = 1;
 	w5500_1_ptr->port_set[1].target_ip_addr[3] = 43;
+	w5500_1_ptr->port_set[2].target_ip_addr[0] = 192;
+	w5500_1_ptr->port_set[2].target_ip_addr[1] = 168;
+	w5500_1_ptr->port_set[2].target_ip_addr[2] = 1;
+	w5500_1_ptr->port_set[2].target_ip_addr[3] = 33;
 	w5500_1_ptr->cs_eth_gpio_port = GPIOA;
 	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
 	w5500_1_ptr->rst_eth_gpio_port = GPIOC;
@@ -195,32 +208,32 @@ int main(void)
 	w5500_hardware_rst(w5500_1_ptr);
 	w5500_ini(w5500_1_ptr);
 	
-	// Инициализация контроллера Ethernet2 настройками из ПЗУ
-	memcpy(w5500_2_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_2));
-	memcpy(w5500_2_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
-	memcpy(w5500_2_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
-	memcpy(w5500_2_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_2));
-	w5500_2_ptr->spi_n = hspi2;
-	w5500_2_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
-	w5500_2_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
-	w5500_2_ptr->port_set[0].sock_num = 0;
-	w5500_2_ptr->port_set[1].sock_num = 1;
-	w5500_2_ptr->port_set[0].is_soc_active = 1;
-	w5500_2_ptr->port_set[1].is_soc_active = 1;
-	w5500_2_ptr->port_set[0].is_client = 0;
-	w5500_2_ptr->port_set[1].is_client = 1;
-	w5500_2_ptr->port_set[0].htim = htim4;
-	w5500_2_ptr->port_set[1].htim = htim13;
-	w5500_2_ptr->port_set[1].target_ip_addr[0] = 192;
-	w5500_2_ptr->port_set[1].target_ip_addr[1] = 168;
-	w5500_2_ptr->port_set[1].target_ip_addr[2] = 1;
-	w5500_2_ptr->port_set[1].target_ip_addr[3] = 43;
-	w5500_2_ptr->cs_eth_gpio_port = GPIOB;
-	w5500_2_ptr->cs_eth_pin = GPIO_PIN_12;
-	w5500_2_ptr->rst_eth_gpio_port = GPIOB;
-	w5500_2_ptr->rst_eth_pin = GPIO_PIN_13;
-	w5500_hardware_rst(w5500_2_ptr);
-	w5500_ini(w5500_2_ptr);
+//	// Инициализация контроллера Ethernet2 настройками из ПЗУ
+//	memcpy(w5500_2_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_2));
+//	memcpy(w5500_2_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
+//	memcpy(w5500_2_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
+//	memcpy(w5500_2_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_2));
+//	w5500_2_ptr->spi_n = hspi2;
+//	w5500_2_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
+//	w5500_2_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
+//	w5500_2_ptr->port_set[0].sock_num = 0;
+//	w5500_2_ptr->port_set[1].sock_num = 1;
+//	w5500_2_ptr->port_set[0].is_soc_active = 1;
+//	w5500_2_ptr->port_set[1].is_soc_active = 1;
+//	w5500_2_ptr->port_set[0].is_client = 0;
+//	w5500_2_ptr->port_set[1].is_client = 1;
+//	w5500_2_ptr->port_set[0].htim = htim4;
+//	w5500_2_ptr->port_set[1].htim = htim13;
+//	w5500_2_ptr->port_set[1].target_ip_addr[0] = 192;
+//	w5500_2_ptr->port_set[1].target_ip_addr[1] = 168;
+//	w5500_2_ptr->port_set[1].target_ip_addr[2] = 1;
+//	w5500_2_ptr->port_set[1].target_ip_addr[3] = 43;
+//	w5500_2_ptr->cs_eth_gpio_port = GPIOB;
+//	w5500_2_ptr->cs_eth_pin = GPIO_PIN_12;
+//	w5500_2_ptr->rst_eth_gpio_port = GPIOB;
+//	w5500_2_ptr->rst_eth_pin = GPIO_PIN_13;
+//	w5500_hardware_rst(w5500_2_ptr);
+//	w5500_ini(w5500_2_ptr);
 	
 	// Инициализация датчиков
 	bmp180_init(&USED_I2C);
@@ -271,18 +284,20 @@ int main(void)
 		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
 		
 		// клиентская часть (взаимодействие с другими у-вами)
-		if (w5500_1_ptr->port_set[1].is_soc_active != 1)
-		{		
-			w5500_ini(w5500_1_ptr);
-			w5500_1_ptr->port_set[1].is_soc_active = 1;
-			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[1].htim, 0);
-		}
 		for (uint8_t i = 0; i < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); i++)
 		{
+			if (w5500_1_ptr->port_set[i+1].is_soc_active != 1)
+			{		
+				w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num);
+				//w5500_ini(w5500_1_ptr);
+				w5500_1_ptr->port_set[i+1].is_soc_active = 1;
+				__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[i+1].htim, 0);
+			}
+			
 			if (!dev_net_map[i].is_inited)
 			{
 				//выполняем команду TYPE
-				if (!request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num, dev_net_map[i].dev_addr, type_cmd))
+				if (!request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map[i].device_name, dev_net_map[i].dev_addr, type_cmd))
 				{
 					dev_net_map[i].is_inited = 1;
 					memcpy(dev_net_map[i].device_name, rx_packet.data, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
@@ -296,17 +311,33 @@ int main(void)
 			else
 			{
 				//выполняем команду READ
-				if (!request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num, dev_net_map[i].dev_addr, read_cmd))
+				if (!request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map[i].device_name, dev_net_map[i].dev_addr, read_cmd))
 				{
-					memcpy(&ram_ptr->uniq.control_panel.gas_boiler_common, rx_packet.data, 
-						sizeof(ram_ptr->uniq.control_panel.gas_boiler_common) + sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
+					if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+					{
+						memcpy(&ram_ptr->uniq.control_panel.gas_boiler_common, rx_packet.data, 
+							sizeof(ram_ptr->uniq.control_panel.gas_boiler_common) + sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
+					} 
+					else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+					{
+						memcpy(&ram_ptr->uniq.control_panel.str_weath_stat_common, rx_packet.data, 
+							sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common) + sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
+					}
 				}
 				else
 				{
 					dev_net_map[i].is_inited = 0;
+					if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+					{
+						memset(&ram_ptr->uniq.control_panel.gas_boiler_common, 0, sizeof(ram_ptr->uniq.control_panel.gas_boiler_common)
+							+ sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
+					} 
+					else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+					{
+						memset(&ram_ptr->uniq.control_panel.str_weath_stat_common, 0, sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common)
+							+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
+					}
 					memset(dev_net_map[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
-					memset(&ram_ptr->uniq.control_panel.gas_boiler_common, 0, sizeof(ram_ptr->uniq.control_panel.gas_boiler_common)
-						+ sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
 				}
 			}
 		}
@@ -754,6 +785,37 @@ static void MX_TIM13_Init(void)
   /* USER CODE BEGIN TIM13_Init 2 */
 
   /* USER CODE END TIM13_Init 2 */
+
+}
+
+/**
+  * @brief TIM14 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM14_Init(void)
+{
+
+  /* USER CODE BEGIN TIM14_Init 0 */
+
+  /* USER CODE END TIM14_Init 0 */
+
+  /* USER CODE BEGIN TIM14_Init 1 */
+
+  /* USER CODE END TIM14_Init 1 */
+  htim14.Instance = TIM14;
+  htim14.Init.Prescaler = 8399;
+  htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim14.Init.Period = 29999;
+  htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM14_Init 2 */
+
+  /* USER CODE END TIM14_Init 2 */
 
 }
 

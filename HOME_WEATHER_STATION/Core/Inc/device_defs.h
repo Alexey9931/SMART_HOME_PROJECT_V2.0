@@ -13,13 +13,16 @@
 
 extern I2C_HandleTypeDef hi2c1;
 
+// Максимальное кол-во устр-в в сети (включая сервер)
+#define MAX_DEV_NUM		4
+
 // Карта сети устройств
 typedef struct network_map
 {
 	uint8_t device_name[32];	//Имя устройства
 	uint8_t dev_addr;					//Адрес устройства
 	uint8_t is_inited;				//Статус инициализации
-}__attribute__((packed)) network_map[1];
+}__attribute__((packed)) network_map[MAX_DEV_NUM-2];
 
 // Макрос типа устройства
 #define _CONTR_PANEL_
