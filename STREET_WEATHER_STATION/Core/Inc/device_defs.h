@@ -13,8 +13,9 @@
 
 extern I2C_HandleTypeDef hi2c1;
 
-// Имя устройства
-#define DEVICE_NAME "Weather Station"
+// Макрос типа устройства
+#define _STREET_WEATH_ST_
+
 // Используемый I2C
 #define USED_I2C hi2c1
 

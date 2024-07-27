@@ -6,6 +6,9 @@
 
 #include "device_defs.h"
 
+// Максимальное кол-во устр-в в сети (включая сервер)
+#define MAX_DEV_NUM		4
+
 // Максимальная длина буффера
 #define BUF_LEN 			1024
 

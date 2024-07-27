@@ -43,6 +43,7 @@
 
 SPI_HandleTypeDef hspi1;
 
+TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
@@ -59,6 +60,7 @@ static void MX_SPI1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -107,13 +109,20 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM4_Init();
   MX_TIM3_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+
+	// Запуск таймеров и прерываний
+	HAL_TIM_Base_Start_IT(&htim1);
+	HAL_TIM_Base_Start_IT(&htim2);
+	HAL_TIM_Base_Start_IT(&htim4);
+	HAL_TIM_Base_Start(&htim3);
 
 	// Заполнение таблицы CRC32
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-	//eeproms_first_ini(&USED_I2C);
+	eeproms_first_ini(&USED_I2C);
 	
 	// Зеркализация данных из ПЗУ в ОЗУ
 	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.common.mirrored_to_rom_regs));
@@ -122,22 +131,26 @@ int main(void)
 	memcpy(w5500_1_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_1));
 	memcpy(w5500_1_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
 	memcpy(w5500_1_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
-	w5500_1_ptr->local_port = ram_data.common.mirrored_to_rom_regs.common.local_port;
 	memcpy(w5500_1_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_1));
-	w5500_1_ptr->sock_num = 0;
 	w5500_1_ptr->spi_n = hspi1;
-	w5500_1_ptr->htim = htim2;
+	w5500_1_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
+	w5500_1_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
+	w5500_1_ptr->port_set[0].sock_num = 0;
+	w5500_1_ptr->port_set[1].sock_num = 1;
+	w5500_1_ptr->port_set[0].is_soc_active = 1;
+	w5500_1_ptr->port_set[1].is_soc_active = 1;
+	w5500_1_ptr->port_set[0].is_client = 0;
+	w5500_1_ptr->port_set[1].is_client = 0;
+	w5500_1_ptr->port_set[0].htim = htim2;
+	w5500_1_ptr->port_set[1].htim = htim1;
 	w5500_1_ptr->cs_eth_gpio_port = GPIOA;
 	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
 	w5500_1_ptr->rst_eth_gpio_port = GPIOB;
 	w5500_1_ptr->rst_eth_pin = GPIO_PIN_0;
 	w5500_hardware_rst(w5500_1_ptr);
+	w5500_ini(w5500_1_ptr);
 	
-	HAL_TIM_Base_Start_IT(&htim2);
-	HAL_TIM_Base_Start_IT(&htim4);
-	HAL_TIM_Base_Start(&htim3);
-	
-	// Инициализация датчиков
+	// ИBнициализация датчиков
 	ds18b20_init(GPIOA, GPIO_PIN_3, SKIP_ROM);
 	
   /* USER CODE END 2 */
@@ -157,12 +170,24 @@ int main(void)
 			is_time_to_update_params = 0;
 		}
 		
-		if (w5500_1_ptr->is_soc_active != 1) 
+		// серверная часть (взаимодействие с raspberry)
+		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
 		{
-			w5500_ini(w5500_1_ptr);
-			w5500_1_ptr->is_soc_active = 1;
+			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
+			w5500_1_ptr->port_set[0].is_soc_active = 1;
+			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[0].htim, 0);
 		}
-		request_reply_iteration(w5500_1_ptr, w5500_1_ptr->sock_num);
+		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
+		
+		// серверная часть (взаимодействие с control panel)		
+		if (w5500_1_ptr->port_set[1].is_soc_active != 1) 
+		{
+			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
+			w5500_1_ptr->port_set[1].is_soc_active = 1;
+			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[1].htim, 0);
+		}
+		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
+		
   }
   /* USER CODE END 3 */
 }
@@ -275,6 +300,52 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 3604;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 29999;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
 
 }
 
