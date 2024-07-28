@@ -104,6 +104,7 @@ float bmp180_get_press(I2C_HandleTypeDef* hi2c, int oss)
 	float press = 0;
 	
 	UP = get_upress(hi2c, oss);
+	if (UP == 0) return 0.0f;
 	X1 = ((UT-AC6)*(AC5/(pow(2,15))));
 	X2 = ((MC*(pow(2,11)))/(X1+MD));
 	B5 = X1+X2;

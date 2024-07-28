@@ -7,7 +7,7 @@ extern network_map dev_net_map;
 
 void dwin_write_half_word(uint16_t data, uint16_t addr)
 {
-	packet_struct tx_pack;
+	packet_struct tx_pack = {0};
 	tx_pack.header = HEADER;
 	tx_pack.length = sizeof(addr) + sizeof(data) + 1;
 	tx_pack.cmd = write_variable;
@@ -186,8 +186,16 @@ void dwin_print_home_page()
 			break;
 	}
 	//статус газового котла
-	ram_ptr->uniq.control_panel.gas_boiler_uniq.rele_status == 1 ? dwin_write_variable("ON", 0x6012, 3):
+	if (ram_ptr->uniq.control_panel.gas_boiler_uniq.rele_status == 1)
+	{
+		dwin_write_variable("ON", 0x6012, 3);
+		dwin_write_half_word(0x0004, 0x0350);
+	}
+	else
+	{
 		dwin_write_variable("OFF", 0x6012, 3);
+		dwin_write_half_word(0x00F8, 0x0350);
+	}
 	//уставка температуры
 	if (ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint < 10.0f)
 	{
@@ -218,16 +226,37 @@ void dwin_print_home_page()
 		if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
 		{
 			//статус сети газового котла
-			dev_net_map[i].is_inited == 1 ? dwin_write_variable("LINKED", 0x3012, 6) : dwin_write_variable("FAILED", 0x3012, 6);
-    } 
+			if (dev_net_map[i].is_inited == 1)
+			{
+				dwin_write_variable("LINKED", 0x3012, 6);
+				dwin_write_half_word(0xB386, 0x0351);
+			}
+			else
+			{
+				dwin_write_variable("FAILED", 0x3012, 6);
+				dwin_write_half_word(0x00F8, 0x0351);
+			}
+		} 
 		else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
 		{
 			//статус сети метеостанции
-			dev_net_map[i].is_inited == 1 ? dwin_write_variable("LINKED", 0x5012, 6) : dwin_write_variable("FAILED", 0x5012, 6);
-    }
+			if (dev_net_map[i].is_inited == 1)
+			{
+				dwin_write_variable("LINKED", 0x5012, 6);
+				dwin_write_half_word(0xB386, 0x0353);
+			}
+			else
+			{
+				dwin_write_variable("FAILED", 0x5012, 6);
+				dwin_write_half_word(0x00F8, 0x0350);
+			}
+		}
 	}
 	//статус сети сервера
 	dwin_write_variable("FAILED", 0x4012, 6);
+	dwin_write_half_word(0x00F8, 0x0352);
 	//картинка прогноза погоды
-	
+	dwin_write_half_word(0x0100, 0x0654);
+	dwin_write_half_word(0x0100, 0x0754);
+	dwin_write_half_word(0x0100, 0x0854);
 }

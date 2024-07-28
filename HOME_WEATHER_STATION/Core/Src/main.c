@@ -302,11 +302,7 @@ int main(void)
 					dev_net_map[i].is_inited = 1;
 					memcpy(dev_net_map[i].device_name, rx_packet.data, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
 				}
-				else
-				{
-					dev_net_map[i].is_inited = 0;
-					memset(dev_net_map[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
-				}
+				else dev_net_map[i].is_inited = 0;
 			}
 			else
 			{

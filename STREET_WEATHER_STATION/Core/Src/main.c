@@ -150,7 +150,7 @@ int main(void)
 	w5500_hardware_rst(w5500_1_ptr);
 	w5500_ini(w5500_1_ptr);
 	
-	// ИBнициализация датчиков
+	// Инициализация датчиков
 	ds18b20_init(GPIOA, GPIO_PIN_3, SKIP_ROM);
 	
   /* USER CODE END 2 */
