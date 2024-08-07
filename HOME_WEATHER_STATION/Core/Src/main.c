@@ -272,6 +272,8 @@ int main(void)
 			is_time_to_update_params = 0;
 			//обновление дисплея
 			dwin_print_home_page();
+			dwin_print_net_page();
+			dwin_print_regs_page();
 		}
 		
 		// серверная часть (взаимодействие с raspberry)
@@ -288,8 +290,8 @@ int main(void)
 		{
 			if (w5500_1_ptr->port_set[i+1].is_soc_active != 1)
 			{		
-				w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num);
-				//w5500_ini(w5500_1_ptr);
+				//w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num);
+				w5500_ini(w5500_1_ptr);
 				w5500_1_ptr->port_set[i+1].is_soc_active = 1;
 				__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[i+1].htim, 0);
 			}
