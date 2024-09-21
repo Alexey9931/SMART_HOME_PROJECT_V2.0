@@ -171,18 +171,20 @@ int main(void)
 		}
 		
 		// серверная часть (взаимодействие с raspberry)
-		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
-		{
-			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
-			w5500_1_ptr->port_set[0].is_soc_active = 1;
-			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[0].htim, 0);
-		}
+//		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
+//		{
+//			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
+//			w5500_1_ptr->port_set[0].is_soc_active = 1;
+//			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[0].htim, 0);
+//		}
 		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
 		
 		// серверная часть (взаимодействие с control panel)		
 		if (w5500_1_ptr->port_set[1].is_soc_active != 1) 
 		{
-			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
+//			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
+//			listen_socket(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
+//			socket_listen_wait(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
 			w5500_1_ptr->port_set[1].is_soc_active = 1;
 			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[1].htim, 0);
 		}
@@ -322,7 +324,7 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 3604;
+  htim1.Init.Prescaler = 7199;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim1.Init.Period = 29999;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -368,7 +370,7 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 3604;
+  htim2.Init.Prescaler = 7199;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 29999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -544,7 +546,22 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim == &htim1)
+	{
+		w5500_1_ptr->port_set[1].is_soc_active = 0;
+	}
+	else if (htim == &htim2)
+	{
+		w5500_1_ptr->port_set[0].is_soc_active = 0;
+	}
+	else if (htim == &htim4)
+	{
+		//Каждую секунду обновление параметров модуля
+		is_time_to_update_params = 1;
+	}
+}
 /* USER CODE END 4 */
 
 /**

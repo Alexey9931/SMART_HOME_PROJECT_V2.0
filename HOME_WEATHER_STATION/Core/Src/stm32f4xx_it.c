@@ -64,8 +64,6 @@ extern TIM_HandleTypeDef htim5;
 extern TIM_HandleTypeDef htim12;
 extern TIM_HandleTypeDef htim13;
 extern TIM_HandleTypeDef htim14;
-extern DMA_HandleTypeDef hdma_usart1_rx;
-extern DMA_HandleTypeDef hdma_usart1_tx;
 extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN EV */
 extern w5500_data* w5500_1_ptr;
@@ -221,7 +219,7 @@ void TIM2_IRQHandler(void)
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
-	w5500_1_ptr->port_set[0].is_soc_active = 0;
+//	w5500_1_ptr->port_set[0].is_soc_active = 0;
 
   /* USER CODE END TIM2_IRQn 1 */
 }
@@ -265,7 +263,7 @@ void TIM8_BRK_TIM12_IRQHandler(void)
   /* USER CODE END TIM8_BRK_TIM12_IRQn 0 */
   HAL_TIM_IRQHandler(&htim12);
   /* USER CODE BEGIN TIM8_BRK_TIM12_IRQn 1 */
-	w5500_1_ptr->port_set[1].is_soc_active = 0;
+//	w5500_1_ptr->port_set[1].is_soc_active = 0;
   /* USER CODE END TIM8_BRK_TIM12_IRQn 1 */
 }
 
@@ -293,7 +291,7 @@ void TIM8_TRG_COM_TIM14_IRQHandler(void)
   /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 0 */
   HAL_TIM_IRQHandler(&htim14);
   /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */
-	w5500_1_ptr->port_set[2].is_soc_active = 0;
+//	w5500_1_ptr->port_set[2].is_soc_active = 0;
   /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 1 */
 }
 
@@ -307,38 +305,10 @@ void TIM5_IRQHandler(void)
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
   /* USER CODE BEGIN TIM5_IRQn 1 */
-	//Каждую секунду обновление параметров модуля
-	is_time_to_update_params = 1;
+//	//Каждую секунду обновление параметров модуля
+//	is_time_to_update_params = 1;
 
   /* USER CODE END TIM5_IRQn 1 */
-}
-
-/**
-  * @brief This function handles DMA2 stream2 global interrupt.
-  */
-void DMA2_Stream2_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA2_Stream2_IRQn 0 */
-
-  /* USER CODE END DMA2_Stream2_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_usart1_rx);
-  /* USER CODE BEGIN DMA2_Stream2_IRQn 1 */
-
-  /* USER CODE END DMA2_Stream2_IRQn 1 */
-}
-
-/**
-  * @brief This function handles DMA2 stream7 global interrupt.
-  */
-void DMA2_Stream7_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA2_Stream7_IRQn 0 */
-
-  /* USER CODE END DMA2_Stream7_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_usart1_tx);
-  /* USER CODE BEGIN DMA2_Stream7_IRQn 1 */
-
-  /* USER CODE END DMA2_Stream7_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

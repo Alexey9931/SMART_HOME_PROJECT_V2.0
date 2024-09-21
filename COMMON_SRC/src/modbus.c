@@ -1,7 +1,7 @@
 #include "modbus.h"
 #include "ram.h"
 
-extern ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
+extern ram_data_struct ram_data;	// Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
 extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
 
 // Таблица для вычисления контрольной суммы
@@ -19,7 +19,7 @@ uint8_t reply_iteration(w5500_data* w5500_n, uint8_t sn)
 	if (receive_packet(w5500_n, sn) != 0) return 1;
 	do_cmd();
 	transmit_packet(w5500_n, sn);
-	__HAL_TIM_SET_COUNTER(&w5500_n->port_set[sn].htim, 0);
+	__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
 	w5500_n->port_set[sn].is_soc_active = 1;
 	
 	return 0;
@@ -40,25 +40,34 @@ uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t *dev_name, ui
 	switch(cmd)
 	{
 		case type_cmd:
-				if (do_type_cmd(w5500_n, dev_addr, sn) != 0) return 1;
+				if (do_type_cmd(w5500_n, dev_addr, sn) != 0)
+				{
+					w5500_n->port_set[sn].is_soc_active = 0;
+					return 1;
+				}
 				break;
 		case read_cmd:
-				if (do_read_cmd(w5500_n, dev_addr, sn, 0, read_size) != 0) return 1;
+				if (do_read_cmd(w5500_n, dev_addr, sn, 0, read_size) != 0)
+				{
+					w5500_n->port_set[sn].is_soc_active = 0;
+					return 1;
+				}
 				break;
 		default:
 				return 1;
 	}
-	__HAL_TIM_SET_COUNTER(&w5500_n->port_set[sn].htim, 0);
+	__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
 	w5500_n->port_set[sn].is_soc_active = 1;
 	while (1)
 	{
 		if (!receive_packet(w5500_n, sn)) 
 		{
-			__HAL_TIM_SET_COUNTER(&w5500_n->port_set[sn].htim, 0);
+			__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
 			w5500_n->port_set[sn].is_soc_active = 1;
 			return 0;
 		}
-		else if (!w5500_n->port_set[sn].is_soc_active) return 1;
+		else if (!w5500_n->port_set[sn].is_soc_active) 
+			return 1;
 	}
 }
 // Функция получения пакета-запроса
@@ -68,6 +77,11 @@ uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn)
 	if(get_socket_status(w5500_n, sn) == SOCK_ESTABLISHED)
 	{
 		w5500_n->rx_buf_len = get_size_rx(w5500_n, sn);
+		if (w5500_n->rx_buf_len > DEF_SOC_BUF_SIZE)
+		{
+			set_read_pointer(w5500_n, sn, 0);
+			return 1;
+		}
 		
 		//Если пришел пустой пакет, то уходим из функции
 		if(w5500_n->rx_buf_len == 0)
@@ -204,6 +218,8 @@ uint8_t do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t 
 	// Если статус текущего сокета "Соединено"
 	if(get_socket_status(w5500_n, sn) == SOCK_ESTABLISHED)
 	{	
+		set_write_pointer(w5500_n, sn, 0);
+		
 		tx_packet.header_fields.header = PACKET_HEADER;
 		tx_packet.header_fields.recv_addr = dev_addr;
 		tx_packet.header_fields.send_addr = w5500_n->ipaddr[3];
@@ -233,6 +249,8 @@ uint8_t do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t 
 		recv_socket(w5500_n, sn);
 		send_socket(w5500_n, sn);
 		
+		ram_ptr->common.num_tx_pack++;
+		
 		return 0;
 	}
 	return 1;
@@ -244,6 +262,8 @@ uint8_t do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t
 	// Если статус текущего сокета "Соединено"
 	if(get_socket_status(w5500_n, sn) == SOCK_ESTABLISHED)
 	{	
+		set_write_pointer(w5500_n, sn, 0);
+		
 		tx_packet.header_fields.header = PACKET_HEADER;
 		tx_packet.header_fields.recv_addr = dev_addr;
 		tx_packet.header_fields.send_addr = w5500_n->ipaddr[3];
@@ -274,6 +294,8 @@ uint8_t do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t
 		recv_socket(w5500_n, sn);
 		send_socket(w5500_n, sn);
 		
+		ram_ptr->common.num_tx_pack++;
+		
 		return 0;
 	}
 	return 1;
@@ -285,6 +307,8 @@ uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn)
 	// Если статус текущего сокета "Соединено"
 	if(get_socket_status(w5500_n, sn) == SOCK_ESTABLISHED)
 	{	
+		set_write_pointer(w5500_n, sn, 0);
+		
 		tx_packet.header_fields.header = PACKET_HEADER;
 		tx_packet.header_fields.recv_addr = dev_addr;
 		tx_packet.header_fields.send_addr = w5500_n->ipaddr[3];
@@ -312,6 +336,8 @@ uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn)
 				
 		recv_socket(w5500_n, sn);
 		send_socket(w5500_n, sn);
+		
+		ram_ptr->common.num_tx_pack++;
 		
 		return 0;
 	}

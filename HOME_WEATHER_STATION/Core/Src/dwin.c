@@ -261,7 +261,7 @@ void dwin_print_home_page()
 			else
 			{
 				dwin_write_variable("FAILED", revert_addr(0x1250), 6);
-				dwin_write_half_word(0x00F8, revert_addr(0x5003));
+				dwin_write_half_word(0x00F8, revert_addr(0x5303));
 			}
 		}
 		else
@@ -274,7 +274,7 @@ void dwin_print_home_page()
 					break;
 				case 1:
 					dwin_write_variable("FAILED", revert_addr(0x1250), 6);
-					dwin_write_half_word(0x00F8, revert_addr(0x5003));
+					dwin_write_half_word(0x00F8, revert_addr(0x5303));
 					break;
 			}
 		}

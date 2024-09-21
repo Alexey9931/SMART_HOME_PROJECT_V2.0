@@ -56,8 +56,6 @@ TIM_HandleTypeDef htim14;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
-DMA_HandleTypeDef hdma_usart1_rx;
-DMA_HandleTypeDef hdma_usart1_tx;
 
 /* USER CODE BEGIN PV */
 
@@ -75,7 +73,6 @@ static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM5_Init(void);
-static void MX_DMA_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM12_Init(void);
@@ -97,8 +94,9 @@ extern ds3231_time sys_time;	// Структура системного врем
 uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
 uint8_t hours_delta; // Локальный счетчик часов
 extern modbus_packet rx_packet;
-extern modbus_packet tx_packet;
-network_map dev_net_map = { {.dev_addr = 43}, {.dev_addr = 33} }; //Карта клиентских устройств
+//extern modbus_packet tx_packet;
+//network_map dev_net_map = { {.dev_addr = 43}, {.dev_addr = 33} }; //Карта клиентских устройств
+network_map dev_net_map = { {.dev_addr = 43, .is_inited = 0} }; //Карта клиентских устройств
 /* USER CODE END 0 */
 
 /**
@@ -139,7 +137,6 @@ int main(void)
   MX_USART3_UART_Init();
   MX_TIM2_Init();
   MX_TIM5_Init();
-  MX_DMA_Init();
   MX_TIM4_Init();
   MX_TIM3_Init();
   MX_TIM12_Init();
@@ -177,7 +174,7 @@ int main(void)
 	memcpy(w5500_1_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
 	memcpy(w5500_1_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
 	memcpy(w5500_1_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_1));
-	w5500_1_ptr->spi_n = hspi1;
+	w5500_1_ptr->spi_n = &hspi1;
 	w5500_1_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
 	w5500_1_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
 	w5500_1_ptr->port_set[2].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
@@ -190,9 +187,9 @@ int main(void)
 	w5500_1_ptr->port_set[0].is_client = 0;
 	w5500_1_ptr->port_set[1].is_client = 1;
 	w5500_1_ptr->port_set[2].is_client = 1;
-	w5500_1_ptr->port_set[0].htim = htim2;
-	w5500_1_ptr->port_set[1].htim = htim12;
-	w5500_1_ptr->port_set[2].htim = htim14;
+	w5500_1_ptr->port_set[0].htim = &htim2;
+	w5500_1_ptr->port_set[1].htim = &htim12;
+	w5500_1_ptr->port_set[2].htim = &htim14;
 	w5500_1_ptr->port_set[1].target_ip_addr[0] = 192;
 	w5500_1_ptr->port_set[1].target_ip_addr[1] = 168;
 	w5500_1_ptr->port_set[1].target_ip_addr[2] = 1;
@@ -262,13 +259,13 @@ int main(void)
 				ram_ptr->common.work_time++;
 			}
 			//обновление показаний датчиков
-			ram_ptr->uniq.control_panel.pressure = bmp180_get_press(&USED_I2C, 3);
-			uint8_t data[5];
-			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
-			{
-				ram_ptr->uniq.control_panel.humidity = (float)(*(int16_t*)(data+3)) / 10;
-			}
-			ram_ptr->uniq.control_panel.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
+//			ram_ptr->uniq.control_panel.pressure = bmp180_get_press(&USED_I2C, 3);
+//			uint8_t data[5];
+//			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
+//			{
+//				ram_ptr->uniq.control_panel.humidity = (float)(*(int16_t*)(data+3)) / 10;
+//			}
+//			ram_ptr->uniq.control_panel.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
 			is_time_to_update_params = 0;
 			//обновление дисплея
 			dwin_print_home_page();
@@ -276,24 +273,24 @@ int main(void)
 			dwin_print_regs_page();
 		}
 		
-		// серверная часть (взаимодействие с raspberry)
-		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
-		{
-			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
-			w5500_1_ptr->port_set[0].is_soc_active = 1;
-			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[0].htim, 0);
-		}
-		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
+//		// серверная часть (взаимодействие с raspberry)
+//		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
+//		{
+//			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
+//			__HAL_TIM_SET_COUNTER(w5500_1_ptr->port_set[0].htim, 0);
+//			w5500_1_ptr->port_set[0].is_soc_active = 1;
+//		}
+//		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
 		
 		// клиентская часть (взаимодействие с другими у-вами)
 		for (uint8_t i = 0; i < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); i++)
 		{
 			if (w5500_1_ptr->port_set[i+1].is_soc_active != 1)
 			{		
-				//w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num);
-				w5500_ini(w5500_1_ptr);
+				 w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num);
+//				w5500_ini(w5500_1_ptr);
+				__HAL_TIM_SET_COUNTER(w5500_1_ptr->port_set[i+1].htim, 0);
 				w5500_1_ptr->port_set[i+1].is_soc_active = 1;
-				__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[i+1].htim, 0);
 			}
 			
 			if (!dev_net_map[i].is_inited)
@@ -304,7 +301,8 @@ int main(void)
 					dev_net_map[i].is_inited = 1;
 					memcpy(dev_net_map[i].device_name, rx_packet.data, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
 				}
-				else dev_net_map[i].is_inited = 0;
+				else
+					dev_net_map[i].is_inited = 0;
 			}
 			else
 			{
@@ -339,6 +337,8 @@ int main(void)
 				}
 			}
 		}
+		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_2);
+		HAL_Delay(1000);
 
   }
   /* USER CODE END 3 */
@@ -917,25 +917,6 @@ static void MX_USART3_UART_Init(void)
 }
 
 /**
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void)
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA2_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA2_Stream2_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
-  /* DMA2_Stream7_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA2_Stream7_IRQn);
-
-}
-
-/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -1029,7 +1010,28 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim == &htim2)
+	{
+		w5500_1_ptr->port_set[0].is_soc_active = 0;
+	}
+	else if (htim == &htim12)
+	{
+		w5500_1_ptr->port_set[1].is_soc_active = 0;
+		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_3);
+	}
+	else if (htim == &htim14)
+	{
+		w5500_1_ptr->port_set[2].is_soc_active = 0;
+	}
+	else if (htim == &htim5)
+	{
+		//Каждую секунду обновление параметров модуля
+		is_time_to_update_params = 1;
+		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_4);
+	}
+}
 /* USER CODE END 4 */
 
 /**

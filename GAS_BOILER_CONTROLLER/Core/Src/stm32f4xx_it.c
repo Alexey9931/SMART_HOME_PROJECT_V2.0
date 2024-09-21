@@ -296,8 +296,8 @@ void TIM4_IRQHandler(void)
   /* USER CODE END TIM4_IRQn 0 */
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */
-	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_5);
-	w5500_2_ptr->port_set[0].is_soc_active = 0;
+//	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_5);
+//	w5500_2_ptr->port_set[0].is_soc_active = 0;
   /* USER CODE END TIM4_IRQn 1 */
 }
 
@@ -325,7 +325,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
   /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
   HAL_TIM_IRQHandler(&htim13);
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
-  w5500_2_ptr->port_set[1].is_soc_active = 0;
+//  w5500_2_ptr->port_set[1].is_soc_active = 0;
   /* USER CODE END TIM8_UP_TIM13_IRQn 1 */
 }
 
@@ -339,8 +339,8 @@ void TIM5_IRQHandler(void)
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
   /* USER CODE BEGIN TIM5_IRQn 1 */
-	//Каждую секунду обновление параметров модуля
-	is_time_to_update_params = 1;
+//	//Каждую секунду обновление параметров модуля
+//	is_time_to_update_params = 1;
   /* USER CODE END TIM5_IRQn 1 */
 }
 

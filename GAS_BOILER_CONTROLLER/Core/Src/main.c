@@ -163,7 +163,7 @@ int main(void)
 	memcpy(w5500_1_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
 	memcpy(w5500_1_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
 	memcpy(w5500_1_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_1));
-	w5500_1_ptr->spi_n = hspi1;
+	w5500_1_ptr->spi_n = &hspi1;
 	w5500_1_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
 	w5500_1_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
 	w5500_1_ptr->port_set[0].sock_num = 0;
@@ -172,8 +172,8 @@ int main(void)
 	w5500_1_ptr->port_set[1].is_soc_active = 1;
 	w5500_1_ptr->port_set[0].is_client = 0;
 	w5500_1_ptr->port_set[1].is_client = 0;
-	w5500_1_ptr->port_set[0].htim = htim2;
-	w5500_1_ptr->port_set[1].htim = htim12;
+	w5500_1_ptr->port_set[0].htim = &htim2;
+	w5500_1_ptr->port_set[1].htim = &htim12;
 	w5500_1_ptr->cs_eth_gpio_port = GPIOA;
 	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
 	w5500_1_ptr->rst_eth_gpio_port = GPIOC;
@@ -186,7 +186,7 @@ int main(void)
 	memcpy(w5500_2_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
 	memcpy(w5500_2_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
 	memcpy(w5500_2_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_2));
-	w5500_2_ptr->spi_n = hspi2;
+	w5500_2_ptr->spi_n = &hspi2;
 	w5500_2_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
 	w5500_2_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
 	w5500_2_ptr->port_set[0].sock_num = 0;
@@ -195,8 +195,8 @@ int main(void)
 	w5500_2_ptr->port_set[1].is_soc_active = 1;
 	w5500_2_ptr->port_set[0].is_client = 0;
 	w5500_2_ptr->port_set[1].is_client = 0;
-	w5500_2_ptr->port_set[0].htim = htim4;
-	w5500_2_ptr->port_set[1].htim = htim13;
+	w5500_2_ptr->port_set[0].htim = &htim4;
+	w5500_2_ptr->port_set[1].htim = &htim13;
 	w5500_2_ptr->cs_eth_gpio_port = GPIOB;
 	w5500_2_ptr->cs_eth_pin = GPIO_PIN_12;
 	w5500_2_ptr->rst_eth_gpio_port = GPIOB;
@@ -234,13 +234,13 @@ int main(void)
 			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
 			{
 				ram_ptr->uniq.gas_boiler.humidity = (float)(*(int16_t*)(data+3)) / 10;
-//				ram_ptr->temperature = (float)((*(uint16_t*)(data+1))&0x3FFF) / 10;
-//				if((*(uint16_t*)(data+1)) & 0x8000)
-//				{
-//					ram_ptr->temperature *= -1.0f;
-//				}
+				ram_ptr->uniq.gas_boiler.temperature = (float)((*(uint16_t*)(data+1))&0x3FFF) / 10;
+				if((*(uint16_t*)(data+1)) & 0x8000)
+				{
+					ram_ptr->uniq.gas_boiler.temperature *= -1.0f;
+				}
 			}
-			ram_ptr->uniq.gas_boiler.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
+//			ram_ptr->uniq.gas_boiler.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
 			//алгоритм термостата
 			thermostat_task();
 			is_time_to_update_params = 0;
@@ -265,20 +265,22 @@ int main(void)
 		}
 		
 		// серверная часть (взаимодействие с raspberry)		
-		if (w5500_2_ptr->port_set[0].is_soc_active != 1) 
-		{
-			w5500_reini_sock(w5500_2_ptr, w5500_2_ptr->port_set[0].sock_num);
-			w5500_2_ptr->port_set[0].is_soc_active = 1;
-			__HAL_TIM_SET_COUNTER(&w5500_2_ptr->port_set[0].htim, 0);
-		}
+//		if (w5500_2_ptr->port_set[0].is_soc_active != 1) 
+//		{
+//			w5500_reini_sock(w5500_2_ptr, w5500_2_ptr->port_set[0].sock_num);
+//			w5500_2_ptr->port_set[0].is_soc_active = 1;
+//			__HAL_TIM_SET_COUNTER(&w5500_2_ptr->port_set[0].htim, 0);
+//		}
 		reply_iteration(w5500_2_ptr, w5500_2_ptr->port_set[0].sock_num);
 		
 		// серверная часть (взаимодействие с control panel)		
 		if (w5500_2_ptr->port_set[1].is_soc_active != 1) 
 		{
 			w5500_reini_sock(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
+//			listen_socket(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
+//			socket_listen_wait(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
 			w5500_2_ptr->port_set[1].is_soc_active = 1;
-			__HAL_TIM_SET_COUNTER(&w5500_2_ptr->port_set[1].htim, 0);
+			__HAL_TIM_SET_COUNTER(w5500_2_ptr->port_set[1].htim, 0);
 		}
 		reply_iteration(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
 		
@@ -894,7 +896,22 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim == &htim4)
+	{
+		w5500_2_ptr->port_set[0].is_soc_active = 0;
+	}
+	else if (htim == &htim13)
+	{
+		w5500_2_ptr->port_set[1].is_soc_active = 0;
+	}
+	else if (htim == &htim5)
+	{
+		//Каждую секунду обновление параметров модуля
+		is_time_to_update_params = 1;
+	}
+}
 /* USER CODE END 4 */
 
 /**
