@@ -14,7 +14,7 @@
 extern I2C_HandleTypeDef hi2c1;
 
 // Максимальное кол-во устр-в в сети (без сервера)
-#define MAX_NET_SIZE		2
+#define MAX_NET_SIZE		3
 
 // Карта сети устройств
 typedef struct network_map

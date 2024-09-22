@@ -95,8 +95,8 @@ uint8_t is_time_to_update_params; // Флаг того, что пора обно
 uint8_t hours_delta; // Локальный счетчик часов
 extern modbus_packet rx_packet;
 //extern modbus_packet tx_packet;
-//network_map dev_net_map = { {.dev_addr = 43}, {.dev_addr = 33} }; //Карта клиентских устройств
-network_map dev_net_map = { {.dev_addr = 43, .is_inited = 0} }; //Карта клиентских устройств
+network_map dev_net_map = { {.dev_addr = 43, .is_inited = 0}, {.dev_addr = 33, .is_inited = 0} }; //Карта клиентских устройств
+//network_map dev_net_map = { {.dev_addr = 43, .is_inited = 0} }; //Карта клиентских устройств
 /* USER CODE END 0 */
 
 /**
@@ -157,7 +157,7 @@ int main(void)
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-	eeproms_first_ini(&USED_I2C);
+//	eeproms_first_ini(&USED_I2C);
 	
 	// Инициализация микросхемы RTC (прошивается 1 раз)
 	//set_time(&USED_I2C, 00, 48, 23, 5, 17, 5, 24);
@@ -273,22 +273,29 @@ int main(void)
 			dwin_print_regs_page();
 		}
 		
-//		// серверная часть (взаимодействие с raspberry)
-//		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
-//		{
-//			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
-//			__HAL_TIM_SET_COUNTER(w5500_1_ptr->port_set[0].htim, 0);
-//			w5500_1_ptr->port_set[0].is_soc_active = 1;
-//		}
-//		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
+		// серверная часть (взаимодействие с raspberry)
+		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
+		{
+			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
+			__HAL_TIM_SET_COUNTER(w5500_1_ptr->port_set[0].htim, 0);
+			w5500_1_ptr->port_set[0].is_soc_active = 1;
+		}
+		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
 		
 		// клиентская часть (взаимодействие с другими у-вами)
 		for (uint8_t i = 0; i < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); i++)
 		{
+//			uint8_t sock_sts[MAX_NET_SIZE-2] = {0};
+//			// Сохранение статуса соединиия других устройств
+//			for (uint8_t k = 0; k < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); k++)
+//			{
+//				if (i != k) sock_sts[k] = w5500_1_ptr->port_set[k+1].is_soc_active;
+//			}
+			
+			// Если сокет неактивен, переинициализация
 			if (w5500_1_ptr->port_set[i+1].is_soc_active != 1)
 			{		
 				 w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num);
-//				w5500_ini(w5500_1_ptr);
 				__HAL_TIM_SET_COUNTER(w5500_1_ptr->port_set[i+1].htim, 0);
 				w5500_1_ptr->port_set[i+1].is_soc_active = 1;
 			}
@@ -336,6 +343,12 @@ int main(void)
 					memset(dev_net_map[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
 				}
 			}
+			
+//			// Восстановление статуса соединиия других устройств
+//			for (uint8_t k = 0; k < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); k++)
+//			{
+//				if (i != k) w5500_1_ptr->port_set[k+1].is_soc_active = sock_sts[k];
+//			}
 		}
 		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_2);
 		HAL_Delay(1000);

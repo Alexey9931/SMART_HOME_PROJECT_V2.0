@@ -122,7 +122,7 @@ int main(void)
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-	eeproms_first_ini(&USED_I2C);
+//	eeproms_first_ini(&USED_I2C);
 	
 	// Зеркализация данных из ПЗУ в ОЗУ
 	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.common.mirrored_to_rom_regs));
@@ -132,7 +132,7 @@ int main(void)
 	memcpy(w5500_1_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
 	memcpy(w5500_1_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
 	memcpy(w5500_1_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_1));
-	w5500_1_ptr->spi_n = hspi1;
+	w5500_1_ptr->spi_n = &hspi1;
 	w5500_1_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
 	w5500_1_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
 	w5500_1_ptr->port_set[0].sock_num = 0;
@@ -141,8 +141,8 @@ int main(void)
 	w5500_1_ptr->port_set[1].is_soc_active = 1;
 	w5500_1_ptr->port_set[0].is_client = 0;
 	w5500_1_ptr->port_set[1].is_client = 0;
-	w5500_1_ptr->port_set[0].htim = htim2;
-	w5500_1_ptr->port_set[1].htim = htim1;
+	w5500_1_ptr->port_set[0].htim = &htim2;
+	w5500_1_ptr->port_set[1].htim = &htim1;
 	w5500_1_ptr->cs_eth_gpio_port = GPIOA;
 	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
 	w5500_1_ptr->rst_eth_gpio_port = GPIOB;
@@ -171,22 +171,20 @@ int main(void)
 		}
 		
 		// серверная часть (взаимодействие с raspberry)
-//		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
-//		{
-//			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
-//			w5500_1_ptr->port_set[0].is_soc_active = 1;
-//			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[0].htim, 0);
-//		}
+		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
+		{
+			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
+			w5500_1_ptr->port_set[0].is_soc_active = 1;
+			__HAL_TIM_SET_COUNTER(w5500_1_ptr->port_set[0].htim, 0);
+		}
 		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
 		
 		// серверная часть (взаимодействие с control panel)		
 		if (w5500_1_ptr->port_set[1].is_soc_active != 1) 
 		{
-//			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
-//			listen_socket(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
-//			socket_listen_wait(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
+			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
 			w5500_1_ptr->port_set[1].is_soc_active = 1;
-			__HAL_TIM_SET_COUNTER(&w5500_1_ptr->port_set[1].htim, 0);
+			__HAL_TIM_SET_COUNTER(w5500_1_ptr->port_set[1].htim, 0);
 		}
 		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
 		
