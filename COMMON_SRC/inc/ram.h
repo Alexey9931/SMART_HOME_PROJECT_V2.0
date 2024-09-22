@@ -41,7 +41,7 @@ typedef struct gas_boiler_ram_struct
 // характерными для уличной метеостанции
 typedef struct strweathstat_ram_struct 
 {
-	uint8_t					reserv[12];
+	uint8_t					reserv[14];
 	float						temperature;
 	float 					humidity;
 	float						rainfall;
