@@ -283,9 +283,35 @@ void dwin_print_home_page()
 	dwin_write_variable("FAILED", revert_addr(0x1240), 6);
 	dwin_write_half_word(0x00F8, revert_addr(0x5203));
 	//картинка прогноза погоды
-	dwin_write_half_word(0x0100, revert_addr(0x5406));
-	dwin_write_half_word(0x0100, revert_addr(0x5407));
-	dwin_write_half_word(0x0100, revert_addr(0x5408));
+	dwin_write_half_word(0x0D00, revert_addr(0x5406));
+	dwin_write_half_word(0x0D00, revert_addr(0x5407));
+	dwin_write_half_word(0x0D00, revert_addr(0x5408));
+}
+
+void dwin_print_gasboiler_page()
+{
+	char tmp_str[32];
+	uint16_t tmp_var;
+
+	//текущая температура
+	if (ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature < 10.0f)
+	{
+		sprintf(tmp_str, "0%.1f", ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature);
+	}
+	else
+	{
+		sprintf(tmp_str, "%.1f", ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature);
+	}
+	dwin_write_variable(tmp_str, revert_addr(0x3040), 4);
+	
+	//уставка
+	tmp_var = revert_addr((uint16_t)(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10));
+	dwin_write_variable((char*)&tmp_var, revert_addr(0x3000), sizeof(tmp_var));
+	
+	//минимальная
+	tmp_var = revert_addr((uint16_t)((ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint - 
+			ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range)*10));
+	dwin_write_variable((char*)&tmp_var, revert_addr(0x3020), sizeof(tmp_var));
 }
 
 void dwin_print_net_page()

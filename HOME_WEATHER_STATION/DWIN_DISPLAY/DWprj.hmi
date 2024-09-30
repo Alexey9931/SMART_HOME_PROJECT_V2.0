@@ -6,7 +6,6 @@ SCREENDSIZE=800X480
 SPADDRESS=5000
 [IMG]
 0=0.jpg
-1=1.png
 2=2.jpg
 3=3.jpg
 4=4.jpg
@@ -23,3 +22,4 @@ SPADDRESS=5000
 15=15.png
 16=16.png
 17=17.png
+18=18.jpg

@@ -38,6 +38,8 @@ void dwin_write_variable(char* data, uint16_t addr, uint8_t len);
 
 void dwin_print_home_page();
 
+void dwin_print_gasboiler_page();
+
 void dwin_print_net_page();
 
 void dwin_print_regs_page();

@@ -271,6 +271,7 @@ int main(void)
 			dwin_print_home_page();
 			dwin_print_net_page();
 			dwin_print_regs_page();
+			dwin_print_gasboiler_page();
 		}
 		
 		// серверная часть (взаимодействие с raspberry)
