@@ -27,14 +27,17 @@ uint8_t reply_iteration(w5500_data* w5500_n, uint8_t sn)
 // Клиентская функция, инициирующая обмен данными
 uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t *dev_name, uint8_t dev_addr, uint8_t cmd)
 {
-	uint16_t read_size;
+	uint16_t rw_size;
+	void *val_ptr;
 	if (strstr((const char*)dev_name, GAS_BOIL_NAME) != NULL) 
 	{
-		read_size = GAS_BOILER_CONTROLLER_REGS_SIZE;
+		rw_size = GAS_BOILER_CONTROLLER_REGS_SIZE;
+		val_ptr = (void*)&ram_ptr->uniq.control_panel.gas_boiler_common;
   } 
 	else if (strstr((const char*)dev_name, STR_WEATH_NAME)!= NULL) 
 	{
-		read_size = WEATH_STATION_REGS_SIZE;
+		rw_size = WEATH_STATION_REGS_SIZE;
+		val_ptr = (void*)&ram_ptr->uniq.control_panel.str_weath_stat_common;
   }
 	
 	switch(cmd)
@@ -47,7 +50,14 @@ uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t *dev_name, ui
 				}
 				break;
 		case read_cmd:
-				if (do_read_cmd(w5500_n, dev_addr, sn, 0, read_size) != 0)
+				if (do_read_cmd(w5500_n, dev_addr, sn, 0, rw_size) != 0)
+				{
+					w5500_n->port_set[sn].is_soc_active = 0;
+					return 1;
+				}
+				break;
+		case write_cmd:
+				if (do_write_cmd(w5500_n, dev_addr, sn, 0, val_ptr, rw_size) != 0)
 				{
 					w5500_n->port_set[sn].is_soc_active = 0;
 					return 1;
@@ -100,6 +110,7 @@ uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn)
 		{
 			return 1;
 		}
+
 		// Проверка адреса назначения
 		if (rx_packet.header_fields.recv_addr != w5500_n->ipaddr[3])
 		{

@@ -9,9 +9,16 @@
 #include <stdint.h>
 
 #define DWIN_UART huart1
-#define BUF_SIZE 	400
+#define DWIN_BUF_SIZE 128
 
 #define HEADER 0xA55A
+
+// Описание ошибок DWIN
+typedef enum
+{
+	DWIN_OK,
+	DWIN_ERROR
+} dwin_status;
 
 // Поддерживаемые протоколом команды
 typedef enum
@@ -26,15 +33,19 @@ typedef enum
 // Структура, описывающая пакет данных
 typedef struct packet_data_struct
 {
-    uint16_t header;     	// Заголовок
-		uint8_t length;     	// Число байт кадра с командного байта
-    dwin_commands cmd;  	// Команда
-    uint8_t data[249];    // Данные
+    uint16_t header;							// Заголовок
+		uint8_t length;     					// Число байт кадра с командного байта
+    dwin_commands cmd;  					// Команда
+    uint8_t data[249];	// Данные
 }__attribute__((packed)) packet_struct;
 
-void dwin_write_half_word(uint16_t data, uint16_t addr);
+uint16_t revert_word(uint16_t word);
 
-void dwin_write_variable(char* data, uint16_t addr, uint8_t len);
+dwin_status dwin_write_half_word(uint16_t data, uint16_t addr);
+
+dwin_status dwin_write_variable(char* data, uint16_t addr, uint8_t len);
+
+void dwin_init();
 
 void dwin_print_home_page();
 

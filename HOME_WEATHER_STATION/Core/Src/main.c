@@ -84,6 +84,7 @@ static void MX_TIM14_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+extern uint8_t dwin_rx_buf[DWIN_BUF_SIZE]; // Буффер приемника DWIN
 extern w5500_data w5500_1; // Настройки первой микросхемы w5500
 extern w5500_data* w5500_1_ptr;
 extern w5500_data w5500_2; // Настройки второй микросхемы w5500
@@ -97,6 +98,7 @@ extern modbus_packet rx_packet;
 //extern modbus_packet tx_packet;
 network_map dev_net_map = { {.dev_addr = 43, .is_inited = 0}, {.dev_addr = 33, .is_inited = 0} }; //Карта клиентских устройств
 //network_map dev_net_map = { {.dev_addr = 43, .is_inited = 0} }; //Карта клиентских устройств
+uint8_t write_flag;
 /* USER CODE END 0 */
 
 /**
@@ -155,6 +157,9 @@ int main(void)
 
 	// Заполнение таблицы CRC32
 	fill_crc32_table();
+	
+	// Инициализация дисплея
+	dwin_init();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
 //	eeproms_first_ini(&USED_I2C);
@@ -314,6 +319,26 @@ int main(void)
 			}
 			else
 			{
+				//выполняем команду WRITE, если есть, записать
+				if (write_flag)
+				{
+					if (request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map[i].device_name, dev_net_map[i].dev_addr, write_cmd))
+					{
+						dev_net_map[i].is_inited = 0;
+						if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+						{
+							memset(&ram_ptr->uniq.control_panel.gas_boiler_common, 0, sizeof(ram_ptr->uniq.control_panel.gas_boiler_common)
+								+ sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
+						} 
+						else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+						{
+							memset(&ram_ptr->uniq.control_panel.str_weath_stat_common, 0, sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common)
+								+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
+						}
+						memset(dev_net_map[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+					}
+					write_flag = 0;
+				}	
 				//выполняем команду READ
 				if (!request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map[i].device_name, dev_net_map[i].dev_addr, read_cmd))
 				{
@@ -1046,6 +1071,81 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_4);
 	}
 }
+uint16_t dwin_buf_cnt = 1;
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if (huart == &huart1)
+	{
+		// Сейчас принимаем только пакеты с командой на чтения,
+		// нужных нам регистров
+		packet_struct rx_pack = {0};
+		uint16_t addr, reg = 0;
+		memcpy(&rx_pack, dwin_rx_buf, dwin_buf_cnt);
+		
+		if ((rx_pack.length == 0) || (dwin_buf_cnt < (rx_pack.length + 3)))
+			goto continue_exit;
+		if ((rx_pack.header != HEADER))
+			goto error_exit;
+
+		float delta_t;
+		switch((uint8_t)rx_pack.cmd)
+		{
+			case read_variable:
+				addr = revert_word(*(uint16_t*)rx_pack.data);
+				reg = revert_word(*(uint16_t*)(rx_pack.data + 3));
+				switch(addr)
+				{
+					case 0x3000:
+						if (((float)reg / 10.0) < (ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint -
+							ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range))
+						{
+							goto error_exit;
+						}
+						delta_t = ((float)reg / 10.0) -
+							ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint;
+						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint +=
+							delta_t;
+						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range +=
+							delta_t;
+						break;
+					case 0x3020:
+						if (((float)reg / 10.0) > ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint)
+						{
+							goto error_exit;
+						}
+						delta_t = ((float)reg / 10.0) -
+							fabs(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint -
+								ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range);
+//						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint +=
+//							delta_t;
+						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range -=
+							delta_t;
+						break;
+					default:
+						goto error_exit;
+				}
+				write_flag = 1;
+				break;
+			default:
+				goto error_exit;
+		}
+		
+		error_exit:
+		{
+			dwin_buf_cnt = 0;
+			HAL_UART_Receive_IT(&DWIN_UART, dwin_rx_buf + dwin_buf_cnt, 1);
+			dwin_buf_cnt++;
+			return;
+		}
+		continue_exit:
+		{
+			HAL_UART_Receive_IT(&DWIN_UART, dwin_rx_buf + dwin_buf_cnt, 1);
+			dwin_buf_cnt++;
+			return;
+		}
+	}
+}
+
 /* USER CODE END 4 */
 
 /**
