@@ -63,6 +63,13 @@ uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t *dev_name, ui
 					return 1;
 				}
 				break;
+		case config_cmd:
+				if (do_config_cmd(w5500_n, dev_addr, sn, 0, val_ptr, rw_size) != 0)
+				{
+					w5500_n->port_set[sn].is_soc_active = 0;
+					return 1;
+				}
+				break;
 		default:
 				return 1;
 	}
@@ -328,6 +335,52 @@ uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn)
 		tx_packet.header_fields.length = tx_data_size + sizeof(packet_header) - sizeof(rx_packet.header_fields.header)
 				+ sizeof(rx_packet.end_fields.crc);
 		memset((char*)&tx_packet.data, type_cmd, 1);
+		
+		memcpy(w5500_n->tx_buf + start_tx_buf_index, &tx_packet.header_fields, sizeof(packet_header));
+		memcpy(w5500_n->tx_buf + start_tx_buf_index + sizeof(packet_header), &tx_packet.data, tx_data_size);
+		
+		tx_packet.end_fields.crc = crc32(w5500_n->tx_buf + start_tx_buf_index + sizeof(tx_packet.header_fields.header), 
+		tx_packet.header_fields.length - sizeof(tx_packet.end_fields.crc));
+		tx_packet.end_fields.end = PACKET_TAIL;
+			
+		memcpy(w5500_n->tx_buf + start_tx_buf_index + sizeof(packet_header) + tx_data_size, &tx_packet.end_fields, sizeof(packet_end));
+			
+		w5500_n->tx_buf_len = sizeof(packet_header) + tx_data_size + sizeof(packet_end);
+			
+		set_write_pointer(w5500_n, sn, get_write_pointer(w5500_n, sn) + w5500_n->tx_buf_len);		
+			
+		w5500_write_sock_buf(w5500_n, sn, get_write_pointer(w5500_n, sn), w5500_n->tx_buf, 
+			start_tx_buf_index + sizeof(packet_header) + tx_data_size + sizeof(packet_end));
+				
+		recv_socket(w5500_n, sn);
+		send_socket(w5500_n, sn);
+		
+		ram_ptr->common.num_tx_pack++;
+		
+		return 0;
+	}
+	return 1;
+}
+// Функция отправки команды config
+uint8_t do_config_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size)
+{
+	uint8_t start_tx_buf_index = 3;
+	// Если статус текущего сокета "Соединено"
+	if(get_socket_status(w5500_n, sn) == SOCK_ESTABLISHED)
+	{	
+		set_write_pointer(w5500_n, sn, 0);
+		
+		tx_packet.header_fields.header = PACKET_HEADER;
+		tx_packet.header_fields.recv_addr = dev_addr;
+		tx_packet.header_fields.send_addr = w5500_n->ipaddr[3];
+		tx_packet.header_fields.cmd = config_cmd;
+		tx_data_size = value_size + sizeof(reg_addr) + sizeof(value_size);
+		tx_packet.header_fields.length = tx_data_size + sizeof(packet_header) - sizeof(rx_packet.header_fields.header)
+				+ sizeof(rx_packet.end_fields.crc);
+		
+		memcpy((char*)&tx_packet.data, &reg_addr, sizeof(reg_addr));
+		memcpy((char*)&tx_packet.data + sizeof(reg_addr), &value_size, sizeof(value_size));
+		memcpy((char*)&tx_packet.data + sizeof(reg_addr) + sizeof(value_size), value, value_size);
 		
 		memcpy(w5500_n->tx_buf + start_tx_buf_index, &tx_packet.header_fields, sizeof(packet_header));
 		memcpy(w5500_n->tx_buf + start_tx_buf_index + sizeof(packet_header), &tx_packet.data, tx_data_size);

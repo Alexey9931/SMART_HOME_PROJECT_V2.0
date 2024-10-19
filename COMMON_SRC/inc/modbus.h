@@ -72,6 +72,8 @@ uint8_t do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t 
 uint8_t do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size);
 // Функция отправки команды type
 uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn);
+// Функция отправки команды config
+uint8_t do_config_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size);
 // Функция для заполнения таблицы CRC32
 void fill_crc32_table(void);
 // Функция вычисления контрольной суммы буфера по алгоритму CRC32

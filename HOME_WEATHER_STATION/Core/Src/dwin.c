@@ -339,6 +339,18 @@ void dwin_print_gasboiler_page()
 	tmp_var = revert_word((uint16_t)((ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint - 
 			ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range)*10));
 	dwin_write_variable((char*)&tmp_var, revert_word(0x3020), sizeof(tmp_var));
+	
+	//статус газового котла
+	if (ram_ptr->uniq.control_panel.gas_boiler_uniq.rele_status == 1)
+	{
+		dwin_write_variable("ON", revert_word(0x3080), 3);
+		dwin_write_half_word(0x0004, revert_word(0x6003));
+	}
+	else
+	{
+		dwin_write_variable("OFF", revert_word(0x3080), 3);
+		dwin_write_half_word(0x00F8, revert_word(0x6003));
+	}
 }
 
 void dwin_print_net_page()
@@ -351,7 +363,7 @@ void dwin_print_net_page()
 			//статус сети газового котла			
 			if (dev_net_map[i].is_inited == 1)
 			{
-				dwin_write_variable("ENABLE", revert_word(0x1480), 6);
+				dwin_write_variable("ENABLE", revert_word(0x1480), 7);
 				dwin_write_half_word(0xB386, revert_word(0x5703));
 			}
 			else
@@ -365,7 +377,7 @@ void dwin_print_net_page()
 			//статус сети метеостанции
 			if (dev_net_map[i].is_inited == 1)
 			{
-				dwin_write_variable("ENABLE", revert_word(0x1510), 6);
+				dwin_write_variable("ENABLE", revert_word(0x1510), 7);
 				dwin_write_half_word(0xB386, revert_word(0x5803));
 			}
 			else

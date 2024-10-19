@@ -319,10 +319,26 @@ int main(void)
 			}
 			else
 			{
-				//выполняем команду WRITE, если есть, записать
+				//выполняем команду WRITE, если есть, что записать
+				//следом выполняем CONFIG для обновления ПЗУ
 				if (write_flag)
 				{
 					if (request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map[i].device_name, dev_net_map[i].dev_addr, write_cmd))
+					{
+						dev_net_map[i].is_inited = 0;
+						if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+						{
+							memset(&ram_ptr->uniq.control_panel.gas_boiler_common, 0, sizeof(ram_ptr->uniq.control_panel.gas_boiler_common)
+								+ sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
+						} 
+						else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+						{
+							memset(&ram_ptr->uniq.control_panel.str_weath_stat_common, 0, sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common)
+								+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
+						}
+						memset(dev_net_map[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+					}
+					if (request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map[i].device_name, dev_net_map[i].dev_addr, config_cmd))
 					{
 						dev_net_map[i].is_inited = 0;
 						if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
@@ -1116,8 +1132,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 						delta_t = ((float)reg / 10.0) -
 							fabs(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint -
 								ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range);
-//						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint +=
-//							delta_t;
 						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range -=
 							delta_t;
 						break;
