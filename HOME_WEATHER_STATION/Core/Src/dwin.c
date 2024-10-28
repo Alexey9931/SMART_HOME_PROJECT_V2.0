@@ -261,12 +261,12 @@ void dwin_print_home_page()
 	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature*10.0f)%10);
 	dwin_write_variable(tmp_str, revert_word(0x1170), 1);
 	
-	for (uint8_t i = 0; i < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); i++)
+	for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
 	{
-		if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+		if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL) 
 		{
 			//статус сети газового котла
-			if (dev_net_map[i].is_inited == 1)
+			if (dev_net_map.client_devs[i].is_inited == 1)
 			{
 				dwin_write_variable("LINKED", revert_word(0x1230), 6);
 				dwin_write_half_word(0xB386, revert_word(0x5103));
@@ -277,10 +277,10 @@ void dwin_print_home_page()
 				dwin_write_half_word(0x00F8, revert_word(0x5103));
 			}
 		}
-		else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+		else if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME)!= NULL) 
 		{
 			//статус сети метеостанции
-			if (dev_net_map[i].is_inited == 1)
+			if (dev_net_map.client_devs[i].is_inited == 1)
 			{
 				dwin_write_variable("LINKED", revert_word(0x1250), 6);
 				dwin_write_half_word(0xB386, revert_word(0x5303));
@@ -307,8 +307,16 @@ void dwin_print_home_page()
 		}
 	}
 	//статус сети сервера
-	dwin_write_variable("FAILED", revert_word(0x1240), 6);
-	dwin_write_half_word(0x00F8, revert_word(0x5203));
+	if (dev_net_map.is_server_connected)
+	{
+		dwin_write_variable("LINKED", revert_word(0x1240), 6);
+		dwin_write_half_word(0xB386, revert_word(0x5203));
+	}
+	else
+	{
+		dwin_write_variable("FAILED", revert_word(0x1240), 6);
+		dwin_write_half_word(0x00F8, revert_word(0x5203));
+	}
 	//картинка прогноза погоды
 	dwin_write_half_word(0x0D00, revert_word(0x5406));
 	dwin_write_half_word(0x0D00, revert_word(0x5407));
@@ -356,12 +364,12 @@ void dwin_print_gasboiler_page()
 void dwin_print_net_page()
 {
 	char tmp_str[32];
-	for (uint8_t i = 0; i < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); i++)
+	for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
 	{
-		if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+		if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL) 
 		{
 			//статус сети газового котла			
-			if (dev_net_map[i].is_inited == 1)
+			if (dev_net_map.client_devs[i].is_inited == 1)
 			{
 				dwin_write_variable("ENABLE", revert_word(0x1480), 7);
 				dwin_write_half_word(0xB386, revert_word(0x5703));
@@ -372,10 +380,10 @@ void dwin_print_net_page()
 				dwin_write_half_word(0x00F8, revert_word(0x5703));
 			}
 		} 
-		else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+		else if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME)!= NULL) 
 		{
 			//статус сети метеостанции
-			if (dev_net_map[i].is_inited == 1)
+			if (dev_net_map.client_devs[i].is_inited == 1)
 			{
 				dwin_write_variable("ENABLE", revert_word(0x1510), 7);
 				dwin_write_half_word(0xB386, revert_word(0x5803));
@@ -402,24 +410,32 @@ void dwin_print_net_page()
 		}
 	}
 	//сетевые параметры газового котла
-	sprintf(tmp_str, "192.168.1.%d", dev_net_map[0].dev_addr);
+	sprintf(tmp_str, "192.168.1.%d", dev_net_map.client_devs[0].dev_addr);
 	dwin_write_variable(tmp_str, revert_word(0x1460), 13);
 	//сетевые параметры метеостанции
-	sprintf(tmp_str, "192.168.1.%d", dev_net_map[1].dev_addr);
+	sprintf(tmp_str, "192.168.1.%d", dev_net_map.client_devs[1].dev_addr);
 	dwin_write_variable(tmp_str, revert_word(0x1490), 13);
 	//сетевые параметры панели управления
 	sprintf(tmp_str, "192.168.1.%d", ram_ptr->common.mirrored_to_rom_regs.common.ip_addr_1[3]);
 	dwin_write_variable(tmp_str, revert_word(0x1400), 13);
-	dwin_write_variable("ENABLE", revert_word(0x1420), 6);
+	dwin_write_variable("ENABLE", revert_word(0x1420), 7);
 	dwin_write_half_word(0xB386, revert_word(0x5503));
 	//сетевые параметры роутера
 	sprintf(tmp_str, "192.168.1.%d", ram_ptr->common.mirrored_to_rom_regs.common.ip_gate[3]);
 	dwin_write_variable(tmp_str, revert_word(0x1520), 13);
 	//сетевые параметры raspberry
-	sprintf(tmp_str, "192.168.1.10");
+	sprintf(tmp_str, "192.168.1.%d", dev_net_map.serv_addr);
 	dwin_write_variable(tmp_str, revert_word(0x1430), 13);
-	dwin_write_variable("DISABLE", revert_word(0x1450), 7);
-	dwin_write_half_word(0x00F8, revert_word(0x5603));
+	if (dev_net_map.is_server_connected)
+	{
+		dwin_write_variable("ENABLE", revert_word(0x1450), 7);
+		dwin_write_half_word(0xB386, revert_word(0x5603));
+	}
+	else
+	{
+		dwin_write_variable("DISABLE", revert_word(0x1450), 7);
+		dwin_write_half_word(0x00F8, revert_word(0x5603));
+	}
 }
 
 void dwin_print_regs_page()

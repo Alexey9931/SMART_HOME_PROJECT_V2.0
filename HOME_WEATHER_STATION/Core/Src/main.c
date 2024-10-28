@@ -95,9 +95,9 @@ extern ds3231_time sys_time;	// Структура системного врем
 uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
 uint8_t hours_delta; // Локальный счетчик часов
 extern modbus_packet rx_packet;
-//extern modbus_packet tx_packet;
-network_map dev_net_map = { {.dev_addr = 43, .is_inited = 0}, {.dev_addr = 33, .is_inited = 0} }; //Карта клиентских устройств
-//network_map dev_net_map = { {.dev_addr = 43, .is_inited = 0} }; //Карта клиентских устройств
+network_map dev_net_map = { .client_devs[0] = {.dev_addr = 43, .is_inited = 0}, // Карта устройств
+														.client_devs[1] = {.dev_addr = 33, .is_inited = 0},
+														.is_server_connected = 0 };
 uint8_t write_flag;
 /* USER CODE END 0 */
 
@@ -279,25 +279,26 @@ int main(void)
 			dwin_print_gasboiler_page();
 		}
 		
-		// серверная часть (взаимодействие с raspberry)
+		// серверная часть (взаимодействие с raspberry - сервером)
 		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
 		{
 			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
 			__HAL_TIM_SET_COUNTER(w5500_1_ptr->port_set[0].htim, 0);
 			w5500_1_ptr->port_set[0].is_soc_active = 1;
 		}
-		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
-		
-		// клиентская часть (взаимодействие с другими у-вами)
-		for (uint8_t i = 0; i < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); i++)
+		if (!reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num))
 		{
-//			uint8_t sock_sts[MAX_NET_SIZE-2] = {0};
-//			// Сохранение статуса соединиия других устройств
-//			for (uint8_t k = 0; k < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); k++)
-//			{
-//				if (i != k) sock_sts[k] = w5500_1_ptr->port_set[k+1].is_soc_active;
-//			}
-			
+			dev_net_map.is_server_connected = 1;
+			dev_net_map.serv_addr = rx_packet.header_fields.send_addr;
+		}
+		else
+		{
+			dev_net_map.is_server_connected = 0;
+		}
+		
+		// клиентская часть (взаимодействие с другими клиентскими у-вами)
+		for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
+		{		
 			// Если сокет неактивен, переинициализация
 			if (w5500_1_ptr->port_set[i+1].is_soc_active != 1)
 			{		
@@ -306,16 +307,16 @@ int main(void)
 				w5500_1_ptr->port_set[i+1].is_soc_active = 1;
 			}
 			
-			if (!dev_net_map[i].is_inited)
+			if (!dev_net_map.client_devs[i].is_inited)
 			{
 				//выполняем команду TYPE
-				if (!request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map[i].device_name, dev_net_map[i].dev_addr, type_cmd))
+				if (!request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map.client_devs[i].device_name, dev_net_map.client_devs[i].dev_addr, type_cmd))
 				{
-					dev_net_map[i].is_inited = 1;
-					memcpy(dev_net_map[i].device_name, rx_packet.data, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+					dev_net_map.client_devs[i].is_inited = 1;
+					memcpy(dev_net_map.client_devs[i].device_name, rx_packet.data, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
 				}
 				else
-					dev_net_map[i].is_inited = 0;
+					dev_net_map.client_devs[i].is_inited = 0;
 			}
 			else
 			{
@@ -323,47 +324,47 @@ int main(void)
 				//следом выполняем CONFIG для обновления ПЗУ
 				if (write_flag)
 				{
-					if (request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map[i].device_name, dev_net_map[i].dev_addr, write_cmd))
+					if (request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map.client_devs[i].device_name, dev_net_map.client_devs[i].dev_addr, write_cmd))
 					{
-						dev_net_map[i].is_inited = 0;
-						if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+						dev_net_map.client_devs[i].is_inited = 0;
+						if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL) 
 						{
 							memset(&ram_ptr->uniq.control_panel.gas_boiler_common, 0, sizeof(ram_ptr->uniq.control_panel.gas_boiler_common)
 								+ sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
 						} 
-						else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+						else if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME)!= NULL) 
 						{
 							memset(&ram_ptr->uniq.control_panel.str_weath_stat_common, 0, sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common)
 								+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
 						}
-						memset(dev_net_map[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+						memset(dev_net_map.client_devs[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
 					}
-					if (request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map[i].device_name, dev_net_map[i].dev_addr, config_cmd))
+					if (request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map.client_devs[i].device_name, dev_net_map.client_devs[i].dev_addr, config_cmd))
 					{
-						dev_net_map[i].is_inited = 0;
-						if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+						dev_net_map.client_devs[i].is_inited = 0;
+						if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL) 
 						{
 							memset(&ram_ptr->uniq.control_panel.gas_boiler_common, 0, sizeof(ram_ptr->uniq.control_panel.gas_boiler_common)
 								+ sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
 						} 
-						else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+						else if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME)!= NULL) 
 						{
 							memset(&ram_ptr->uniq.control_panel.str_weath_stat_common, 0, sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common)
 								+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
 						}
-						memset(dev_net_map[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+						memset(dev_net_map.client_devs[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
 					}
 					write_flag = 0;
 				}	
 				//выполняем команду READ
-				if (!request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map[i].device_name, dev_net_map[i].dev_addr, read_cmd))
+				if (!request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map.client_devs[i].device_name, dev_net_map.client_devs[i].dev_addr, read_cmd))
 				{
-					if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+					if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL) 
 					{
 						memcpy(&ram_ptr->uniq.control_panel.gas_boiler_common, rx_packet.data, 
 							sizeof(ram_ptr->uniq.control_panel.gas_boiler_common) + sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
 					} 
-					else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+					else if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME)!= NULL) 
 					{
 						memcpy(&ram_ptr->uniq.control_panel.str_weath_stat_common, rx_packet.data, 
 							sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common) + sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
@@ -371,26 +372,20 @@ int main(void)
 				}
 				else
 				{
-					dev_net_map[i].is_inited = 0;
-					if (strstr((const char*)dev_net_map[i].device_name, GAS_BOIL_NAME) != NULL) 
+					dev_net_map.client_devs[i].is_inited = 0;
+					if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL) 
 					{
 						memset(&ram_ptr->uniq.control_panel.gas_boiler_common, 0, sizeof(ram_ptr->uniq.control_panel.gas_boiler_common)
 							+ sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
 					} 
-					else if (strstr((const char*)dev_net_map[i].device_name, STR_WEATH_NAME)!= NULL) 
+					else if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME)!= NULL) 
 					{
 						memset(&ram_ptr->uniq.control_panel.str_weath_stat_common, 0, sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common)
 							+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
 					}
-					memset(dev_net_map[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+					memset(dev_net_map.client_devs[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
 				}
 			}
-			
-//			// Восстановление статуса соединиия других устройств
-//			for (uint8_t k = 0; k < (sizeof(dev_net_map)/sizeof(dev_net_map[0])); k++)
-//			{
-//				if (i != k) w5500_1_ptr->port_set[k+1].is_soc_active = sock_sts[k];
-//			}
 		}
 		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_2);
 		HAL_Delay(1000);

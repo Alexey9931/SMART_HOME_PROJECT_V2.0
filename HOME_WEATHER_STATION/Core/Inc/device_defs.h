@@ -16,13 +16,21 @@ extern I2C_HandleTypeDef hi2c1;
 // Максимальное кол-во устр-в в сети (без сервера)
 #define MAX_NET_SIZE		3
 
-// Карта сети устройств
-typedef struct network_map
+// Карта сети клиентских устройств
+typedef struct client_network_map
 {
 	uint8_t device_name[32];	//Имя устройства
 	uint8_t dev_addr;					//Адрес устройства
 	uint8_t is_inited;				//Статус инициализации
-}__attribute__((packed)) network_map[MAX_NET_SIZE-1];
+}__attribute__((packed)) client_network_map;
+
+// Карта сети всех устройств (с сервером)
+typedef struct network_map
+{
+	client_network_map client_devs[MAX_NET_SIZE-1]; //Клиентские устройства
+	uint8_t is_server_connected;										//Статус соединения с сервером
+	uint8_t serv_addr;															//Адрес сервера
+}__attribute__((packed)) network_map;
 
 // Макрос типа устройства
 #define _CONTR_PANEL_
