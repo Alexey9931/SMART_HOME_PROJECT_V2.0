@@ -57,12 +57,16 @@ dwin_status dwin_write_variable(char* data, uint16_t addr, uint8_t len)
 	else
 		return DWIN_OK;
 }
-
+void dwin_switch_page(uint8_t id)
+{
+	char data[4] = {0x5A, 0x01, 0x00, id};
+	dwin_write_variable(data, revert_word(0x0084), sizeof(data)/sizeof(data[0]));
+}
 void dwin_init()
 {
 	HAL_UART_Receive_IT(&DWIN_UART, dwin_rx_buf, 1);
+	dwin_switch_page(1);
 }
-
 void dwin_print_home_page()
 {
 	char tmp_str[16];

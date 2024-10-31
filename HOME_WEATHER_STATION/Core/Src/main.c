@@ -158,9 +158,6 @@ int main(void)
 	// Заполнение таблицы CRC32
 	fill_crc32_table();
 	
-	// Инициализация дисплея
-	dwin_init();
-	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
 //	eeproms_first_ini(&USED_I2C);
 	
@@ -242,6 +239,8 @@ int main(void)
 	dht22_init(GPIOD, GPIO_PIN_15);
 	ds18b20_init(GPIOD, GPIO_PIN_14, SKIP_ROM);
 	
+	// Инициализация дисплея
+	dwin_init();
 	dwin_print_home_page();
   /* USER CODE END 2 */
 
