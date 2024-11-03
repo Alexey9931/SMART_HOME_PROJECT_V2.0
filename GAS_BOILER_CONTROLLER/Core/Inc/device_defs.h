@@ -23,6 +23,6 @@ extern I2C_HandleTypeDef hi2c1;
 // Минимально возможная уставка температуры
 #define MIN_TEMP_SET 0.0f
 // Шаг декремента/инкремента уставки температуры
-#define TEMP_SET_INC 0.5f
+#define TEMP_SET_INC 0.1f
 
 #endif /* DEVICE_DEFS_H_ */

@@ -88,6 +88,8 @@ extern uint8_t is_time_to_update_params; // Флаг того, что пора �
 extern uint8_t is_time_to_update_rom;	// Флаг того, что пора обновлять ПЗУ
 extern uint8_t is_time_to_update_lcd; // Флаг того, что пора обновлять дисплей
 uint8_t hours_delta; // Локальный счетчик часов
+uint8_t is_lcd_on = 1; // Флаг для мигания уставки на дисплее
+extern uint8_t button_is_locked; // Флаг состояния кнопки "ОК"
 /* USER CODE END 0 */
 
 /**
@@ -143,6 +145,9 @@ int main(void)
 
 	// Заполнение таблицы CRC32
 	fill_crc32_table();
+	
+	// Инициализация дисплея
+	max7219_init();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
 //	eeproms_first_ini(&USED_I2C);
@@ -204,8 +209,6 @@ int main(void)
 	w5500_hardware_rst(w5500_2_ptr);
 	w5500_ini(w5500_2_ptr);
 	
-	// Инициализация дисплея
-	max7219_init();
 	// Инициализация датчиков
 	dht22_init(GPIOD, GPIO_PIN_15);
 	ds18b20_init(GPIOD, GPIO_PIN_14, SKIP_ROM);
@@ -248,7 +251,16 @@ int main(void)
 		if (is_time_to_update_lcd)
 		{
 			//обновление показаний на дисплее
-			print_temp_max7219(ram_ptr->uniq.gas_boiler.temperature*10, ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10);
+			if (button_is_locked)
+			{
+				print_temp_max7219(ram_ptr->uniq.gas_boiler.temperature*10,
+					ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10, 1);
+			}
+			else
+			{
+				print_temp_max7219(ram_ptr->uniq.gas_boiler.temperature*10,
+				ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10, is_lcd_on);
+			}
 			is_time_to_update_lcd = 0;
 		}
 		//если пришло время обновить ПЗУ
@@ -908,6 +920,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		//Каждую секунду обновление параметров модуля
 		is_time_to_update_params = 1;
+	}
+	else if (htim == &htim6)
+	{
+		//Каждые 100 мс мигание уставки на дисплее
+		if (is_lcd_on) is_lcd_on = 0;
+		else is_lcd_on = 1;
+		is_time_to_update_lcd = 1;
 	}
 }
 /* USER CODE END 4 */

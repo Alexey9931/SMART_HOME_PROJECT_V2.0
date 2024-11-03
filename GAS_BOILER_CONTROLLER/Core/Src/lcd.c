@@ -21,6 +21,7 @@ void max7219_init()
 	HAL_Delay(10);
 	send_max7219(0x0C, 1); //включим индикатор
 	HAL_Delay(10);
+	print_temp_max7219(0, 0, 1);
 }
 
 void max7219_clear()
@@ -37,7 +38,7 @@ void max7219_clear()
 }
 
 void number_max7219(volatile long n)
-{
+                                                                                                                 {
 	char ng = 0; //переменная для минуса
 	if (n < 0)
 	{
@@ -60,13 +61,15 @@ void number_max7219(volatile long n)
 	}
 }
 
-uint8_t print_temp_max7219(int current_temp, int setpoint_temp)
+uint8_t print_temp_max7219(int current_temp, int setpoint_temp, uint8_t is_lcd_on)
 {
-	if ((current_temp > 999) || (setpoint_temp > 999)) return 1;
-	uint8_t start_pos;
+	if ((current_temp > 999) || (setpoint_temp > 999) || (current_temp < 0) || (setpoint_temp < 0))
+	{
+		return 1;
+	}
+		uint8_t start_pos;
 	start_pos = 2;
 
-	max7219_clear();
 	send_max7219(0x09, 0xEE); //включим режим декодирования для всех разрядов кроме позиций 2 и 6
 	//_delay_ms(10);
 	send_max7219(1, 0x4E);//вывод букв С
@@ -93,26 +96,44 @@ uint8_t print_temp_max7219(int current_temp, int setpoint_temp)
 		}
 	}
 	start_pos = 6;
-	if (setpoint_temp == 0)
+	if (is_lcd_on)
 	{
-		send_max7219(start_pos, 0);
-		send_max7219(start_pos+1, 0x80);
+		if (setpoint_temp == 0)
+		{
+			send_max7219(start_pos, 0);
+			send_max7219(start_pos+1, 0x80);
+		}
+		else
+		{
+			if ((setpoint_temp < 100) && (setpoint_temp <= 10))
+			{
+				send_max7219(start_pos+2, 0xF);
+			}
+			else if (setpoint_temp < 10)
+			{
+				send_max7219(start_pos+1, 0x80);
+				send_max7219(start_pos+2, 0xF);
+			}
+			while (setpoint_temp != 0)
+			{
+				if((start_pos == 3)||(start_pos == 7))
+				{
+					send_max7219(start_pos, (setpoint_temp%10)|0x80);//вывод с точкой
+				}
+				else
+				{
+					send_max7219(start_pos, setpoint_temp%10);
+				}
+				start_pos++;
+				setpoint_temp /= 10;
+			}
+		}
 	}
 	else
 	{
-		while (setpoint_temp != 0)
-		{
-			if((start_pos == 3)||(start_pos == 7))
-			{
-				send_max7219(start_pos, (setpoint_temp%10)|0x80);//вывод с точкой
-			}
-			else
-			{
-				send_max7219(start_pos, setpoint_temp%10);
-			}
-			start_pos++;
-			setpoint_temp /= 10;
-		}
+		send_max7219(start_pos++, 0xF);
+		send_max7219(start_pos++, 0xF);
+		send_max7219(start_pos, 0xF);
 	}
 	return 0;
 }

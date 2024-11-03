@@ -5,9 +5,9 @@ uint8_t ds18b20_reset(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin
   uint16_t status;
 	
 	set_pin_output(ds18b20_gpio_port, ds18b20_gpio_pin);
-	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 0);
+	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, GPIO_PIN_RESET);
   delay_us(485);//задержка как минимум на 480 микросекунд
-	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 1);
+	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, GPIO_PIN_SET);
   delay_us(65);//задержка как минимум на 60 микросекунд
 	set_pin_input(ds18b20_gpio_port, ds18b20_gpio_pin);
 	status = HAL_GPIO_ReadPin(ds18b20_gpio_port, ds18b20_gpio_pin);
@@ -21,9 +21,9 @@ uint8_t ds18b20_read_bit(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_
   uint8_t bit = 0;
 	
 	set_pin_output(ds18b20_gpio_port, ds18b20_gpio_pin);
-	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 0);
+	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, GPIO_PIN_RESET);
   delay_us(2);
-	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 1);
+	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, GPIO_PIN_SET);
 	delay_us(13);
 	set_pin_input(ds18b20_gpio_port, ds18b20_gpio_pin);
 	bit = (HAL_GPIO_ReadPin(ds18b20_gpio_port, ds18b20_gpio_pin) ? 1 : 0);//проверяем уровень	
@@ -47,9 +47,9 @@ uint8_t ds18b20_read_byte(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio
 void ds18b20_write_bit(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin, uint8_t bit)
 {
 	set_pin_output(ds18b20_gpio_port, ds18b20_gpio_pin);
-	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 0);
+	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, GPIO_PIN_RESET);
   delay_us(bit ? 3 : 65);
-	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, 1);
+	HAL_GPIO_WritePin(ds18b20_gpio_port, ds18b20_gpio_pin, GPIO_PIN_SET);
   delay_us(bit ? 65 : 3);
 }
 
