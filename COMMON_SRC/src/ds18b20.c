@@ -139,6 +139,7 @@ float ds18b20_get_temp(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pi
 	float temp;
 	
 	ds18b20_measure_temp_cmd(ds18b20_gpio_port, ds18b20_gpio_pin, SKIP_ROM, 0);
+	HAL_Delay(750);
 	ds18b20_read_strat_cpad(ds18b20_gpio_port, ds18b20_gpio_pin, SKIP_ROM, dt, 0);
 	raw_temper = ((uint16_t)dt[1]<<8)|dt[0];
 	temp = ds18b20_convert(ds18b20_gpio_port, ds18b20_gpio_pin, raw_temper);

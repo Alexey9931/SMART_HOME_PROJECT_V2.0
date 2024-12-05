@@ -15,9 +15,11 @@ uint8_t dht22_get_data(GPIO_TypeDef* dht22_gpio_port, uint16_t dht22_gpio_pin, u
 	set_pin_output(dht22_gpio_port, dht22_gpio_pin);
 	//reset port
 	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, GPIO_PIN_RESET);
-	HAL_Delay(2);
 	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, GPIO_PIN_SET);
-	delay_us(20);
+	HAL_Delay(100);
+	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, GPIO_PIN_RESET);
+	HAL_Delay(18);
+	HAL_GPIO_WritePin(dht22_gpio_port, dht22_gpio_pin, GPIO_PIN_SET);
 	set_pin_input(dht22_gpio_port, dht22_gpio_pin);
 	//дождемся ответа датчика
 	delay_us(60);//20-40 мкс

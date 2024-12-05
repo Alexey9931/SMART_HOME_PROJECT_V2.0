@@ -908,6 +908,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+	static int htim5_cnt = 0;
 	if (htim == &htim4)
 	{
 		w5500_2_ptr->port_set[0].is_soc_active = 0;
@@ -918,8 +919,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 	else if (htim == &htim5)
 	{
-		//Каждую секунду обновление параметров модуля
-		is_time_to_update_params = 1;
+		//Каждые 30сек обновление параметров модуля
+		if ((htim5_cnt%30) == 0)
+		{
+			is_time_to_update_params = 1;
+			htim5_cnt = 1;
+		}
+		else
+		{
+			htim5_cnt++;
+		}
 	}
 	else if (htim == &htim6)
 	{
