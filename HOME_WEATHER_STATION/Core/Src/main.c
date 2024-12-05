@@ -159,10 +159,15 @@ int main(void)
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-//	eeproms_first_ini(&USED_I2C);
+#ifdef EEPROM_DEFAULT_INIT
+	eeproms_first_ini(&USED_I2C);
+#endif
 	
 	// Инициализация микросхемы RTC (прошивается 1 раз)
+#ifdef RTC_DEFAULT_INIT
 	//set_time(&USED_I2C, 00, 48, 23, 5, 17, 5, 24);
+#endif
+
 	get_time(&USED_I2C);
 	memcpy(&ram_ptr->uniq.control_panel.sys_time, &sys_time, sizeof(sys_time));
 	memcpy(&ram_ptr->uniq.control_panel.start_time, &sys_time, sizeof(sys_time));
@@ -172,6 +177,7 @@ int main(void)
 	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.common.mirrored_to_rom_regs));
 
 	// Инициализация контроллера Ethernet1 настройками из ПЗУ
+#ifdef ETHERNET_PORT1
 	memcpy(w5500_1_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_1, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_1));
 	memcpy(w5500_1_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
 	memcpy(w5500_1_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
@@ -206,34 +212,36 @@ int main(void)
 	w5500_1_ptr->rst_eth_pin = GPIO_PIN_4;
 	w5500_hardware_rst(w5500_1_ptr);
 	w5500_ini(w5500_1_ptr);
-	
-//	// Инициализация контроллера Ethernet2 настройками из ПЗУ
-//	memcpy(w5500_2_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_2));
-//	memcpy(w5500_2_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
-//	memcpy(w5500_2_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
-//	memcpy(w5500_2_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_2));
-//	w5500_2_ptr->spi_n = hspi2;
-//	w5500_2_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
-//	w5500_2_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
-//	w5500_2_ptr->port_set[0].sock_num = 0;
-//	w5500_2_ptr->port_set[1].sock_num = 1;
-//	w5500_2_ptr->port_set[0].is_soc_active = 1;
-//	w5500_2_ptr->port_set[1].is_soc_active = 1;
-//	w5500_2_ptr->port_set[0].is_client = 0;
-//	w5500_2_ptr->port_set[1].is_client = 1;
-//	w5500_2_ptr->port_set[0].htim = htim4;
-//	w5500_2_ptr->port_set[1].htim = htim13;
-//	w5500_2_ptr->port_set[1].target_ip_addr[0] = 192;
-//	w5500_2_ptr->port_set[1].target_ip_addr[1] = 168;
-//	w5500_2_ptr->port_set[1].target_ip_addr[2] = 1;
-//	w5500_2_ptr->port_set[1].target_ip_addr[3] = 43;
-//	w5500_2_ptr->cs_eth_gpio_port = GPIOB;
-//	w5500_2_ptr->cs_eth_pin = GPIO_PIN_12;
-//	w5500_2_ptr->rst_eth_gpio_port = GPIOB;
-//	w5500_2_ptr->rst_eth_pin = GPIO_PIN_13;
-//	w5500_hardware_rst(w5500_2_ptr);
-//	w5500_ini(w5500_2_ptr);
-	
+#endif
+	// Инициализация контроллера Ethernet2 настройками из ПЗУ
+#ifdef ETHERNET_PORT2
+	memcpy(w5500_2_ptr->ipaddr, &ram_data.common.mirrored_to_rom_regs.common.ip_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_addr_2));
+	memcpy(w5500_2_ptr->ipgate, &ram_data.common.mirrored_to_rom_regs.common.ip_gate, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_gate));
+	memcpy(w5500_2_ptr->ipmask, &ram_data.common.mirrored_to_rom_regs.common.ip_mask, sizeof(ram_data.common.mirrored_to_rom_regs.common.ip_mask));
+	memcpy(w5500_2_ptr->macaddr, &ram_data.common.mirrored_to_rom_regs.common.mac_addr_2, sizeof(ram_data.common.mirrored_to_rom_regs.common.mac_addr_2));
+	w5500_2_ptr->spi_n = hspi2;
+	w5500_2_ptr->port_set[0].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[0];
+	w5500_2_ptr->port_set[1].local_port = ram_data.common.mirrored_to_rom_regs.common.local_port[1];
+	w5500_2_ptr->port_set[0].sock_num = 0;
+	w5500_2_ptr->port_set[1].sock_num = 1;
+	w5500_2_ptr->port_set[0].is_soc_active = 1;
+	w5500_2_ptr->port_set[1].is_soc_active = 1;
+	w5500_2_ptr->port_set[0].is_client = 0;
+	w5500_2_ptr->port_set[1].is_client = 1;
+	w5500_2_ptr->port_set[0].htim = htim4;
+	w5500_2_ptr->port_set[1].htim = htim13;
+	w5500_2_ptr->port_set[1].target_ip_addr[0] = 192;
+	w5500_2_ptr->port_set[1].target_ip_addr[1] = 168;
+	w5500_2_ptr->port_set[1].target_ip_addr[2] = 1;
+	w5500_2_ptr->port_set[1].target_ip_addr[3] = 43;
+	w5500_2_ptr->cs_eth_gpio_port = GPIOB;
+	w5500_2_ptr->cs_eth_pin = GPIO_PIN_12;
+	w5500_2_ptr->rst_eth_gpio_port = GPIOB;
+	w5500_2_ptr->rst_eth_pin = GPIO_PIN_13;
+	w5500_hardware_rst(w5500_2_ptr);
+	w5500_ini(w5500_2_ptr);
+#endif
+
 	// Инициализация датчиков
 	bmp180_init(&USED_I2C);
 	dht22_init(GPIOD, GPIO_PIN_15);
@@ -263,13 +271,22 @@ int main(void)
 				ram_ptr->common.work_time++;
 			}
 			//обновление показаний датчиков
-//			ram_ptr->uniq.control_panel.pressure = bmp180_get_press(&USED_I2C, 3);
-//			uint8_t data[5];
-//			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
-//			{
-//				ram_ptr->uniq.control_panel.humidity = (float)(*(int16_t*)(data+3)) / 10;
-//			}
-//			ram_ptr->uniq.control_panel.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
+			ram_ptr->uniq.control_panel.pressure = bmp180_get_press(&USED_I2C, 3);
+			uint8_t data[5];
+			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
+			{
+				ram_ptr->uniq.control_panel.humidity = (float)(*(int16_t*)(data+3)) / 10;
+#ifdef DHT22_DEFAULT_SENS
+				ram_ptr->uniq.control_panel.temperature = (float)((*(uint16_t*)(data+1))&0x3FFF) / 10;
+				if((*(uint16_t*)(data+1)) & 0x8000)
+				{
+					ram_ptr->uniq.control_panel.temperature *= -1.0f;
+				}
+#endif
+			}
+#ifndef DHT22_DEFAULT_SENS
+			ram_ptr->uniq.control_panel.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
+#endif
 			is_time_to_update_params = 0;
 			//обновление дисплея
 			dwin_print_home_page();

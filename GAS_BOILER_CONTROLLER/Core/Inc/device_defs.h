@@ -16,6 +16,19 @@ extern I2C_HandleTypeDef hi2c1;
 // Макрос типа устройства
 #define _GAS_BOILER_CONTR_
 
+// Стандартная инициализация EEPROM (делается 1 раз)
+//#define EEPROM_DEFAULT_INIT
+
+// Стандартная инициализация RTC (делается 1 раз)
+//#define RTC_DEFAULT_INIT
+
+// Выбор используемого порта ETHERNET
+//#define ETHERNET_PORT1
+#define ETHERNET_PORT2
+
+// Выбор используемого датчика температуры
+#define DHT22_DEFAULT_SENS
+
 // Используемый I2C
 #define USED_I2C hi2c1
 // Максимально возможная уставка температуры

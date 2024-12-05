@@ -122,7 +122,9 @@ int main(void)
 	fill_crc32_table();
 	
 	// Инициализация пространства памяти ПЗУ (прошиваются ПЗУ 1 раз)
-//	eeproms_first_ini(&USED_I2C);
+#ifdef EEPROM_DEFAULT_INIT
+	eeproms_first_ini(&USED_I2C);
+#endif
 	
 	// Зеркализация данных из ПЗУ в ОЗУ
 	eeprom_read(&USED_I2C, 0, (uint8_t*)ram_ptr, sizeof(ram_data.common.mirrored_to_rom_regs));

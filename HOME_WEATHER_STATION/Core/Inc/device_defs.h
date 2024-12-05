@@ -13,8 +13,27 @@
 
 extern I2C_HandleTypeDef hi2c1;
 
+// Макрос типа устройства
+#define _CONTR_PANEL_
+
+// Стандартная инициализация EEPROM (делается 1 раз)
+//#define EEPROM_DEFAULT_INIT
+
+// Стандартная инициализация RTC (делается 1 раз)
+//#define RTC_DEFAULT_INIT
+
+// Выбор используемого порта ETHERNET
+#define ETHERNET_PORT1
+//#define ETHERNET_PORT2
+
+// Выбор используемого датчика температуры
+#define DHT22_DEFAULT_SENS
+
 // Максимальное кол-во устр-в в сети (без сервера)
 #define MAX_NET_SIZE		3
+
+// Используемый I2C
+#define USED_I2C hi2c1
 
 // Карта сети клиентских устройств
 typedef struct client_network_map
@@ -31,11 +50,5 @@ typedef struct network_map
 	uint8_t is_server_connected;										//Статус соединения с сервером
 	uint8_t serv_addr;															//Адрес сервера
 }__attribute__((packed)) network_map;
-
-// Макрос типа устройства
-#define _CONTR_PANEL_
-
-// Используемый I2C
-#define USED_I2C hi2c1
 
 #endif /* DEVICE_DEFS_H_ */

@@ -16,6 +16,9 @@ extern I2C_HandleTypeDef hi2c1;
 // Макрос типа устройства
 #define _STREET_WEATH_ST_
 
+// Стандартная инициализация EEPROM (делается 1 раз)
+//#define EEPROM_DEFAULT_INIT
+
 // Используемый I2C
 #define USED_I2C hi2c1
 
