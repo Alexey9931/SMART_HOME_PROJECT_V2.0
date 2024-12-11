@@ -579,6 +579,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\COMMON_SRC\src\ram.c</FilePath>
             </File>
+            <File>
+              <FileName>htu21d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\COMMON_SRC\src\htu21d.c</FilePath>
+            </File>
+            <File>
+              <FileName>htu21d.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\COMMON_SRC\inc\htu21d.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

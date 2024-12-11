@@ -168,7 +168,8 @@ int main(void)
 		if (is_time_to_update_params == 1)
 		{
 			//обновление показаний датчиков
-			ram_ptr->uniq.str_weath_stat.temperature = ds18b20_get_temp(GPIOA, GPIO_PIN_3);
+			ram_data.uniq.str_weath_stat.temperature = ds18b20_get_temp(GPIOA, GPIO_PIN_3);
+			ram_data.uniq.str_weath_stat.humidity = HTU21D_get_humidity(&hi2c1);
 			is_time_to_update_params = 0;
 		}
 		

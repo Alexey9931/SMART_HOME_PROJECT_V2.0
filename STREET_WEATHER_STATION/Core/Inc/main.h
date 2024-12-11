@@ -35,6 +35,7 @@ extern "C" {
 #include "eeprom.h"
 #include "ram.h"
 #include "ds18b20.h"
+#include "htu21d.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
