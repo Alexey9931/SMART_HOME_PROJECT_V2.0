@@ -88,6 +88,7 @@ void Error_Handler(void);
 #define gerkon_8_GPIO_Port GPIOA
 #define hall_Pin GPIO_PIN_15
 #define hall_GPIO_Port GPIOA
+#define hall_EXTI_IRQn EXTI15_10_IRQn
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
