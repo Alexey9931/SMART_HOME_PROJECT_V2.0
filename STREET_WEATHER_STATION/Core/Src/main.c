@@ -170,6 +170,7 @@ int main(void)
 			//обновление показаний датчиков
 			ram_data.uniq.str_weath_stat.temperature = ds18b20_get_temp(GPIOA, GPIO_PIN_3);
 			ram_data.uniq.str_weath_stat.humidity = HTU21D_get_humidity(&hi2c1);
+			get_wind_direct(&ram_data.uniq.str_weath_stat.wind_direct);
 			is_time_to_update_params = 0;
 		}
 		

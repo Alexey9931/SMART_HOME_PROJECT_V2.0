@@ -434,6 +434,16 @@
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f1xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>gerkons.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\gerkons.c</FilePath>
+            </File>
+            <File>
+              <FileName>gerkons.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\gerkons.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
