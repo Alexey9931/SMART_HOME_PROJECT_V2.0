@@ -37,6 +37,7 @@ extern "C" {
 #include "ds18b20.h"
 #include "htu21d.h"
 #include "gerkons.h"
+#include "fc37.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
