@@ -212,7 +212,6 @@ void TIM1_UP_IRQHandler(void)
   /* USER CODE END TIM1_UP_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_UP_IRQn 1 */
-//	w5500_1_ptr->port_set[1].is_soc_active = 0;
   /* USER CODE END TIM1_UP_IRQn 1 */
 }
 
@@ -226,7 +225,6 @@ void TIM2_IRQHandler(void)
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
-//	w5500_1_ptr->port_set[0].is_soc_active = 0;
   /* USER CODE END TIM2_IRQn 1 */
 }
 
@@ -240,24 +238,7 @@ void TIM4_IRQHandler(void)
   /* USER CODE END TIM4_IRQn 0 */
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */
-	//Каждую секунду обновление параметров модуля
-//	is_time_to_update_params = 1;
-//	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
   /* USER CODE END TIM4_IRQn 1 */
-}
-
-/**
-  * @brief This function handles EXTI line[15:10] interrupts.
-  */
-void EXTI15_10_IRQHandler(void)
-{
-  /* USER CODE BEGIN EXTI15_10_IRQn 0 */
-
-  /* USER CODE END EXTI15_10_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(hall_Pin);
-  /* USER CODE BEGIN EXTI15_10_IRQn 1 */
-
-  /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

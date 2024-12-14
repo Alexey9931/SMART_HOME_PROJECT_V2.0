@@ -71,7 +71,7 @@ extern w5500_data w5500_1; // Настройки первой микросхем
 extern w5500_data* w5500_1_ptr;
 extern ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
 extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
-uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
+uint8_t is_tim2_irq; // Флаг, указывающий на наличие события TIM2_IRQ
 uint8_t hours_delta; // Локальный счетчик часов
 /* USER CODE END 0 */
 
@@ -117,6 +117,7 @@ int main(void)
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_TIM_Base_Start_IT(&htim4);
 	HAL_TIM_Base_Start(&htim3);
+	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
 
 	// Заполнение таблицы CRC32
 	fill_crc32_table();
@@ -143,7 +144,7 @@ int main(void)
 	w5500_1_ptr->port_set[1].is_soc_active = 1;
 	w5500_1_ptr->port_set[0].is_client = 0;
 	w5500_1_ptr->port_set[1].is_client = 0;
-	w5500_1_ptr->port_set[0].htim = &htim2;
+	w5500_1_ptr->port_set[0].htim = &htim4;
 	w5500_1_ptr->port_set[1].htim = &htim1;
 	w5500_1_ptr->cs_eth_gpio_port = GPIOA;
 	w5500_1_ptr->cs_eth_pin = GPIO_PIN_4;
@@ -164,16 +165,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		//если пришло время обновить параметры модуля
-		if (is_time_to_update_params == 1)
-		{
-			//обновление показаний датчиков
-			ram_data.uniq.str_weath_stat.temperature = ds18b20_get_temp(GPIOA, GPIO_PIN_3);
-			ram_data.uniq.str_weath_stat.humidity = HTU21D_get_humidity(&hi2c1);
-			get_wind_direct(&ram_data.uniq.str_weath_stat.wind_direct);
-			is_time_to_update_params = 0;
-		}
-		
+		//обновление показаний датчиков
+		ram_data.uniq.str_weath_stat.temperature = ds18b20_get_temp(GPIOA, GPIO_PIN_3);
+		ram_data.uniq.str_weath_stat.humidity = HTU21D_get_humidity(&hi2c1);
+		get_wind_direct(&ram_data.uniq.str_weath_stat.wind_direct);
+
 		// серверная часть (взаимодействие с raspberry)
 		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
 		{
@@ -367,6 +363,7 @@ static void MX_TIM2_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_IC_InitTypeDef sConfigIC = {0};
 
   /* USER CODE BEGIN TIM2_Init 1 */
 
@@ -386,9 +383,21 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  if (HAL_TIM_IC_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;
+  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+  sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+  sConfigIC.ICFilter = 0;
+  if (HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -464,7 +473,7 @@ static void MX_TIM4_Init(void)
   htim4.Instance = TIM4;
   htim4.Init.Prescaler = 7199;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 9999;
+  htim4.Init.Period = 29999;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
@@ -476,7 +485,7 @@ static void MX_TIM4_Init(void)
   {
     Error_Handler();
   }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
   {
@@ -545,16 +554,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : hall_Pin */
-  GPIO_InitStruct.Pin = hall_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(hall_GPIO_Port, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-
 }
 
 /* USER CODE BEGIN 4 */
@@ -564,23 +563,38 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		w5500_1_ptr->port_set[1].is_soc_active = 0;
 	}
-	else if (htim == &htim2)
+	else if (htim == &htim4)
 	{
 		w5500_1_ptr->port_set[0].is_soc_active = 0;
 	}
-	else if (htim == &htim4)
+	else if (htim == &htim2)
 	{
-		//Каждую секунду обновление параметров модуля
-		is_time_to_update_params = 1;
+		is_tim2_irq = 1;
+		ram_data.uniq.str_weath_stat.wind_speed = 0.0f;
 	}
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-	if (GPIO_Pin == GPIO_PIN_15)
-	{
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
-	}
+	if (htim->Instance == TIM2)
+  {
+		if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
+    {
+			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+			TIM2->CNT = 0;
+			uint16_t period = HAL_TIM_ReadCapturedValue(&htim2, TIM_CHANNEL_1);
+			if ((!is_tim2_irq) && (period))
+			{
+				float delta_t = (float)(htim->Init.Prescaler * period / 72000000.0f);
+				ram_data.uniq.str_weath_stat.wind_speed = 1 / delta_t;
+			}
+			else
+			{
+				ram_data.uniq.str_weath_stat.wind_speed = 0.0f;
+			}
+			is_tim2_irq = 0;
+    }
+  }
 }
 /* USER CODE END 4 */
 
