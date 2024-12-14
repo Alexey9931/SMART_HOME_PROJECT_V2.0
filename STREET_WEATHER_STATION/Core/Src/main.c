@@ -583,7 +583,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
 			TIM2->CNT = 0;
 			uint16_t period = HAL_TIM_ReadCapturedValue(&htim2, TIM_CHANNEL_1);
-			if ((!is_tim2_irq) && (period))
+			if ((!is_tim2_irq) && (period > 1))
 			{
 				float delta_t = (float)(htim->Init.Prescaler * period / 72000000.0f);
 				ram_data.uniq.str_weath_stat.wind_speed = 1 / delta_t;
