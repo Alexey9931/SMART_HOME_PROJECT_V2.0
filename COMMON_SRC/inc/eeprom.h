@@ -27,6 +27,8 @@ typedef struct common_eeprom_struct
 	uint8_t 	mac_addr_1[6];		//MAC адрес 1-го порта
 	uint8_t 	mac_addr_2[6];		//MAC адрес 2-го порта
 	uint32_t 	local_port[2];		//Порты соединения (сокета)
+	float			temp_correction;	//Калибровочная поправка для температуры
+	float			hum_correction;		//Калибровочная поправка для влажности
 }__attribute__((packed)) common_eeprom;
 
 // Структура с данными для хранения в ПЗУ, 

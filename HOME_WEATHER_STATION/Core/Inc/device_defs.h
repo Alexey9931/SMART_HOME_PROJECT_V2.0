@@ -27,7 +27,7 @@ extern I2C_HandleTypeDef hi2c1;
 //#define ETHERNET_PORT2
 
 // Выбор используемого датчика температуры
-#define DHT22_DEFAULT_SENS
+//#define DHT22_DEFAULT_SENS
 
 // Максимальное кол-во устр-в в сети (без сервера)
 #define MAX_NET_SIZE		3

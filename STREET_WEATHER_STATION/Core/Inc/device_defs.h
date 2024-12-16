@@ -19,6 +19,9 @@ extern I2C_HandleTypeDef hi2c1;
 // Стандартная инициализация EEPROM (делается 1 раз)
 //#define EEPROM_DEFAULT_INIT
 
+// Выбор используемого датчика температуры
+//#define HTU21D_DEFAULT_SENS
+
 // Используемый I2C
 #define USED_I2C hi2c1
 

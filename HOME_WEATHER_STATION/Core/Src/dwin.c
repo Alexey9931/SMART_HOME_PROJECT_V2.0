@@ -514,13 +514,17 @@ void dwin_print_regs_page()
 	strcpy(tmp_str, "StartTime:\r\n"
 									"Time:\r\n"
 									"Temperature:\r\n"
+									"Temp correction:\r\n"
 									"Humidity:\r\n"
+									"Hum correction:\r\n"
 									"Pressure:");
 	dwin_write_variable(tmp_str, revert_word(0x1700), sizeof(tmp_str));
 	
 	memset(tmp_str, 0, sizeof(tmp_str));
 	sprintf(tmp_str,  "%.2d:%.2d:%.2d %.2d/%.2d/20%.2d\r\n"
 										"%.2d:%.2d:%.2d %.2d/%.2d/20%.2d\r\n"
+										"%.2f\r\n"
+										"%.2f\r\n"
 										"%.2f\r\n"
 										"%.2f\r\n"
 										"%.2f",
@@ -537,7 +541,9 @@ void dwin_print_regs_page()
 	ram_ptr->uniq.control_panel.sys_time.month,
 	ram_ptr->uniq.control_panel.sys_time.year,
 	ram_ptr->uniq.control_panel.temperature,
+	ram_ptr->common.mirrored_to_rom_regs.common.temp_correction,
 	ram_ptr->uniq.control_panel.humidity,
+	ram_ptr->common.mirrored_to_rom_regs.common.hum_correction,
 	ram_ptr->uniq.control_panel.pressure);
 	dwin_write_variable(tmp_str, revert_word(0x1780), sizeof(tmp_str));
 	
@@ -608,7 +614,9 @@ void dwin_print_regs_page()
 	
 	memset(tmp_str, 0, sizeof(tmp_str));
 	strcpy(tmp_str, "Temperature:\r\n"
+									"Temp correction:\r\n"
 									"Humidity:\r\n"
+									"Hum correction:\r\n"
 									"Rainfall:\r\n"
 									"WindSpeed:\r\n"
 									"WindDirection:");
@@ -619,9 +627,13 @@ void dwin_print_regs_page()
 										"%.2f\r\n"
 										"%.2f\r\n"
 										"%.2f\r\n"
+										"%.2f\r\n"
+										"%.2f\r\n"
 										"%d",
 	ram_ptr->uniq.control_panel.str_weath_stat_data.temperature,
+	ram_ptr->common.mirrored_to_rom_regs.common.temp_correction,
 	ram_ptr->uniq.control_panel.str_weath_stat_data.humidity,
+	ram_ptr->common.mirrored_to_rom_regs.common.hum_correction,
 	ram_ptr->uniq.control_panel.str_weath_stat_data.rainfall,
 	ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed,
 	ram_ptr->uniq.control_panel.str_weath_stat_data.wind_direct);
@@ -698,7 +710,9 @@ void dwin_print_regs_page()
 									"StartTime:\r\n"
 									"Time:\r\n"
 									"Temperature:\r\n"
+									"Temp correction:\r\n"
 									"Humidity:\r\n"
+									"Hum correction:\r\n"
 									"ReleStatus:");
 	dwin_write_variable(tmp_str, revert_word(0x1900), sizeof(tmp_str));
 	
@@ -707,6 +721,8 @@ void dwin_print_regs_page()
 										"%.2f\r\n"
 										"%.2d:%.2d:%.2d %.2d/%.2d/20%.2d\r\n"
 										"%.2d:%.2d:%.2d %.2d/%.2d/20%.2d\r\n"
+										"%.2f\r\n"
+										"%.2f\r\n"
 										"%.2f\r\n"
 										"%.2f\r\n"
 										"%d",
@@ -725,7 +741,9 @@ void dwin_print_regs_page()
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.sys_time.month,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.sys_time.year,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature,
+	ram_ptr->common.mirrored_to_rom_regs.common.temp_correction,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.humidity,
+	ram_ptr->common.mirrored_to_rom_regs.common.hum_correction,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.rele_status);
 	dwin_write_variable(tmp_str, revert_word(0x1980), sizeof(tmp_str));
 }

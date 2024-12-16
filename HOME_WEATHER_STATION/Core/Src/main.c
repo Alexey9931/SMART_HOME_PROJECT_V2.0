@@ -276,6 +276,7 @@ int main(void)
 			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
 			{
 				ram_ptr->uniq.control_panel.humidity = (float)(*(int16_t*)(data+3)) / 10;
+				ram_ptr->uniq.control_panel.humidity += ram_ptr->common.mirrored_to_rom_regs.common.hum_correction;
 #ifdef DHT22_DEFAULT_SENS
 				ram_ptr->uniq.control_panel.temperature = (float)((*(uint16_t*)(data+1))&0x3FFF) / 10;
 				if((*(uint16_t*)(data+1)) & 0x8000)
@@ -287,6 +288,7 @@ int main(void)
 #ifndef DHT22_DEFAULT_SENS
 			ram_ptr->uniq.control_panel.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
 #endif
+			ram_ptr->uniq.control_panel.temperature += ram_ptr->common.mirrored_to_rom_regs.common.temp_correction;
 			is_time_to_update_params = 0;
 			//обновление дисплея
 			dwin_print_home_page();
