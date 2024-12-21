@@ -55,4 +55,6 @@ void dwin_print_net_page();
 
 void dwin_print_regs_page();
 
+void dwin_print_settings_page();
+
 #endif /* __DWIN_H */

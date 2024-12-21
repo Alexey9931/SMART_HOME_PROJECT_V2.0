@@ -93,6 +93,7 @@ extern ram_data_struct ram_data;	//Пространство памяти ОЗУ 
 extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
 extern ds3231_time sys_time;	// Структура системного времени
 uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
+uint8_t is_time_to_update_rom; // Флаг того, что пора обновить данные eeprom
 uint8_t hours_delta; // Локальный счетчик часов
 extern modbus_packet rx_packet;
 network_map dev_net_map = { .client_devs[0] = {.dev_addr = 43, .is_inited = 0}, // Карта устройств
@@ -295,6 +296,14 @@ int main(void)
 			dwin_print_net_page();
 			dwin_print_regs_page();
 			dwin_print_gasboiler_page();
+			dwin_print_settings_page();
+		}
+		
+		//если пришло время обновить данные eeprom
+		if (is_time_to_update_rom)
+		{
+			eeprom_write(&USED_I2C, 0, (uint8_t*)&ram_ptr->common.mirrored_to_rom_regs, sizeof(eeprom_data));
+			is_time_to_update_rom = 0;
 		}
 		
 		// серверная часть (взаимодействие с raspberry - сервером)
@@ -340,7 +349,7 @@ int main(void)
 			{
 				//выполняем команду WRITE, если есть, что записать
 				//следом выполняем CONFIG для обновления ПЗУ
-				if (write_flag)
+				if (dev_net_map.client_devs[i].write_flag)
 				{
 					if (request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map.client_devs[i].device_name, dev_net_map.client_devs[i].dev_addr, write_cmd))
 					{
@@ -372,7 +381,7 @@ int main(void)
 						}
 						memset(dev_net_map.client_devs[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
 					}
-					write_flag = 0;
+					dev_net_map.client_devs[i].write_flag = 0;
 				}	
 				//выполняем команду READ
 				if (!request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map.client_devs[i].device_name, dev_net_map.client_devs[i].dev_addr, read_cmd))
@@ -1108,7 +1117,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		// Сейчас принимаем только пакеты с командой на чтения,
 		// нужных нам регистров
 		packet_struct rx_pack = {0};
-		uint16_t addr, reg = 0;
+		uint16_t addr = 0;
+		int16_t reg = 0;
 		memcpy(&rx_pack, dwin_rx_buf, dwin_buf_cnt);
 		
 		if ((rx_pack.length == 0) || (dwin_buf_cnt < (rx_pack.length + 3)))
@@ -1124,6 +1134,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				reg = revert_word(*(uint16_t*)(rx_pack.data + 3));
 				switch(addr)
 				{
+					//Уставка температуры для GasBoilerController
 					case 0x3000:
 						if (((float)reg / 10.0) < (ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint -
 							ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range))
@@ -1136,7 +1147,17 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 							delta_t;
 						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range +=
 							delta_t;
+
+						for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
+						{
+							if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL)
+							{
+								dev_net_map.client_devs[i].write_flag = 1;
+								break;
+							}
+						}
 						break;
+					//Минимальная температура для GasBoilerController
 					case 0x3020:
 						if (((float)reg / 10.0) > ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint)
 						{
@@ -1147,11 +1168,80 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 								ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range);
 						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range -=
 							delta_t;
+
+						for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
+						{
+							if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL)
+							{
+								dev_net_map.client_devs[i].write_flag = 1;
+								break;
+							}
+						}
+						break;
+					//Поправка для датчика температуры ControlPanel
+					case 0x3300:
+						ram_ptr->common.mirrored_to_rom_regs.common.temp_correction = (float)reg / 10.0;
+						is_time_to_update_rom = 1;
+						break;
+					//Поправка для датчика влажности ControlPanel
+					case 0x3330:
+						ram_ptr->common.mirrored_to_rom_regs.common.hum_correction = (float)reg / 10.0;
+						is_time_to_update_rom = 1;
+						break;
+					//Поправка для датчика температуры GasboilerController
+					case 0x3310:
+						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.temp_correction = (float)reg / 10.0;
+
+						for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
+						{
+							if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL)
+							{
+								dev_net_map.client_devs[i].write_flag = 1;
+								break;
+							}
+						}
+						break;
+					//Поправка для датчика влажности GasboilerController
+					case 0x3340:
+						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.hum_correction = (float)reg / 10.0;
+
+						for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
+						{
+							if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL)
+							{
+								dev_net_map.client_devs[i].write_flag = 1;
+								break;
+							}
+						}
+						break;
+					//Поправка для датчика температуры StreetWeatherStation
+					case 0x3320:
+						ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.temp_correction = (float)reg / 10.0;
+
+						for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
+						{
+							if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME) != NULL)
+							{
+								dev_net_map.client_devs[i].write_flag = 1;
+								break;
+							}
+						}
+						break;
+					//Поправка для датчика влажности StreetWeatherStation
+					case 0x3350:
+						ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.hum_correction = (float)reg / 10.0;
+						for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
+						{
+							if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME) != NULL)
+							{
+								dev_net_map.client_devs[i].write_flag = 1;
+								break;
+							}
+						}
 						break;
 					default:
 						goto error_exit;
 				}
-				write_flag = 1;
 				break;
 			default:
 				goto error_exit;

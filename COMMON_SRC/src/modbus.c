@@ -64,7 +64,7 @@ uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t *dev_name, ui
 				}
 				break;
 		case config_cmd:
-				if (do_config_cmd(w5500_n, dev_addr, sn, 0, val_ptr, rw_size) != 0)
+				if (do_config_cmd(w5500_n, dev_addr, sn, 0, val_ptr, sizeof(eeprom_data)) != 0)
 				{
 					w5500_n->port_set[sn].is_soc_active = 0;
 					return 1;

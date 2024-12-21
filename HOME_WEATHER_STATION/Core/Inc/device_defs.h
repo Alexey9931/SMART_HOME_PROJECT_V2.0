@@ -41,6 +41,7 @@ typedef struct client_network_map
 	uint8_t device_name[32];	//Имя устройства
 	uint8_t dev_addr;					//Адрес устройства
 	uint8_t is_inited;				//Статус инициализации
+	uint8_t write_flag;				//Флаг необходимости записи обновленных регистров
 }__attribute__((packed)) client_network_map;
 
 // Карта сети всех устройств (с сервером)

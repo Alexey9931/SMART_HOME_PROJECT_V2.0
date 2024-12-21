@@ -18,9 +18,9 @@
 #define PACKET_TAIL 	0xAAAA
 
 //Device's register space
-#define CONTROL_PANEL_REGS_SIZE          114
-#define GAS_BOILER_CONTROLLER_REGS_SIZE  111
-#define WEATH_STATION_REGS_SIZE          119
+#define CONTROL_PANEL_REGS_SIZE          122
+#define GAS_BOILER_CONTROLLER_REGS_SIZE  119
+#define WEATH_STATION_REGS_SIZE          127
 
 // Поддерживаемые протоколом команды
 typedef enum

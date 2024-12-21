@@ -631,9 +631,9 @@ void dwin_print_regs_page()
 										"%.2f\r\n"
 										"%d",
 	ram_ptr->uniq.control_panel.str_weath_stat_data.temperature,
-	ram_ptr->common.mirrored_to_rom_regs.common.temp_correction,
+	ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.temp_correction,
 	ram_ptr->uniq.control_panel.str_weath_stat_data.humidity,
-	ram_ptr->common.mirrored_to_rom_regs.common.hum_correction,
+	ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.hum_correction,
 	ram_ptr->uniq.control_panel.str_weath_stat_data.rainfall,
 	ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed,
 	ram_ptr->uniq.control_panel.str_weath_stat_data.wind_direct);
@@ -741,9 +741,38 @@ void dwin_print_regs_page()
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.sys_time.month,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.sys_time.year,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature,
-	ram_ptr->common.mirrored_to_rom_regs.common.temp_correction,
+	ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.temp_correction,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.humidity,
-	ram_ptr->common.mirrored_to_rom_regs.common.hum_correction,
+	ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.hum_correction,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.rele_status);
 	dwin_write_variable(tmp_str, revert_word(0x1980), sizeof(tmp_str));
+}
+
+void dwin_print_settings_page()
+{
+	uint16_t tmp_var;
+
+	//Поправка для датчика температуры ControlPanel
+	tmp_var = revert_word((int16_t)(ram_ptr->common.mirrored_to_rom_regs.common.temp_correction*10));
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3300), sizeof(tmp_var));
+
+	//Поправка для датчика влажности ControlPanel
+	tmp_var = revert_word((int16_t)(ram_ptr->common.mirrored_to_rom_regs.common.hum_correction*10));
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3330), sizeof(tmp_var));
+
+	//Поправка для датчика температуры GasboilerController
+	tmp_var = revert_word((int16_t)(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.temp_correction*10));
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3310), sizeof(tmp_var));
+
+	//Поправка для датчика влажности GasboilerController
+	tmp_var = revert_word((int16_t)(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.hum_correction*10));
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3340), sizeof(tmp_var));
+
+	//Поправка для датчика температуры StreetWeatherStation
+	tmp_var = revert_word((int16_t)(ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.temp_correction*10));
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3320), sizeof(tmp_var));
+
+	//Поправка для датчика влажности StreetWeatherStation
+	tmp_var = revert_word((int16_t)(ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.hum_correction*10));
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3350), sizeof(tmp_var));
 }
