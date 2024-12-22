@@ -775,4 +775,20 @@ void dwin_print_settings_page()
 	//Поправка для датчика влажности StreetWeatherStation
 	tmp_var = revert_word((int16_t)(ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.hum_correction*10));
 	dwin_write_variable((char*)&tmp_var, revert_word(0x3350), sizeof(tmp_var));
+	
+	//Дата/время
+	tmp_var = revert_word(ram_ptr->uniq.control_panel.sys_time.hour);
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3360), sizeof(tmp_var));
+	
+	tmp_var = revert_word(ram_ptr->uniq.control_panel.sys_time.minutes);
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3370), sizeof(tmp_var));
+	
+	tmp_var = revert_word(ram_ptr->uniq.control_panel.sys_time.dayofmonth);
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3380), sizeof(tmp_var));
+	
+	tmp_var = revert_word(ram_ptr->uniq.control_panel.sys_time.month);
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3390), sizeof(tmp_var));
+	
+	tmp_var = revert_word(ram_ptr->uniq.control_panel.sys_time.year + 2000);
+	dwin_write_variable((char*)&tmp_var, revert_word(0x3400), sizeof(tmp_var));
 }

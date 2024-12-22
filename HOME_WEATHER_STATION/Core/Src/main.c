@@ -91,9 +91,10 @@ extern w5500_data w5500_2; // Настройки второй микросхем
 extern w5500_data* w5500_2_ptr;
 extern ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
 extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
-extern ds3231_time sys_time;	// Структура системного времени
-uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
-uint8_t is_time_to_update_rom; // Флаг того, что пора обновить данные eeprom
+extern ds3231_time sys_time;	//Структура системного времени
+uint8_t is_time_to_update_params; //Флаг того, что пора обновлять параметры модуля
+uint8_t is_time_to_update_rom; //Флаг того, что пора обновить данные eeprom
+uint8_t is_time_to_update_systime; //Флаг того, что пора обновить системное время
 uint8_t hours_delta; // Локальный счетчик часов
 extern modbus_packet rx_packet;
 network_map dev_net_map = { .client_devs[0] = {.dev_addr = 43, .is_inited = 0}, // Карта устройств
@@ -264,8 +265,22 @@ int main(void)
 		if (is_time_to_update_params == 1)
 		{
 			//обновление времени
-			get_time(&USED_I2C);
-			memcpy(&ram_ptr->uniq.control_panel.sys_time, &sys_time, sizeof(sys_time));
+			if (is_time_to_update_systime)
+			{
+				set_time(&USED_I2C, ram_ptr->uniq.control_panel.sys_time.seconds,
+									ram_ptr->uniq.control_panel.sys_time.minutes,
+									ram_ptr->uniq.control_panel.sys_time.hour,
+									ram_ptr->uniq.control_panel.sys_time.dayofweek,
+									ram_ptr->uniq.control_panel.sys_time.dayofmonth,
+									ram_ptr->uniq.control_panel.sys_time.month,
+									ram_ptr->uniq.control_panel.sys_time.year);
+				is_time_to_update_systime = 0;
+			}
+			else
+			{
+				get_time(&USED_I2C);
+				memcpy(&ram_ptr->uniq.control_panel.sys_time, &sys_time, sizeof(sys_time));
+			}
 			if (((ram_ptr->uniq.control_panel.sys_time.hour - hours_delta) > 0 )||((hours_delta - ram_ptr->uniq.control_panel.sys_time.hour) == 23))
 			{
 				hours_delta = ram_ptr->uniq.control_panel.sys_time.hour;
@@ -305,6 +320,19 @@ int main(void)
 			eeprom_write(&USED_I2C, 0, (uint8_t*)&ram_ptr->common.mirrored_to_rom_regs, sizeof(eeprom_data));
 			is_time_to_update_rom = 0;
 		}
+		
+//		//если пришло время обновить системное время
+//		if (is_time_to_update_systime)
+//		{
+//			set_time(&USED_I2C, ram_ptr->uniq.control_panel.sys_time.seconds,
+//											ram_ptr->uniq.control_panel.sys_time.minutes,
+//											ram_ptr->uniq.control_panel.sys_time.hour,
+//											ram_ptr->uniq.control_panel.sys_time.dayofweek,
+//											ram_ptr->uniq.control_panel.sys_time.dayofmonth,
+//											ram_ptr->uniq.control_panel.sys_time.month,
+//											ram_ptr->uniq.control_panel.sys_time.year);
+//			is_time_to_update_systime = 0;
+//		}
 		
 		// серверная часть (взаимодействие с raspberry - сервером)
 		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
@@ -1238,6 +1266,51 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 								break;
 							}
 						}
+						break;
+					//Настройки даты/времени - часы
+					case 0x3360:
+						ram_ptr->uniq.control_panel.sys_time.hour = reg;
+						is_time_to_update_systime = 1;
+						break;
+					//Настройки даты/времени - минуты
+					case 0x3370:
+						ram_ptr->uniq.control_panel.sys_time.minutes = reg;
+						is_time_to_update_systime = 1;
+						break;
+					//Настройки даты/времени - число
+					case 0x3380:
+						switch (ram_ptr->uniq.control_panel.sys_time.month)
+						{
+							case 2:
+								if ( !(((ram_ptr->uniq.control_panel.sys_time.year % 4 == 0) && (reg > 29)) ||
+										 ((ram_ptr->uniq.control_panel.sys_time.year % 4 != 0) && (reg > 28))))
+								{
+									ram_ptr->uniq.control_panel.sys_time.dayofmonth = reg;
+									is_time_to_update_systime = 1;
+								}
+								break;
+							case 4: case 6: case 9: case 11:
+								if (reg <= 30)
+								{
+									ram_ptr->uniq.control_panel.sys_time.dayofmonth = reg;
+									is_time_to_update_systime = 1;
+								}
+								break;
+							default:
+								ram_ptr->uniq.control_panel.sys_time.dayofmonth = reg;
+								is_time_to_update_systime = 1;
+								break;
+						}
+						break;
+					//Настройки даты/времени - месяц
+					case 0x3390:
+						ram_ptr->uniq.control_panel.sys_time.month = reg;
+						is_time_to_update_systime = 1;
+						break;
+					//Настройки даты/времени - год
+					case 0x3400:
+						ram_ptr->uniq.control_panel.sys_time.year = reg%100;
+						is_time_to_update_systime = 1;
 						break;
 					default:
 						goto error_exit;
