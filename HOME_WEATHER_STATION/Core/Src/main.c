@@ -100,7 +100,6 @@ extern modbus_packet rx_packet;
 network_map dev_net_map = { .client_devs[0] = {.dev_addr = 43, .is_inited = 0}, // Карта устройств
 														.client_devs[1] = {.dev_addr = 33, .is_inited = 0},
 														.is_server_connected = 0 };
-uint8_t write_flag;
 /* USER CODE END 0 */
 
 /**
@@ -321,19 +320,6 @@ int main(void)
 			is_time_to_update_rom = 0;
 		}
 		
-//		//если пришло время обновить системное время
-//		if (is_time_to_update_systime)
-//		{
-//			set_time(&USED_I2C, ram_ptr->uniq.control_panel.sys_time.seconds,
-//											ram_ptr->uniq.control_panel.sys_time.minutes,
-//											ram_ptr->uniq.control_panel.sys_time.hour,
-//											ram_ptr->uniq.control_panel.sys_time.dayofweek,
-//											ram_ptr->uniq.control_panel.sys_time.dayofmonth,
-//											ram_ptr->uniq.control_panel.sys_time.month,
-//											ram_ptr->uniq.control_panel.sys_time.year);
-//			is_time_to_update_systime = 0;
-//		}
-		
 		// серверная часть (взаимодействие с raspberry - сервером)
 		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
 		{
@@ -393,6 +379,8 @@ int main(void)
 								+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
 						}
 						memset(dev_net_map.client_devs[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+						dev_net_map.client_devs[i].write_flag = 0;
+						continue;
 					}
 					if (request_iteration(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, dev_net_map.client_devs[i].device_name, dev_net_map.client_devs[i].dev_addr, config_cmd))
 					{
@@ -408,6 +396,8 @@ int main(void)
 								+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
 						}
 						memset(dev_net_map.client_devs[i].device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+						dev_net_map.client_devs[i].write_flag = 0;
+						continue;
 					}
 					dev_net_map.client_devs[i].write_flag = 0;
 				}	
@@ -663,7 +653,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 8399;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 29999;
+  htim2.Init.Period = 49999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -753,7 +743,7 @@ static void MX_TIM4_Init(void)
   htim4.Instance = TIM4;
   htim4.Init.Prescaler = 8399;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 29999;
+  htim4.Init.Period = 49999;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
@@ -842,7 +832,7 @@ static void MX_TIM12_Init(void)
   htim12.Instance = TIM12;
   htim12.Init.Prescaler = 8399;
   htim12.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim12.Init.Period = 29999;
+  htim12.Init.Period = 49999;
   htim12.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim12.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim12) != HAL_OK)
@@ -878,7 +868,7 @@ static void MX_TIM13_Init(void)
   htim13.Instance = TIM13;
   htim13.Init.Prescaler = 8399;
   htim13.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim13.Init.Period = 29999;
+  htim13.Init.Period = 49999;
   htim13.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim13.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim13) != HAL_OK)
@@ -909,7 +899,7 @@ static void MX_TIM14_Init(void)
   htim14.Instance = TIM14;
   htim14.Init.Prescaler = 8399;
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim14.Init.Period = 29999;
+  htim14.Init.Period = 49999;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim14) != HAL_OK)

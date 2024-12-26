@@ -25,7 +25,7 @@ extern float temp_range;
 
 void eeproms_first_ini(I2C_HandleTypeDef* hi2c)
 {
-	eeprom_data rom_struct;
+	eeprom_data rom_struct = {0};
 	
 	strncpy((char*)&rom_struct.common.device_name, DEVICE_NAME, sizeof(DEVICE_NAME));	
 	memcpy(rom_struct.common.ip_addr_1, ip_addr_ini_1, sizeof(ip_addr_ini_1));
@@ -141,7 +141,7 @@ void _eeprom_write(I2C_HandleTypeDef* hi2c, uint8_t rom_num, uint16_t page, uint
 		uint16_t MemAddress = startPage<<paddrposition | offset;
 		uint16_t bytesremaining = bytestowrite(size, offset);
 
-		HAL_I2C_Mem_Write(hi2c, eeprom_addr, MemAddress, 2, &data[pos], bytesremaining, 10);
+		HAL_I2C_Mem_Write(hi2c, eeprom_addr, MemAddress, 2, &data[pos], bytesremaining, 1000);
 
 		startPage++;
 		offset = 0;
@@ -182,7 +182,7 @@ void _eeprom_read(I2C_HandleTypeDef* hi2c, uint8_t rom_num, uint16_t page, uint1
 	{
 		uint16_t MemAddress = startPage<<paddrposition | offset;
 		uint16_t bytesremaining = bytestowrite(size, offset);
-		HAL_I2C_Mem_Read(hi2c, eeprom_addr, MemAddress, 2, &data[pos], bytesremaining, 10);
+		HAL_I2C_Mem_Read(hi2c, eeprom_addr, MemAddress, 2, &data[pos], bytesremaining, 1000);
 		startPage++;
 		offset = 0;
 		size = size-bytesremaining;
@@ -212,7 +212,7 @@ void eeprom_page_erase(I2C_HandleTypeDef* hi2c, uint8_t rom_num, uint16_t page)
 	uint8_t data[PAGE_SIZE];
 	memset(data,0xff,PAGE_SIZE);
 
-	HAL_I2C_Mem_Write(hi2c, eeprom_addr, MemAddress, 2, data, PAGE_SIZE, 10);
+	HAL_I2C_Mem_Write(hi2c, eeprom_addr, MemAddress, 2, data, PAGE_SIZE, 1000);
 
 	HAL_Delay(10); 
 }

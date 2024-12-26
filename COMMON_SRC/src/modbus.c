@@ -209,9 +209,9 @@ void do_cmd(void)
 		case config_cmd:
 				reg_addr = *(uint16_t*)rx_packet.data;
 				reg_size = *(uint16_t*)(rx_packet.data + sizeof(reg_addr));
-				eeprom_write(&USED_I2C, reg_addr, rx_packet.data + sizeof(reg_addr) + sizeof(reg_size), reg_size);
 				memset(&tx_packet.data, config_cmd, 1);
 				tx_data_size = 1;
+				eeprom_write(&USED_I2C, reg_addr, rx_packet.data + sizeof(reg_addr) + sizeof(reg_size), reg_size);
 				break;
 		case reset_cmd:
 				eeproms_first_ini(&USED_I2C);
@@ -226,6 +226,8 @@ void do_cmd(void)
 		case init_cmd:
 				memcpy((char*)&tx_packet.data, (char*)&ram_data, sizeof(ram_data));
 				tx_data_size = sizeof(ram_data);
+				break;
+		default:
 				break;
 	}
 }
