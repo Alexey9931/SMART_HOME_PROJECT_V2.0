@@ -321,10 +321,56 @@ void dwin_print_home_page()
 		dwin_write_variable("FAILED", revert_word(0x1240), 6);
 		dwin_write_half_word(0x00F8, revert_word(0x5203));
 	}
-	//картинка прогноза погоды
-	dwin_write_half_word(0x0D00, revert_word(0x5406));
-	dwin_write_half_word(0x0D00, revert_word(0x5407));
-	dwin_write_half_word(0x0D00, revert_word(0x5408));
+	//картинка текущей погоды
+	if ((ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed == 0.0f) &&
+			(ram_ptr->uniq.control_panel.str_weath_stat_data.rainfall <= 20.0f))
+	{
+		//sunny
+		dwin_write_half_word(0x0C00, revert_word(0x5406));
+		dwin_write_half_word(0x0C00, revert_word(0x5407));
+		dwin_write_half_word(0x0C00, revert_word(0x5408));
+	}
+	else if (((ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed > 0.0f) &&
+						(ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed < 7.0f)) &&
+					  (ram_ptr->uniq.control_panel.str_weath_stat_data.rainfall <= 20.0f))
+	{
+		//sunny with clouds
+		dwin_write_half_word(0x0D00, revert_word(0x5406));
+		dwin_write_half_word(0x0D00, revert_word(0x5407));
+		dwin_write_half_word(0x0D00, revert_word(0x5408));
+	}
+	else if ((ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed >= 7.0f) &&
+					 (ram_ptr->uniq.control_panel.str_weath_stat_data.rainfall <= 20.0f))
+	{
+		//only clouds
+		dwin_write_half_word(0x1100, revert_word(0x5406));
+		dwin_write_half_word(0x1100, revert_word(0x5407));
+		dwin_write_half_word(0x1100, revert_word(0x5408));
+	}
+	else if (((ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed >= 0.0f) &&
+						(ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed < 7.0f)) &&
+					  ((ram_ptr->uniq.control_panel.str_weath_stat_data.rainfall > 20.0f)))
+	{
+		//small rain with sun
+		dwin_write_half_word(0x0B00, revert_word(0x5406));
+		dwin_write_half_word(0x0B00, revert_word(0x5407));
+		dwin_write_half_word(0x0B00, revert_word(0x5408));
+	}
+	else if ((ram_ptr->uniq.control_panel.str_weath_stat_data.wind_speed >= 7.0f) &&
+					 (ram_ptr->uniq.control_panel.str_weath_stat_data.rainfall > 20.0f))
+	{
+		//hard rainy
+		dwin_write_half_word(0x0E00, revert_word(0x5406));
+		dwin_write_half_word(0x0E00, revert_word(0x5407));
+		dwin_write_half_word(0x0E00, revert_word(0x5408));
+	}
+	else
+	{
+		//sunny
+		dwin_write_half_word(0x0C00, revert_word(0x5406));
+		dwin_write_half_word(0x0C00, revert_word(0x5407));
+		dwin_write_half_word(0x0C00, revert_word(0x5408));
+	}
 }
 
 void dwin_print_gasboiler_page()
