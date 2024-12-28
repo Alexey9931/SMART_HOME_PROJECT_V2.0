@@ -7,6 +7,7 @@
 #include "device_defs.h"
 
 void dht22_init(GPIO_TypeDef* dht22_gpio_port, uint16_t dht22_gpio_pin);
-uint8_t dht22_get_data(GPIO_TypeDef* dht22_gpio_port, uint16_t dht22_gpio_pin, uint8_t *data);
+float dht22_get_temp(GPIO_TypeDef* dht22_gpio_port, uint16_t dht22_gpio_pin);
+float dht22_get_hum(GPIO_TypeDef* dht22_gpio_port, uint16_t dht22_gpio_pin);
 
 #endif /* __DHT22_H */

@@ -240,20 +240,11 @@ int main(void)
 				ram_ptr->common.work_time++;
 			}
 			//обновление показаний датчиков
-			uint8_t data[5];
-			if(!dht22_get_data(GPIOD, GPIO_PIN_15, data))
-			{
-				ram_ptr->uniq.gas_boiler.humidity = (float)(*(int16_t*)(data+3)) / 10;
-				ram_ptr->uniq.gas_boiler.humidity += ram_ptr->common.mirrored_to_rom_regs.common.hum_correction;
+			ram_ptr->uniq.gas_boiler.humidity = dht22_get_hum(GPIOD, GPIO_PIN_15);
+			ram_ptr->uniq.gas_boiler.humidity += ram_ptr->common.mirrored_to_rom_regs.common.hum_correction;
 #ifdef DHT22_DEFAULT_SENS
-				ram_ptr->uniq.gas_boiler.temperature = (float)((*(uint16_t*)(data+1))&0x3FFF) / 10;
-				if((*(uint16_t*)(data+1)) & 0x8000)
-				{
-					ram_ptr->uniq.gas_boiler.temperature *= -1.0f;
-				}
-#endif
-			}
-#ifndef DHT22_DEFAULT_SENS		
+			ram_ptr->uniq.gas_boiler.temperature = dht22_get_temp(GPIOD, GPIO_PIN_15);
+#else	
 			ram_ptr->uniq.gas_boiler.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
 #endif
 			ram_ptr->uniq.gas_boiler.temperature += ram_ptr->common.mirrored_to_rom_regs.common.temp_correction;
