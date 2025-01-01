@@ -24,6 +24,7 @@
 #define GPIO_PIN_S_E		GPIO_PIN_13	//GERKON2
 #define GPIO_PORT_S_E		GPIOB
 
+// Функция получения текущего направления ветра
 void get_wind_direct(wind_direction *previous_value);
 
 #endif /* GERKONS_H_ */

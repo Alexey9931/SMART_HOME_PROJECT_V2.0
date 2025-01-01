@@ -1102,10 +1102,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		w5500_1_ptr->port_set[0].is_soc_active = 0;
 	}
+	else if (htim == &htim4)
+	{
+		w5500_2_ptr->port_set[0].is_soc_active = 0;
+	}
 	else if (htim == &htim12)
 	{
 		w5500_1_ptr->port_set[1].is_soc_active = 0;
-		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_3);
+	}
+	else if (htim == &htim13)
+	{
+		w5500_2_ptr->port_set[1].is_soc_active = 0;
 	}
 	else if (htim == &htim14)
 	{
@@ -1115,7 +1122,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		//Каждую секунду обновление параметров модуля
 		is_time_to_update_params = 1;
-		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_4);
 	}
 }
 

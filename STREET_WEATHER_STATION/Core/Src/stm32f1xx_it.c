@@ -51,8 +51,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#include "w5500.h"
-#include "ram.h"
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -60,8 +58,6 @@ extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim4;
 /* USER CODE BEGIN EV */
-extern w5500_data* w5500_1_ptr;
-extern uint8_t is_time_to_update_params;
 /* USER CODE END EV */
 
 /******************************************************************************/

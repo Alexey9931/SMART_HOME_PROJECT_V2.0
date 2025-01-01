@@ -13,6 +13,7 @@
 #define enable_rele		HAL_GPIO_WritePin(RELE_GPIO_PORT, RELE_GPIO_PIN, GPIO_PIN_SET);
 #define disable_rele	HAL_GPIO_WritePin(RELE_GPIO_PORT, RELE_GPIO_PIN, GPIO_PIN_RESET);
 
+// Реализация алгоритма термостата
 void thermostat_task(void);
 
 #endif /* __THERMOSTAT_ALG_H */

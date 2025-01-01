@@ -64,11 +64,7 @@ extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim12;
 extern TIM_HandleTypeDef htim13;
 /* USER CODE BEGIN EV */
-extern w5500_data* w5500_1_ptr;
-extern w5500_data* w5500_2_ptr;
-uint8_t is_time_to_update_params;
 uint8_t is_time_to_update_rom;
-uint8_t is_time_to_update_lcd;
 uint8_t button_is_locked = 1;
 /* USER CODE END EV */
 
@@ -284,8 +280,7 @@ void TIM2_IRQHandler(void)
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
-	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_6);
-	w5500_1_ptr->port_set[0].is_soc_active = 0;
+
   /* USER CODE END TIM2_IRQn 1 */
 }
 
@@ -299,8 +294,7 @@ void TIM4_IRQHandler(void)
   /* USER CODE END TIM4_IRQn 0 */
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */
-//	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_5);
-//	w5500_2_ptr->port_set[0].is_soc_active = 0;
+
   /* USER CODE END TIM4_IRQn 1 */
 }
 
@@ -314,7 +308,7 @@ void TIM8_BRK_TIM12_IRQHandler(void)
   /* USER CODE END TIM8_BRK_TIM12_IRQn 0 */
   HAL_TIM_IRQHandler(&htim12);
   /* USER CODE BEGIN TIM8_BRK_TIM12_IRQn 1 */
-  w5500_1_ptr->port_set[1].is_soc_active = 0;
+
   /* USER CODE END TIM8_BRK_TIM12_IRQn 1 */
 }
 
@@ -328,7 +322,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
   /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
   HAL_TIM_IRQHandler(&htim13);
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
-//  w5500_2_ptr->port_set[1].is_soc_active = 0;
+
   /* USER CODE END TIM8_UP_TIM13_IRQn 1 */
 }
 
@@ -342,8 +336,7 @@ void TIM5_IRQHandler(void)
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
   /* USER CODE BEGIN TIM5_IRQn 1 */
-//	//Каждую секунду обновление параметров модуля
-//	is_time_to_update_params = 1;
+
   /* USER CODE END TIM5_IRQn 1 */
 }
 
@@ -357,7 +350,7 @@ void TIM6_DAC_IRQHandler(void)
   /* USER CODE END TIM6_DAC_IRQn 0 */
   HAL_TIM_IRQHandler(&htim6);
   /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
-//	is_time_to_update_lcd = 1;
+
   /* USER CODE END TIM6_DAC_IRQn 1 */
 }
 

@@ -84,9 +84,9 @@ extern w5500_data* w5500_2_ptr;
 extern ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
 extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
 extern ds3231_time sys_time;	// Структура системного времени
-extern uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
+uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
 extern uint8_t is_time_to_update_rom;	// Флаг того, что пора обновлять ПЗУ
-extern uint8_t is_time_to_update_lcd; // Флаг того, что пора обновлять дисплей
+uint8_t is_time_to_update_lcd; // Флаг того, что пора обновлять дисплей
 uint8_t hours_delta; // Локальный счетчик часов
 uint8_t is_lcd_on = 1; // Флаг для мигания уставки на дисплее
 extern uint8_t button_is_locked; // Флаг состояния кнопки "ОК"
@@ -912,9 +912,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		w5500_2_ptr->port_set[0].is_soc_active = 0;
 	}
+	if (htim == &htim2)
+	{
+		w5500_1_ptr->port_set[0].is_soc_active = 0;
+	}
 	else if (htim == &htim13)
 	{
 		w5500_2_ptr->port_set[1].is_soc_active = 0;
+	}
+	else if (htim == &htim12)
+	{
+		w5500_1_ptr->port_set[1].is_soc_active = 0;
 	}
 	else if (htim == &htim5)
 	{

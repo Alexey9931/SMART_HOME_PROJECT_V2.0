@@ -1,5 +1,5 @@
 /**
-* API для взаимодействия датчиком температуры ds18b20
+* API для взаимодействия с датчиком температуры ds18b20
  */
 #ifndef __DS18B20_H
 #define __DS18B20_H
@@ -14,11 +14,11 @@
 #define RESOLUTION_11BIT 0x5F
 #define RESOLUTION_12BIT 0x7F
 
+// Функция инициализации ds18b20
 uint8_t ds18b20_init(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin, uint8_t mode);
-void ds18b20_measure_temp_cmd(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin, uint8_t mode, uint8_t DevNum);
-void ds18b20_read_strat_cpad(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin, uint8_t mode, uint8_t *Data, uint8_t DevNum);
+// Функция получения знака температуры
 uint8_t ds18b20_get_sign(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin, uint16_t dt);
-float ds18b20_convert(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin, uint16_t dt);
+// Функция получения температуры
 float ds18b20_get_temp(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin);
 
 #endif /* __DS18B20_H */

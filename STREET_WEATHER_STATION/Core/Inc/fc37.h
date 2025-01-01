@@ -9,6 +9,7 @@
 #define ADC_MAX 1700	//Сырое значение АЦП для уровня 0%
 #define ADC_MIN 500		//Сырое значение АЦП для уровня 100%
 
+// Функция получения кол-ва осадков
 float get_rain_fall(ADC_HandleTypeDef *hadc);
 
 #endif /* FC37_H_ */

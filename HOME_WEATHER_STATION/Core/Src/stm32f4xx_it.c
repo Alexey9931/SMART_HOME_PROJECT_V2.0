@@ -22,7 +22,6 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "bmp180.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,8 +41,6 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
-extern ds3231_time time;	// Структура времени
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -53,8 +50,6 @@ extern ds3231_time time;	// Структура времени
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#include "w5500.h"
-#include "ram.h"
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -66,9 +61,6 @@ extern TIM_HandleTypeDef htim13;
 extern TIM_HandleTypeDef htim14;
 extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN EV */
-extern w5500_data* w5500_1_ptr;
-extern w5500_data* w5500_2_ptr;
-extern uint8_t is_time_to_update_params;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -219,7 +211,6 @@ void TIM2_IRQHandler(void)
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
-//	w5500_1_ptr->port_set[0].is_soc_active = 0;
 
   /* USER CODE END TIM2_IRQn 1 */
 }
@@ -234,7 +225,6 @@ void TIM4_IRQHandler(void)
   /* USER CODE END TIM4_IRQn 0 */
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */
-	w5500_2_ptr->port_set[0].is_soc_active = 0;
 
   /* USER CODE END TIM4_IRQn 1 */
 }
@@ -263,7 +253,7 @@ void TIM8_BRK_TIM12_IRQHandler(void)
   /* USER CODE END TIM8_BRK_TIM12_IRQn 0 */
   HAL_TIM_IRQHandler(&htim12);
   /* USER CODE BEGIN TIM8_BRK_TIM12_IRQn 1 */
-//	w5500_1_ptr->port_set[1].is_soc_active = 0;
+
   /* USER CODE END TIM8_BRK_TIM12_IRQn 1 */
 }
 
@@ -277,7 +267,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
   /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
   HAL_TIM_IRQHandler(&htim13);
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
-  w5500_2_ptr->port_set[1].is_soc_active = 0;
+
   /* USER CODE END TIM8_UP_TIM13_IRQn 1 */
 }
 
@@ -291,7 +281,7 @@ void TIM8_TRG_COM_TIM14_IRQHandler(void)
   /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 0 */
   HAL_TIM_IRQHandler(&htim14);
   /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */
-//	w5500_1_ptr->port_set[2].is_soc_active = 0;
+
   /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 1 */
 }
 
@@ -305,8 +295,6 @@ void TIM5_IRQHandler(void)
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
   /* USER CODE BEGIN TIM5_IRQn 1 */
-//	//Каждую секунду обновление параметров модуля
-//	is_time_to_update_params = 1;
 
   /* USER CODE END TIM5_IRQn 1 */
 }
