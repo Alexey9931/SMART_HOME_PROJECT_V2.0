@@ -13,80 +13,6 @@ modbus_packet tx_packet;
 // Размер данных в отправляемом пакете
 uint32_t tx_data_size;
 
-// Серверная функция, обеспечивающая обмен данными
-uint8_t reply_iteration(w5500_data* w5500_n, uint8_t sn)
-{
-	if (receive_packet(w5500_n, sn) != 0) return 1;
-	do_cmd();
-	transmit_packet(w5500_n, sn);
-	__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
-	w5500_n->port_set[sn].is_soc_active = 1;
-	
-	return 0;
-}
-// Клиентская функция, инициирующая обмен данными
-uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t *dev_name, uint8_t dev_addr, uint8_t cmd)
-{
-	uint16_t rw_size;
-	void *val_ptr;
-	if (strstr((const char*)dev_name, GAS_BOIL_NAME) != NULL) 
-	{
-		rw_size = GAS_BOILER_CONTROLLER_REGS_SIZE;
-		val_ptr = (void*)&ram_ptr->uniq.control_panel.gas_boiler_common;
-  } 
-	else if (strstr((const char*)dev_name, STR_WEATH_NAME)!= NULL) 
-	{
-		rw_size = WEATH_STATION_REGS_SIZE;
-		val_ptr = (void*)&ram_ptr->uniq.control_panel.str_weath_stat_common;
-  }
-	
-	switch(cmd)
-	{
-		case type_cmd:
-				if (do_type_cmd(w5500_n, dev_addr, sn) != 0)
-				{
-					w5500_n->port_set[sn].is_soc_active = 0;
-					return 1;
-				}
-				break;
-		case read_cmd:
-				if (do_read_cmd(w5500_n, dev_addr, sn, 0, rw_size) != 0)
-				{
-					w5500_n->port_set[sn].is_soc_active = 0;
-					return 1;
-				}
-				break;
-		case write_cmd:
-				if (do_write_cmd(w5500_n, dev_addr, sn, 0, val_ptr, rw_size) != 0)
-				{
-					w5500_n->port_set[sn].is_soc_active = 0;
-					return 1;
-				}
-				break;
-		case config_cmd:
-				if (do_config_cmd(w5500_n, dev_addr, sn, 0, val_ptr, sizeof(eeprom_data)) != 0)
-				{
-					w5500_n->port_set[sn].is_soc_active = 0;
-					return 1;
-				}
-				break;
-		default:
-				return 1;
-	}
-	__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
-	w5500_n->port_set[sn].is_soc_active = 1;
-	while (1)
-	{
-		if (!receive_packet(w5500_n, sn)) 
-		{
-			__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
-			w5500_n->port_set[sn].is_soc_active = 1;
-			return 0;
-		}
-		else if (!w5500_n->port_set[sn].is_soc_active) 
-			return 1;
-	}
-}
 // Функция получения пакета-запроса
 uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn)
 {
@@ -180,11 +106,9 @@ void transmit_packet(w5500_data* w5500_n, uint8_t sn)
 		
 		recv_socket(w5500_n, sn);
 		send_socket(w5500_n, sn);
-		
-		//HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_2);
 }
 // Функция выполнения команды по запросу
-void do_cmd(void)
+void do_request_cmd()
 {
 	ram_ptr->common.num_tx_pack++;
 	
@@ -231,8 +155,19 @@ void do_cmd(void)
 				break;
 	}
 }
+// Серверная функция, обеспечивающая обмен данными
+uint8_t reply_iteration(w5500_data* w5500_n, uint8_t sn)
+{
+	if (receive_packet(w5500_n, sn) != 0) return 1;
+	do_request_cmd();
+	transmit_packet(w5500_n, sn);
+	__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
+	w5500_n->port_set[sn].is_soc_active = 1;
+	
+	return 0;
+}
 // Функция отправки команды read
-uint8_t do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, uint16_t value_size)
+uint8_t _read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, uint16_t value_size)
 {
 	uint8_t start_tx_buf_index = 3;
 	// Если статус текущего сокета "Соединено"
@@ -276,7 +211,7 @@ uint8_t do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t 
 	return 1;
 }
 // Функция отправки команды write
-uint8_t do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size)
+uint8_t _write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size)
 {
 	uint8_t start_tx_buf_index = 3;
 	// Если статус текущего сокета "Соединено"
@@ -321,7 +256,7 @@ uint8_t do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t
 	return 1;
 }
 // Функция отправки команды type
-uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn)
+uint8_t _type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn)
 {
 	uint8_t start_tx_buf_index = 3;
 	// Если статус текущего сокета "Соединено"
@@ -364,7 +299,7 @@ uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn)
 	return 1;
 }
 // Функция отправки команды config
-uint8_t do_config_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size)
+uint8_t _config_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size)
 {
 	uint8_t start_tx_buf_index = 3;
 	// Если статус текущего сокета "Соединено"
@@ -409,6 +344,17 @@ uint8_t do_config_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_
 	}
 	return 1;
 }
+// Функция проверки соединения
+void check_sock_connection(w5500_data* w5500_n, port_settings* port)
+{
+	if (port->is_soc_active != 1) 
+	{
+		port->sock_recon_num++;
+		w5500_reini_sock(w5500_n, port->sock_num);
+		port->is_soc_active = 1;
+		__HAL_TIM_SET_COUNTER(port->htim, 0);
+	}
+}
 // Функция вычисления контрольной суммы буфера по алгоритму CRC32
 uint_least32_t crc32(unsigned char *buf, size_t len)
 {
@@ -435,3 +381,183 @@ void fill_crc32_table(void)
 		crc_table[i] = crc;
 	}
 }
+// Клиентское API (только для ControlPanel)
+#ifdef _CONTR_PANEL_
+// Клиентская функция для выполнения команды "TYPE"
+uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t sn, client_network_map* device)
+{	
+	if (_type_cmd(w5500_n, device->dev_addr, sn) != 0)
+	{
+		w5500_n->port_set[sn].is_soc_active = 0;
+		goto error_exit;
+	}
+				
+	__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
+	w5500_n->port_set[sn].is_soc_active = 1;
+	while (1)
+	{
+		if (!receive_packet(w5500_n, sn)) 
+		{
+			__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
+			w5500_n->port_set[sn].is_soc_active = 1;
+			goto success_exit;
+		}
+		else if (!w5500_n->port_set[sn].is_soc_active) 
+			goto error_exit;
+	}
+	
+	error_exit:
+	{
+		device->is_inited = 0;
+		return 1;
+	}
+	success_exit:
+	{
+		device->is_inited = 1;
+		memcpy(device->device_name, rx_packet.data, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+		return 0;
+	}
+}
+// Клиентская функция для выполнения команды "WRITE"
+uint8_t do_write_cmd(w5500_data* w5500_n, uint8_t sn, client_network_map* device, uint16_t reg_addr, void* value, uint16_t value_size)
+{	
+	if (_write_cmd(w5500_n, device->dev_addr, sn, reg_addr, value, value_size) != 0)
+	{
+		w5500_n->port_set[sn].is_soc_active = 0;
+		goto error_exit;
+	}
+				
+	__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
+	w5500_n->port_set[sn].is_soc_active = 1;
+	while (1)
+	{
+		if (!receive_packet(w5500_n, sn)) 
+		{
+			__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
+			w5500_n->port_set[sn].is_soc_active = 1;
+			goto success_exit;
+		}
+		else if (!w5500_n->port_set[sn].is_soc_active) 
+			goto error_exit;
+	}
+	
+	error_exit:
+	{
+		device->is_inited = 0;
+		if (strstr((const char*)device->device_name, GAS_BOIL_NAME) != NULL) 
+		{
+			memset(&ram_ptr->uniq.control_panel.gas_boiler_common, 0, sizeof(ram_ptr->uniq.control_panel.gas_boiler_common)
+				+ sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
+		} 
+		else if (strstr((const char*)device->device_name, STR_WEATH_NAME)!= NULL) 
+		{
+			memset(&ram_ptr->uniq.control_panel.str_weath_stat_common, 0, sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common)
+				+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
+		}
+		memset(device->device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+		return 1;
+	}
+	success_exit:
+	{
+		return 0;
+	}
+}
+// Клиентская функция для выполнения команды "CONFIG"
+uint8_t do_config_cmd(w5500_data* w5500_n, uint8_t sn, client_network_map* device, uint16_t reg_addr, void* value, uint16_t value_size)
+{	
+	if (_config_cmd(w5500_n, device->dev_addr, sn, reg_addr, value, value_size) != 0)
+	{
+		w5500_n->port_set[sn].is_soc_active = 0;
+		goto error_exit;
+	}
+				
+	__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
+	w5500_n->port_set[sn].is_soc_active = 1;
+	while (1)
+	{
+		if (!receive_packet(w5500_n, sn)) 
+		{
+			__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
+			w5500_n->port_set[sn].is_soc_active = 1;
+			goto success_exit;
+		}
+		else if (!w5500_n->port_set[sn].is_soc_active) 
+			goto error_exit;
+	}
+	
+	error_exit:
+	{
+		device->is_inited = 0;
+		if (strstr((const char*)device->device_name, GAS_BOIL_NAME) != NULL) 
+		{
+			memset(&ram_ptr->uniq.control_panel.gas_boiler_common, 0, sizeof(ram_ptr->uniq.control_panel.gas_boiler_common)
+				+ sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
+		} 
+		else if (strstr((const char*)device->device_name, STR_WEATH_NAME)!= NULL) 
+		{
+			memset(&ram_ptr->uniq.control_panel.str_weath_stat_common, 0, sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common)
+				+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
+		}
+		memset(device->device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+		return 1;
+	}
+	success_exit:
+	{
+		return 0;
+	}
+}
+// Клиентская функция для выполнения команды "READ"
+uint8_t do_read_cmd(w5500_data* w5500_n, uint8_t sn, client_network_map* device, uint16_t reg_addr, uint16_t value_size)
+{	
+	if (_read_cmd(w5500_n, device->dev_addr, sn, reg_addr, value_size) != 0)
+	{
+		w5500_n->port_set[sn].is_soc_active = 0;
+		goto error_exit;
+	}
+				
+	__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
+	w5500_n->port_set[sn].is_soc_active = 1;
+	while (1)
+	{
+		if (!receive_packet(w5500_n, sn)) 
+		{
+			__HAL_TIM_SET_COUNTER(w5500_n->port_set[sn].htim, 0);
+			w5500_n->port_set[sn].is_soc_active = 1;
+			goto success_exit;
+		}
+		else if (!w5500_n->port_set[sn].is_soc_active) 
+			goto error_exit;
+	}
+	
+	error_exit:
+	{
+		device->is_inited = 0;
+		if (strstr((const char*)device->device_name, GAS_BOIL_NAME) != NULL) 
+		{
+			memset(&ram_ptr->uniq.control_panel.gas_boiler_common, 0, sizeof(ram_ptr->uniq.control_panel.gas_boiler_common)
+				+ sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
+		} 
+		else if (strstr((const char*)device->device_name, STR_WEATH_NAME)!= NULL) 
+		{
+			memset(&ram_ptr->uniq.control_panel.str_weath_stat_common, 0, sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common)
+				+ sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
+		}
+		memset(device->device_name, 0, sizeof(ram_ptr->common.mirrored_to_rom_regs.common.device_name));
+		return 1;
+	}
+	success_exit:
+	{
+		if (strstr((const char*)device->device_name, GAS_BOIL_NAME) != NULL) 
+		{
+			memcpy(&ram_ptr->uniq.control_panel.gas_boiler_common, rx_packet.data, 
+				sizeof(ram_ptr->uniq.control_panel.gas_boiler_common) + sizeof(ram_ptr->uniq.control_panel.gas_boiler_uniq));
+		} 
+		else if (strstr((const char*)device->device_name, STR_WEATH_NAME)!= NULL) 
+		{
+			memcpy(&ram_ptr->uniq.control_panel.str_weath_stat_common, rx_packet.data, 
+				sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common) + sizeof(ram_ptr->uniq.control_panel.str_weath_stat_data));
+		}
+		return 0;
+	}
+}
+#endif

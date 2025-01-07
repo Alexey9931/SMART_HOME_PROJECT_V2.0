@@ -34,6 +34,7 @@ typedef struct port_setting_struct
 	uint8_t							is_client;					// Порт клиента/сервера
 	uint8_t 						is_soc_active;			// Статус сокета (активен/не активен)
 	TIM_HandleTypeDef*	htim;								// Таймер для ведения таймаута
+	uint8_t							sock_recon_num;			// Кол-во переинициализаций сокета
 } port_settings;
 
 // Структура с настройками и данными микросхемы w5500

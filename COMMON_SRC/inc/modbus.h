@@ -18,9 +18,9 @@
 #define PACKET_TAIL 	0xAAAA
 
 //Device's register space
-#define CONTROL_PANEL_REGS_SIZE          122
-#define GAS_BOILER_CONTROLLER_REGS_SIZE  119
-#define WEATH_STATION_REGS_SIZE          127
+#define CONTROL_PANEL_REGS_SIZE          123
+#define GAS_BOILER_CONTROLLER_REGS_SIZE  128
+#define WEATH_STATION_REGS_SIZE          128
 
 // Поддерживаемые протоколом команды
 typedef enum
@@ -58,25 +58,23 @@ typedef struct modbus_struct
 
 // Серверная функция, обеспечивающая обмен данными
 uint8_t reply_iteration(w5500_data* w5500_n, uint8_t sn);
-// Клиентская функция, инициирующая обмен данными
-uint8_t request_iteration(w5500_data* w5500_n, uint8_t sn, uint8_t *dev_name, uint8_t dev_addr, uint8_t cmd);
-// Функция получения пакета
-uint8_t receive_packet(w5500_data* w5500_n, uint8_t sn);
-// Функция отправки пакета
-void transmit_packet(w5500_data* w5500_n, uint8_t sn);
-// Функция выполнения команды
-void do_cmd(void);
-// Функция отправки команды read
-uint8_t do_read_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, uint16_t value_size);
-// Функция отправки команды write
-uint8_t do_write_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size);
-// Функция отправки команды type
-uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn);
-// Функция отправки команды config
-uint8_t do_config_cmd(w5500_data* w5500_n, uint8_t dev_addr, uint8_t sn, uint16_t reg_addr, void* value, uint16_t value_size);
+// Функция проверки соединения
+void check_sock_connection(w5500_data* w5500_n, port_settings* port);
 // Функция для заполнения таблицы CRC32
 void fill_crc32_table(void);
 // Функция вычисления контрольной суммы буфера по алгоритму CRC32
 uint_least32_t crc32(unsigned char *buf, size_t len);
+
+// Клиентское API (только для ControlPanel)
+#ifdef _CONTR_PANEL_
+// Клиентская функция для выполнения команды "TYPE"
+uint8_t do_type_cmd(w5500_data* w5500_n, uint8_t sn, client_network_map* device);
+// Клиентская функция для выполнения команды "WRITE"
+uint8_t do_write_cmd(w5500_data* w5500_n, uint8_t sn, client_network_map* device, uint16_t reg_addr, void* value, uint16_t value_size);
+// Клиентская функция для выполнения команды "CONFIG"
+uint8_t do_config_cmd(w5500_data* w5500_n, uint8_t sn, client_network_map* device, uint16_t reg_addr, void* value, uint16_t value_size);
+// Клиентская функция для выполнения команды "READ"
+uint8_t do_read_cmd(w5500_data* w5500_n, uint8_t sn, client_network_map* device, uint16_t reg_addr, uint16_t value_size);
+#endif
 
 #endif /* MODBUS_H_ */

@@ -35,22 +35,23 @@ typedef struct common_eeprom_struct
 // характерными для панели управления
 typedef struct control_panel_eeprom_struct 
 {
-	uint8_t reserv[8];		//Резерв
+	uint8_t reserv[9];		//Резерв
 }__attribute__((packed)) control_panel_eeprom;
 
 // Структура с данными для хранения в ПЗУ,
 // характерными для контроллера газового котла
 typedef struct gas_boiler_eeprom_struct 
 {
-	float	temp_setpoint;		//Уставка температуры
-	float	temp_range;				//Нижний предел уставки температуры
+	float		temp_setpoint;		//Уставка температуры
+	float		temp_range;				//Нижний предел уставки температуры
+	uint8_t temp_source;			//Выбор датчика для измерения температуры
 }__attribute__((packed)) gas_boiler_eeprom;
 
 // Структура с данными для хранения в ПЗУ,
 // характерными для уличной метеостанции
 typedef struct strweathstat_eeprom_struct 
 {
-	uint8_t reserv[8];		//Резерв
+	uint8_t reserv[9];		//Резерв
 }__attribute__((packed)) strweathstat_eeprom;
 
 // Обобщенная структура уникальных данных

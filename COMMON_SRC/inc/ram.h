@@ -32,7 +32,9 @@ typedef struct gas_boiler_ram_struct
 {
 	ds3231_time		start_time;
 	ds3231_time 	sys_time;
-	float					temperature;
+	float					gasboiler_temp;
+	float					controlpanel_temp;
+	float					current_temp;
 	float 				humidity;
 	uint8_t				rele_status;
 }__attribute__((packed)) gas_boiler_ram;

@@ -84,7 +84,7 @@ extern w5500_data* w5500_2_ptr;
 extern ram_data_struct ram_data;	//Пространство памяти ОЗУ (куда зеркализованы в т.ч. и данные из ПЗУ)
 extern ram_data_struct *ram_ptr;	// Указатель на данные ОЗУ
 extern ds3231_time sys_time;	// Структура системного времени
-uint8_t is_time_to_update_params; // Флаг того, что пора обновлять параметры модуля
+uint8_t is_time_to_update_params = 1; // Флаг того, что пора обновлять параметры модуля
 extern uint8_t is_time_to_update_rom;	// Флаг того, что пора обновлять ПЗУ
 uint8_t is_time_to_update_lcd; // Флаг того, что пора обновлять дисплей
 uint8_t hours_delta; // Локальный счетчик часов
@@ -245,9 +245,9 @@ int main(void)
 #ifdef DHT22_DEFAULT_SENS
 			ram_ptr->uniq.gas_boiler.temperature = dht22_get_temp(GPIOD, GPIO_PIN_15);
 #else	
-			ram_ptr->uniq.gas_boiler.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
+			ram_ptr->uniq.gas_boiler.gasboiler_temp = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
 #endif
-			ram_ptr->uniq.gas_boiler.temperature += ram_ptr->common.mirrored_to_rom_regs.common.temp_correction;
+			ram_ptr->uniq.gas_boiler.gasboiler_temp += ram_ptr->common.mirrored_to_rom_regs.common.temp_correction;
 			//алгоритм термостата
 			thermostat_task();
 			is_time_to_update_params = 0;
@@ -257,12 +257,12 @@ int main(void)
 			//обновление показаний на дисплее
 			if (button_is_locked)
 			{
-				print_temp_max7219(ram_ptr->uniq.gas_boiler.temperature*10,
+				print_temp_max7219(ram_ptr->uniq.gas_boiler.current_temp*10,
 					ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10, 1);
 			}
 			else
 			{
-				print_temp_max7219(ram_ptr->uniq.gas_boiler.temperature*10,
+				print_temp_max7219(ram_ptr->uniq.gas_boiler.current_temp*10,
 				ram_ptr->common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10, is_lcd_on);
 			}
 			is_time_to_update_lcd = 0;
@@ -275,22 +275,12 @@ int main(void)
 			is_time_to_update_rom = 0;
 		}
 		
-		// серверная часть (взаимодействие с raspberry)		
-		if (w5500_2_ptr->port_set[0].is_soc_active != 1) 
-		{
-			w5500_reini_sock(w5500_2_ptr, w5500_2_ptr->port_set[0].sock_num);
-			w5500_2_ptr->port_set[0].is_soc_active = 1;
-			__HAL_TIM_SET_COUNTER(w5500_2_ptr->port_set[0].htim, 0);
-		}
+		// серверная часть (взаимодействие с raspberry)
+		check_sock_connection(w5500_2_ptr, &w5500_2_ptr->port_set[0]);
 		reply_iteration(w5500_2_ptr, w5500_2_ptr->port_set[0].sock_num);
 		
-		// серверная часть (взаимодействие с control panel)		
-		if (w5500_2_ptr->port_set[1].is_soc_active != 1) 
-		{
-			w5500_reini_sock(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
-			w5500_2_ptr->port_set[1].is_soc_active = 1;
-			__HAL_TIM_SET_COUNTER(w5500_2_ptr->port_set[1].htim, 0);
-		}
+		// серверная часть (взаимодействие с control panel)
+		check_sock_connection(w5500_2_ptr, &w5500_2_ptr->port_set[1]);
 		reply_iteration(w5500_2_ptr, w5500_2_ptr->port_set[1].sock_num);
 		
   }

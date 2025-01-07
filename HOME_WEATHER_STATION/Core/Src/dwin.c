@@ -261,16 +261,16 @@ void dwin_print_home_page()
 	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint*10.0f)%10);
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_GASBOILER_SET_FRACT_VP), 1);
 	//текущая температура
-	if (ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature < 10.0f)
+	if (ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp < 10.0f)
 	{
-		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature);
+		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp);
 	}
 	else
 	{
-		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature);
+		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp);
 	}
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_GASBOILER_CUR_INT_VP), 3);
-	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature*10.0f)%10);
+	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp*10.0f)%10);
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_GASBOILER_CUR_FRACT_VP), 1);
 	
 	for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
@@ -387,13 +387,13 @@ void dwin_print_gasboiler_page()
 	uint16_t tmp_var = 0;
 
 	//текущая температура
-	if (ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature < 10.0f)
+	if (ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp < 10.0f)
 	{
-		sprintf(tmp_str, "0%.1f", ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature);
+		sprintf(tmp_str, "0%.1f", ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp);
 	}
 	else
 	{
-		sprintf(tmp_str, "%.1f", ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature);
+		sprintf(tmp_str, "%.1f", ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp);
 	}
 	dwin_write_variable(tmp_str, revert_word(GASBOILER_PAGE_CUR_TEMP_VP), 4);
 	
@@ -405,6 +405,10 @@ void dwin_print_gasboiler_page()
 	tmp_var = revert_word((uint16_t)((ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint - 
 			ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range)*10));
 	dwin_write_variable((char*)&tmp_var, revert_word(GASBOILER_PAGE_MIN_TEMP_VP), sizeof(tmp_var));
+
+	//выбор датчика температуры
+	dwin_write_half_word(revert_word(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_source),
+		revert_word(GASBOILER_PAGE_TEMP_SOURCE_VP));
 	
 	//статус газового котла
 	if (ram_ptr->uniq.control_panel.gas_boiler_uniq.rele_status == 1)
@@ -761,9 +765,12 @@ void dwin_print_regs_page()
 	memset(tmp_str, 0, sizeof(tmp_str));
 	strcpy(tmp_str, "TempSetpoint:\r\n"
 									"TempRange:\r\n"
+									"TempSource:\r\n"
 									"StartTime:\r\n"
 									"Time:\r\n"
-									"Temperature:\r\n"
+									"GasBoilerTemp:\r\n"
+									"ControlPanelTemp:\r\n"
+									"CurrentTemp:\r\n"
 									"Temp correction:\r\n"
 									"Humidity:\r\n"
 									"Hum correction:\r\n"
@@ -773,8 +780,11 @@ void dwin_print_regs_page()
 	memset(tmp_str, 0, sizeof(tmp_str));
 	sprintf(tmp_str,  "%.2f\r\n"
 										"%.2f\r\n"
+										"%d\r\n"
 										"%.2d:%.2d:%.2d %.2d/%.2d/20%.2d\r\n"
 										"%.2d:%.2d:%.2d %.2d/%.2d/20%.2d\r\n"
+										"%.2f\r\n"
+										"%.2f\r\n"
 										"%.2f\r\n"
 										"%.2f\r\n"
 										"%.2f\r\n"
@@ -782,6 +792,7 @@ void dwin_print_regs_page()
 										"%d",
 	ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint,
 	ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range,
+	ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_source,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.start_time.hour,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.start_time.minutes,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.start_time.seconds,
@@ -794,7 +805,9 @@ void dwin_print_regs_page()
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.sys_time.dayofmonth,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.sys_time.month,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.sys_time.year,
-	ram_ptr->uniq.control_panel.gas_boiler_uniq.temperature,
+	ram_ptr->uniq.control_panel.gas_boiler_uniq.gasboiler_temp,
+	ram_ptr->uniq.control_panel.gas_boiler_uniq.controlpanel_temp,
+	ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp,
 	ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.temp_correction,
 	ram_ptr->uniq.control_panel.gas_boiler_uniq.humidity,
 	ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.hum_correction,
@@ -890,7 +903,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 						{
 							if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL)
 							{
-								dev_net_map.client_devs[i].write_flag = 1;
+								write_cmd_entry* entry = get_free_write_entry(&dev_net_map.client_devs[i]);
+								if (entry != NULL)
+									set_write_entry(entry, offsetof(ram_data_struct, common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint),
+										(void*)&ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint,
+										sizeof(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_setpoint));
+								entry = get_free_write_entry(&dev_net_map.client_devs[i]);
+								if (entry != NULL)
+									set_write_entry(entry, offsetof(ram_data_struct, common.mirrored_to_rom_regs.unig.gas_boiler.temp_range),
+										(void*)&ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range,
+										sizeof(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range));
 								break;
 							}
 						}
@@ -911,7 +933,28 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 						{
 							if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL)
 							{
-								dev_net_map.client_devs[i].write_flag = 1;
+								write_cmd_entry* entry = get_free_write_entry(&dev_net_map.client_devs[i]);
+								if (entry != NULL)
+									set_write_entry(entry, offsetof(ram_data_struct, common.mirrored_to_rom_regs.unig.gas_boiler.temp_range),
+										(void*)&ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range,
+										sizeof(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_range));
+								break;
+							}
+						}
+						break;
+					//Выбор датчика температуры
+					case GASBOILER_PAGE_TEMP_SOURCE_VP:
+						ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_source = reg;
+
+						for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)
+						{
+							if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL)
+							{
+								write_cmd_entry* entry = get_free_write_entry(&dev_net_map.client_devs[i]);
+								if (entry != NULL)
+									set_write_entry(entry, offsetof(ram_data_struct, common.mirrored_to_rom_regs.unig.gas_boiler.temp_source),
+										&ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_source,
+										sizeof(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_source));
 								break;
 							}
 						}
@@ -934,7 +977,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 						{
 							if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL)
 							{
-								dev_net_map.client_devs[i].write_flag = 1;
+								write_cmd_entry* entry = get_free_write_entry(&dev_net_map.client_devs[i]);
+								if (entry != NULL)
+									set_write_entry(entry, offsetof(ram_data_struct, common.mirrored_to_rom_regs.common.temp_correction),
+										(void*)&ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.temp_correction,
+										sizeof(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.temp_correction));
 								break;
 							}
 						}
@@ -947,7 +994,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 						{
 							if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL)
 							{
-								dev_net_map.client_devs[i].write_flag = 1;
+								write_cmd_entry* entry = get_free_write_entry(&dev_net_map.client_devs[i]);
+								if (entry != NULL)
+									set_write_entry(entry, offsetof(ram_data_struct, common.mirrored_to_rom_regs.common.hum_correction),
+										(void*)&ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.hum_correction,
+										sizeof(ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.common.hum_correction));
 								break;
 							}
 						}
@@ -960,7 +1011,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 						{
 							if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME) != NULL)
 							{
-								dev_net_map.client_devs[i].write_flag = 1;
+								write_cmd_entry* entry = get_free_write_entry(&dev_net_map.client_devs[i]);
+								if (entry != NULL)
+									set_write_entry(entry, offsetof(ram_data_struct, common.mirrored_to_rom_regs.common.temp_correction),
+										(void*)&ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.temp_correction,
+										sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.temp_correction));
 								break;
 							}
 						}
@@ -972,7 +1027,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 						{
 							if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME) != NULL)
 							{
-								dev_net_map.client_devs[i].write_flag = 1;
+								write_cmd_entry* entry = get_free_write_entry(&dev_net_map.client_devs[i]);
+								if (entry != NULL)
+									set_write_entry(entry, offsetof(ram_data_struct, common.mirrored_to_rom_regs.common.hum_correction),
+										(void*)&ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.hum_correction,
+										sizeof(ram_ptr->uniq.control_panel.str_weath_stat_common.mirrored_to_rom_regs.common.hum_correction));
 								break;
 							}
 						}
