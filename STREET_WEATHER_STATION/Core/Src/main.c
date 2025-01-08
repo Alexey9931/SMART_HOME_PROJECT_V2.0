@@ -185,21 +185,11 @@ int main(void)
 		ram_data.uniq.str_weath_stat.rainfall = get_rain_fall(&hadc1);
 
 		// серверная часть (взаимодействие с raspberry)
-		if (w5500_1_ptr->port_set[0].is_soc_active != 1) 
-		{
-			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
-			w5500_1_ptr->port_set[0].is_soc_active = 1;
-			__HAL_TIM_SET_COUNTER(w5500_1_ptr->port_set[0].htim, 0);
-		}
+		check_sock_connection(w5500_1_ptr, &w5500_1_ptr->port_set[0]);
 		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[0].sock_num);
 		
-		// серверная часть (взаимодействие с control panel)		
-		if (w5500_1_ptr->port_set[1].is_soc_active != 1) 
-		{
-			w5500_reini_sock(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
-			w5500_1_ptr->port_set[1].is_soc_active = 1;
-			__HAL_TIM_SET_COUNTER(w5500_1_ptr->port_set[1].htim, 0);
-		}
+		// серверная часть (взаимодействие с control panel)
+		check_sock_connection(w5500_1_ptr, &w5500_1_ptr->port_set[1]);
 		reply_iteration(w5500_1_ptr, w5500_1_ptr->port_set[1].sock_num);
 		
   }

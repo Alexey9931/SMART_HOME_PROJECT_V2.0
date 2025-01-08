@@ -349,22 +349,6 @@ int main(void)
 			{
 				//выполняем команду WRITE, если есть, что записать
 				//следом выполняем CONFIG для обновления ПЗУ
-				
-				// W/A
-				uint16_t rw_size;
-				uint16_t reg_addr = 0;
-				void *val_ptr;
-				if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL) 
-				{
-					rw_size = GAS_BOILER_CONTROLLER_REGS_SIZE;
-					val_ptr = (void*)&ram_ptr->uniq.control_panel.gas_boiler_common;
-				} 
-				else if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME)!= NULL) 
-				{
-					rw_size = WEATH_STATION_REGS_SIZE;
-					val_ptr = (void*)&ram_ptr->uniq.control_panel.str_weath_stat_common;
-				}
-
 				write_cmd_entry* entry;
 				while ((entry = get_loaded_write_entry(&dev_net_map.client_devs[i])) != NULL)
 				{
@@ -381,11 +365,15 @@ int main(void)
 					free_write_entry(entry);
 				}	
 				//выполняем команду READ
-				do_read_cmd(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, &dev_net_map.client_devs[i], reg_addr, rw_size);
+				uint16_t rw_size;
+				if (strstr((const char*)dev_net_map.client_devs[i].device_name, GAS_BOIL_NAME) != NULL) 
+					rw_size = GAS_BOILER_CONTROLLER_REGS_SIZE;
+				else if (strstr((const char*)dev_net_map.client_devs[i].device_name, STR_WEATH_NAME)!= NULL) 
+					rw_size = WEATH_STATION_REGS_SIZE;
+				do_read_cmd(w5500_1_ptr, w5500_1_ptr->port_set[i+1].sock_num, &dev_net_map.client_devs[i], 0, rw_size);
 			}
 		}
 		HAL_Delay(1000);
-
   }
   /* USER CODE END 3 */
 }
