@@ -174,13 +174,14 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		//обновление показаний датчиков
 #ifdef HTU21D_DEFAULT_SENS
-		ram_data.uniq.str_weath_stat.temperature = HTU21D_get_temperature(&hi2c1);
+		if (HTU21D_get_temperature(&hi2c1, (float*)&ram_data.uniq.str_weath_stat.temperature) != HTU21D_ERROR)
+			ram_data.uniq.str_weath_stat.temperature +=ram_data.common.mirrored_to_rom_regs.common.temp_correction;
 #else
-		ram_data.uniq.str_weath_stat.temperature = ds18b20_get_temp(GPIOA, GPIO_PIN_3);
+		if (ds18b20_get_temp(GPIOA, GPIO_PIN_3, (float*)&ram_data.uniq.str_weath_stat.temperature) != DS18B20_ERROR)
+			ram_data.uniq.str_weath_stat.temperature +=ram_data.common.mirrored_to_rom_regs.common.temp_correction;
 #endif
-		ram_data.uniq.str_weath_stat.temperature +=ram_data.common.mirrored_to_rom_regs.common.temp_correction;
-		ram_data.uniq.str_weath_stat.humidity = HTU21D_get_humidity(&hi2c1);
-		ram_data.uniq.str_weath_stat.humidity += ram_data.common.mirrored_to_rom_regs.common.hum_correction;
+		if (HTU21D_get_humidity(&hi2c1, (float*)&ram_data.uniq.str_weath_stat.humidity) != HTU21D_ERROR)
+			ram_data.uniq.str_weath_stat.humidity += ram_data.common.mirrored_to_rom_regs.common.hum_correction;
 		get_wind_direct(&ram_data.uniq.str_weath_stat.wind_direct);
 		ram_data.uniq.str_weath_stat.rainfall = get_rain_fall(&hadc1);
 

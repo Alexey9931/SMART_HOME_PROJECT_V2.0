@@ -59,36 +59,46 @@ uint8_t dht22_get_data(GPIO_TypeDef* dht22_gpio_port, uint16_t dht22_gpio_pin)
 	return i;
 }
 
-float dht22_get_temp(GPIO_TypeDef* dht22_gpio_port, uint16_t dht22_gpio_pin)
+dht22_ret dht22_get_temp(GPIO_TypeDef* dht22_gpio_port, uint16_t dht22_gpio_pin, float *temp)
 {
-	float temp = 0.0f;
 	uint8_t raw_data[5] = {0};
+	float temp_val = 0.0f;
 	
-	if (!dht22_check_response(dht22_gpio_port, dht22_gpio_pin)) return temp;
+	if (!dht22_check_response(dht22_gpio_port, dht22_gpio_pin))
+	{
+		memcpy(temp, &temp_val, sizeof(temp_val));
+		return DHT22_ERROR;
+	}
 	
 	for (uint8_t i = 0; i < 5; i++)
 	{
 		raw_data[i] = dht22_get_data(dht22_gpio_port, dht22_gpio_pin);
 	}
 	
-	temp = (float)(((raw_data[2]<<8)|raw_data[3])/10.0f);
+	temp_val = (float)(((raw_data[2]<<8)|raw_data[3])/10.0f);
+	memcpy(temp, &temp_val, sizeof(temp_val));
 	
-	return temp;
+	return DHT22_OK;
 }
 
-float dht22_get_hum(GPIO_TypeDef* dht22_gpio_port, uint16_t dht22_gpio_pin)
+dht22_ret dht22_get_hum(GPIO_TypeDef* dht22_gpio_port, uint16_t dht22_gpio_pin, float *hum)
 {
-	float hum = 0.0f;
 	uint8_t raw_data[5] = {0};
+	float hum_val = 0.0f;
 	
-	if (!dht22_check_response(dht22_gpio_port, dht22_gpio_pin)) return hum;
+	if (!dht22_check_response(dht22_gpio_port, dht22_gpio_pin))
+	{
+		memcpy(hum, &hum_val, sizeof(hum_val));
+		return DHT22_ERROR;
+	}
 	
 	for (uint8_t i = 0; i < 5; i++)
 	{
 		raw_data[i] = dht22_get_data(dht22_gpio_port, dht22_gpio_pin);
 	}
 	
-	hum = (float)(((raw_data[0]<<8)|raw_data[1])/10.0f);
+	hum_val = (float)(((raw_data[0]<<8)|raw_data[1])/10.0f);
+	memcpy(hum, &hum_val, sizeof(hum_val));
 	
-	return hum;
+	return DHT22_OK;
 }

@@ -79,14 +79,14 @@ void dwin_print_home_page()
 	//домашняя температура
 	if (ram_ptr->uniq.control_panel.temperature < 10.0f)
 	{
-		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.control_panel.temperature);
+		sprintf(tmp_str, " %d.", (int)fabs(ram_ptr->uniq.control_panel.temperature));
 	}
 	else
 	{
-		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.control_panel.temperature);
+		sprintf(tmp_str, "%d.", (int)fabs(ram_ptr->uniq.control_panel.temperature));
 	}
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_INDOOR_TEMP_INT_VP), 3);
-	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.temperature*10.0f)%10);
+	sprintf(tmp_str, "%d", (int)fabs(ram_ptr->uniq.control_panel.temperature*10.0f)%10);
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_INDOOR_TEMP_FRACT_VP), 1);
 	ram_ptr->uniq.control_panel.temperature >= 0.0f ?
 		dwin_write_variable("+", revert_word(HOME_PAGE_INDOOR_TEMP_SIGN_VP), 1):
@@ -94,14 +94,14 @@ void dwin_print_home_page()
 	//уличная температура
 	if (ram_ptr->uniq.control_panel.str_weath_stat_data.temperature < 10.0f)
 	{
-		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.control_panel.str_weath_stat_data.temperature);
+		sprintf(tmp_str, " %d.", (int)fabs(ram_ptr->uniq.control_panel.str_weath_stat_data.temperature));
 	}
 	else
 	{
-		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.control_panel.str_weath_stat_data.temperature);
+		sprintf(tmp_str, "%d.", (int)fabs(ram_ptr->uniq.control_panel.str_weath_stat_data.temperature));
 	}
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_OUTDOOR_TEMP_INT_VP), 3);
-	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.str_weath_stat_data.temperature*10.0f)%10);
+	sprintf(tmp_str, "%d", (int)abs((int)(ram_ptr->uniq.control_panel.str_weath_stat_data.temperature*10.0f)%10));
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_OUTDOOR_TEMP_FRACT_VP), 1);
 	ram_ptr->uniq.control_panel.str_weath_stat_data.temperature >= 0.0f ?
 		dwin_write_variable("+", revert_word(HOME_PAGE_OUTDOOR_TEMP_SIGN_VP), 1):
@@ -109,11 +109,11 @@ void dwin_print_home_page()
 	//домашняя влажность
 	if (ram_ptr->uniq.control_panel.humidity < 10.0f)
 	{
-		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.control_panel.humidity);
+		sprintf(tmp_str, " %d.", (unsigned int)ram_ptr->uniq.control_panel.humidity);
 	}
 	else
 	{
-		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.control_panel.humidity);
+		sprintf(tmp_str, "%d.", (unsigned int)ram_ptr->uniq.control_panel.humidity);
 	}
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_INDOOR_HUM_INT_VP), 3);
 	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.humidity*10.0f)%10);
@@ -121,11 +121,11 @@ void dwin_print_home_page()
 	//уличная влажность
 	if (ram_ptr->uniq.control_panel.str_weath_stat_data.humidity < 10.0f)
 	{
-		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.control_panel.str_weath_stat_data.humidity);
+		sprintf(tmp_str, " %d.", (unsigned int)ram_ptr->uniq.control_panel.str_weath_stat_data.humidity);
 	}
 	else
 	{
-		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.control_panel.str_weath_stat_data.humidity);
+		sprintf(tmp_str, "%d.", (unsigned int)ram_ptr->uniq.control_panel.str_weath_stat_data.humidity);
 	}
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_OUTDOOR_HUM_INT_VP), 3);
 	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.str_weath_stat_data.humidity*10.0f)%10);
@@ -133,11 +133,11 @@ void dwin_print_home_page()
 	//атм.давление
 	if (ram_ptr->uniq.control_panel.pressure < 100.0f)
 	{
-		sprintf(tmp_str, "  %d", (int)ram_ptr->uniq.control_panel.pressure);
+		sprintf(tmp_str, "  %d", (unsigned int)ram_ptr->uniq.control_panel.pressure);
 	}
 	else
 	{
-		sprintf(tmp_str, "%d", (int)ram_ptr->uniq.control_panel.pressure);
+		sprintf(tmp_str, "%d", (unsigned int)ram_ptr->uniq.control_panel.pressure);
 	}
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_PRESSURE_VP), 3);
 	//скорость ветра
@@ -263,14 +263,14 @@ void dwin_print_home_page()
 	//текущая температура
 	if (ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp < 10.0f)
 	{
-		sprintf(tmp_str, " %d.", (int)ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp);
+		sprintf(tmp_str, " %d.", (int)fabs(ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp));
 	}
 	else
 	{
-		sprintf(tmp_str, "%d.", (int)ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp);
+		sprintf(tmp_str, "%d.", (int)fabs(ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp));
 	}
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_GASBOILER_CUR_INT_VP), 3);
-	sprintf(tmp_str, "%d", (int)(ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp*10.0f)%10);
+	sprintf(tmp_str, "%d", (int)abs((int)(ram_ptr->uniq.control_panel.gas_boiler_uniq.current_temp*10.0f)%10));
 	dwin_write_variable(tmp_str, revert_word(HOME_PAGE_GASBOILER_CUR_FRACT_VP), 1);
 	
 	for (uint8_t i = 0; i < (sizeof(dev_net_map.client_devs)/sizeof(dev_net_map.client_devs[0])); i++)

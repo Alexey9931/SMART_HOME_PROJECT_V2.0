@@ -132,22 +132,30 @@ float ds18b20_convert(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin
   
 	return t;
 }
-float ds18b20_get_temp(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin)
+ds18b20_ret ds18b20_get_temp(GPIO_TypeDef* ds18b20_gpio_port, uint16_t ds18b20_gpio_pin, float *temp)
 {
 	uint8_t dt[8];
 	uint16_t raw_temper;
-	float temp;
+	float temp_val = 0.0f;
 	
 	ds18b20_measure_temp_cmd(ds18b20_gpio_port, ds18b20_gpio_pin, SKIP_ROM, 0);
 	HAL_Delay(750);
 	ds18b20_read_strat_cpad(ds18b20_gpio_port, ds18b20_gpio_pin, SKIP_ROM, dt, 0);
 	raw_temper = ((uint16_t)dt[1]<<8)|dt[0];
-	temp = ds18b20_convert(ds18b20_gpio_port, ds18b20_gpio_pin, raw_temper);
+	temp_val = ds18b20_convert(ds18b20_gpio_port, ds18b20_gpio_pin, raw_temper);
 	if (ds18b20_get_sign(ds18b20_gpio_port, ds18b20_gpio_pin, raw_temper))	
 	{
-		temp *= -1.0f;
+		temp_val *= -1.0f;
 	}
-	if ((temp == 85.0f)||(raw_temper == 0xFFFF)) return 0.0f;
-	
-	return temp;
+	if ((temp_val == 85.0f)||(raw_temper == 0xFFFF))
+	{
+		temp_val = 0.0f;
+		memcpy(temp, &temp_val, sizeof(temp_val));
+		return DS18B20_ERROR;
+	}
+	else
+	{
+		memcpy(temp, &temp_val, sizeof(temp_val));
+		return DS18B20_OK;
+	}
 }

@@ -4,12 +4,8 @@
 #ifndef __DWIN_H
 #define __DWIN_H
 
-#include "stm32f4xx_hal.h"
+#include "device_defs.h"
 #include "ram.h"
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdint.h>
 
 #define DWIN_UART huart1
 #define DWIN_BUF_SIZE 128

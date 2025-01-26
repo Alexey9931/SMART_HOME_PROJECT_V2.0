@@ -287,14 +287,15 @@ int main(void)
 			}
 			//обновление показаний датчиков
 			ram_ptr->uniq.control_panel.pressure = bmp180_get_press(&USED_I2C, 3);
-			ram_ptr->uniq.control_panel.humidity = dht22_get_hum(GPIOD, GPIO_PIN_15);
-			ram_ptr->uniq.control_panel.humidity += ram_ptr->common.mirrored_to_rom_regs.common.hum_correction;
+			if (dht22_get_hum(GPIOD, GPIO_PIN_15, (float*)&ram_ptr->uniq.control_panel.humidity) != DHT22_ERROR)
+				ram_ptr->uniq.control_panel.humidity += ram_ptr->common.mirrored_to_rom_regs.common.hum_correction;
 #ifdef DHT22_DEFAULT_SENS
-			ram_ptr->uniq.control_panel.temperature = dht22_get_temp(GPIOD, GPIO_PIN_15);
+			if (dht22_get_temp(GPIOD, GPIO_PIN_15, (float*)&ram_ptr->uniq.control_panel.temperature) != DHT22_ERROR)
+				ram_ptr->uniq.control_panel.temperature += ram_ptr->common.mirrored_to_rom_regs.common.temp_correction;
 #else
-			ram_ptr->uniq.control_panel.temperature = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
+			if (ds18b20_get_temp(GPIOD, GPIO_PIN_14, (float*)&ram_ptr->uniq.control_panel.temperature) != DS18B20_ERROR)
+				ram_ptr->uniq.control_panel.temperature += ram_ptr->common.mirrored_to_rom_regs.common.temp_correction;
 #endif
-			ram_ptr->uniq.control_panel.temperature += ram_ptr->common.mirrored_to_rom_regs.common.temp_correction;
 			//если для алгоритма термостата GasBoilerController выбран датчик от ControlPanel, то регулярно
 			//передаем показания в GasBoilerController
 			if (ram_ptr->uniq.control_panel.gas_boiler_common.mirrored_to_rom_regs.unig.gas_boiler.temp_source)

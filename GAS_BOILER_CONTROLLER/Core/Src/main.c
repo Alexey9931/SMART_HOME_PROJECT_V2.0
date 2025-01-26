@@ -240,14 +240,15 @@ int main(void)
 				ram_ptr->common.work_time++;
 			}
 			//обновление показаний датчиков
-			ram_ptr->uniq.gas_boiler.humidity = dht22_get_hum(GPIOD, GPIO_PIN_15);
-			ram_ptr->uniq.gas_boiler.humidity += ram_ptr->common.mirrored_to_rom_regs.common.hum_correction;
+			if (dht22_get_hum(GPIOD, GPIO_PIN_15, (float*)&ram_ptr->uniq.gas_boiler.humidity) != DHT22_ERROR)
+				ram_ptr->uniq.gas_boiler.humidity += ram_ptr->common.mirrored_to_rom_regs.common.hum_correction;
 #ifdef DHT22_DEFAULT_SENS
-			ram_ptr->uniq.gas_boiler.temperature = dht22_get_temp(GPIOD, GPIO_PIN_15);
+			if (dht22_get_temp(GPIOD, GPIO_PIN_15, (float*)&ram_ptr->uniq.gas_boiler.temperature) != DHT22_ERROR)
+				ram_ptr->uniq.gas_boiler.gasboiler_temp += ram_ptr->common.mirrored_to_rom_regs.common.temp_correction;
 #else	
-			ram_ptr->uniq.gas_boiler.gasboiler_temp = ds18b20_get_temp(GPIOD, GPIO_PIN_14);
+			if (ds18b20_get_temp(GPIOD, GPIO_PIN_14, (float*)&ram_ptr->uniq.gas_boiler.gasboiler_temp) != DS18B20_ERROR)
+				ram_ptr->uniq.gas_boiler.gasboiler_temp += ram_ptr->common.mirrored_to_rom_regs.common.temp_correction;
 #endif
-			ram_ptr->uniq.gas_boiler.gasboiler_temp += ram_ptr->common.mirrored_to_rom_regs.common.temp_correction;
 			//алгоритм термостата
 			thermostat_task();
 			is_time_to_update_params = 0;
